@@ -1,0 +1,26 @@
+# Render Blueprint — one free web service (API + built frontend) + free Postgres.
+# Deploy: push to GitHub, then "New > Blueprint" in Render and point it at this repo.
+services:
+  - type: web
+    name: obradoriq
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: obradoriq-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SEED_ON_START
+        value: "true"
+      - key: LLM_OFFLINE
+        value: "true"          # set to "false" and add ANTHROPIC_API_KEY for live phrasing
+      - key: ANTHROPIC_API_KEY
+        sync: false            # set manually in the dashboard if going live
+
+databases:
+  - name: obradoriq-db
+    plan: free

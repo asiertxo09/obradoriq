@@ -1,0 +1,398 @@
+site,product,date,quantity_wasted
+Centro,Croissant,2026-04-20,17
+Centro,Croissant,2026-04-22,23
+Centro,Croissant,2026-04-23,20
+Centro,Croissant,2026-04-27,4
+Centro,Croissant,2026-04-28,7
+Centro,Croissant,2026-04-29,20
+Centro,Croissant,2026-04-30,4
+Centro,Croissant,2026-05-01,8
+Centro,Croissant,2026-05-04,22
+Centro,Croissant,2026-05-05,10
+Centro,Croissant,2026-05-06,5
+Centro,Croissant,2026-05-07,13
+Centro,Croissant,2026-05-08,1
+Centro,Croissant,2026-05-12,13
+Centro,Croissant,2026-05-13,8
+Centro,Croissant,2026-05-14,18
+Centro,Croissant,2026-05-18,2
+Centro,Croissant,2026-05-20,4
+Centro,Croissant,2026-05-25,2
+Centro,Croissant,2026-05-26,3
+Centro,Croissant,2026-05-28,6
+Centro,Croissant,2026-06-01,2
+Centro,Croissant,2026-06-03,18
+Centro,Croissant,2026-06-04,10
+Centro,Croissant,2026-06-09,17
+Centro,Croissant,2026-06-10,34
+Centro,Croissant,2026-06-15,1
+Centro,Croissant,2026-06-18,16
+Centro,Croissant,2026-06-19,3
+Centro,Croissant,2026-06-23,9
+Centro,Croissant,2026-06-24,14
+Centro,Croissant,2026-06-25,14
+Centro,Pain au Chocolat,2026-04-20,6
+Centro,Pain au Chocolat,2026-04-22,1
+Centro,Pain au Chocolat,2026-04-23,10
+Centro,Pain au Chocolat,2026-04-24,3
+Centro,Pain au Chocolat,2026-04-27,5
+Centro,Pain au Chocolat,2026-04-28,7
+Centro,Pain au Chocolat,2026-04-29,3
+Centro,Pain au Chocolat,2026-04-30,2
+Centro,Pain au Chocolat,2026-05-05,14
+Centro,Pain au Chocolat,2026-05-06,12
+Centro,Pain au Chocolat,2026-05-07,11
+Centro,Pain au Chocolat,2026-05-12,14
+Centro,Pain au Chocolat,2026-05-13,22
+Centro,Pain au Chocolat,2026-05-14,2
+Centro,Pain au Chocolat,2026-05-20,10
+Centro,Pain au Chocolat,2026-05-26,4
+Centro,Pain au Chocolat,2026-05-27,6
+Centro,Pain au Chocolat,2026-06-02,16
+Centro,Pain au Chocolat,2026-06-03,7
+Centro,Pain au Chocolat,2026-06-08,1
+Centro,Pain au Chocolat,2026-06-10,2
+Centro,Pain au Chocolat,2026-06-11,11
+Centro,Pain au Chocolat,2026-06-16,12
+Centro,Pain au Chocolat,2026-06-17,8
+Centro,Pain au Chocolat,2026-06-18,7
+Centro,Pain au Chocolat,2026-06-23,1
+Centro,Pain au Chocolat,2026-06-25,8
+Centro,Baguette,2026-04-20,3
+Centro,Baguette,2026-04-23,43
+Centro,Baguette,2026-04-24,16
+Centro,Baguette,2026-04-26,17
+Centro,Baguette,2026-04-27,36
+Centro,Baguette,2026-04-28,19
+Centro,Baguette,2026-05-05,12
+Centro,Baguette,2026-05-07,15
+Centro,Baguette,2026-05-11,4
+Centro,Baguette,2026-05-12,7
+Centro,Baguette,2026-05-13,13
+Centro,Baguette,2026-05-14,32
+Centro,Baguette,2026-05-18,4
+Centro,Baguette,2026-05-19,34
+Centro,Baguette,2026-05-20,16
+Centro,Baguette,2026-05-25,21
+Centro,Baguette,2026-05-26,23
+Centro,Baguette,2026-05-27,17
+Centro,Baguette,2026-05-28,12
+Centro,Baguette,2026-05-29,14
+Centro,Baguette,2026-05-31,11
+Centro,Baguette,2026-06-04,17
+Centro,Baguette,2026-06-09,6
+Centro,Baguette,2026-06-10,10
+Centro,Baguette,2026-06-15,28
+Centro,Baguette,2026-06-16,18
+Centro,Sourdough,2026-04-20,6
+Centro,Sourdough,2026-04-21,10
+Centro,Sourdough,2026-04-22,6
+Centro,Sourdough,2026-04-23,2
+Centro,Sourdough,2026-04-27,7
+Centro,Sourdough,2026-04-28,6
+Centro,Sourdough,2026-04-29,7
+Centro,Sourdough,2026-04-30,4
+Centro,Sourdough,2026-05-04,9
+Centro,Sourdough,2026-05-05,8
+Centro,Sourdough,2026-05-06,4
+Centro,Sourdough,2026-05-07,2
+Centro,Sourdough,2026-05-11,10
+Centro,Sourdough,2026-05-12,8
+Centro,Sourdough,2026-05-13,7
+Centro,Sourdough,2026-05-14,7
+Centro,Sourdough,2026-05-18,9
+Centro,Sourdough,2026-05-20,5
+Centro,Sourdough,2026-05-21,8
+Centro,Sourdough,2026-05-25,12
+Centro,Sourdough,2026-05-26,1
+Centro,Sourdough,2026-05-29,5
+Centro,Sourdough,2026-06-01,5
+Centro,Sourdough,2026-06-02,11
+Centro,Sourdough,2026-06-03,2
+Centro,Sourdough,2026-06-04,6
+Centro,Sourdough,2026-06-08,8
+Centro,Sourdough,2026-06-09,10
+Centro,Sourdough,2026-06-11,2
+Centro,Sourdough,2026-06-15,8
+Centro,Sourdough,2026-06-16,7
+Centro,Sourdough,2026-06-18,3
+Centro,Sourdough,2026-06-19,2
+Centro,Sourdough,2026-06-22,5
+Centro,Sourdough,2026-06-23,5
+Centro,Sourdough,2026-06-25,3
+Centro,Cinnamon Roll,2026-04-20,11
+Centro,Cinnamon Roll,2026-04-21,17
+Centro,Cinnamon Roll,2026-04-22,8
+Centro,Cinnamon Roll,2026-04-23,9
+Centro,Cinnamon Roll,2026-04-27,12
+Centro,Cinnamon Roll,2026-04-28,11
+Centro,Cinnamon Roll,2026-04-29,8
+Centro,Cinnamon Roll,2026-05-04,8
+Centro,Cinnamon Roll,2026-05-05,6
+Centro,Cinnamon Roll,2026-05-06,13
+Centro,Cinnamon Roll,2026-05-07,7
+Centro,Cinnamon Roll,2026-05-08,5
+Centro,Cinnamon Roll,2026-05-11,12
+Centro,Cinnamon Roll,2026-05-12,13
+Centro,Cinnamon Roll,2026-05-13,10
+Centro,Cinnamon Roll,2026-05-14,5
+Centro,Cinnamon Roll,2026-05-18,6
+Centro,Cinnamon Roll,2026-05-19,6
+Centro,Cinnamon Roll,2026-05-20,10
+Centro,Cinnamon Roll,2026-05-21,1
+Centro,Cinnamon Roll,2026-05-22,1
+Centro,Cinnamon Roll,2026-05-25,19
+Centro,Cinnamon Roll,2026-05-26,2
+Centro,Cinnamon Roll,2026-05-29,9
+Centro,Cinnamon Roll,2026-06-01,3
+Centro,Cinnamon Roll,2026-06-02,7
+Centro,Cinnamon Roll,2026-06-03,3
+Centro,Cinnamon Roll,2026-06-04,3
+Centro,Cinnamon Roll,2026-06-08,4
+Centro,Cinnamon Roll,2026-06-09,4
+Centro,Cinnamon Roll,2026-06-10,5
+Centro,Cinnamon Roll,2026-06-15,9
+Centro,Cinnamon Roll,2026-06-16,2
+Centro,Cinnamon Roll,2026-06-17,6
+Centro,Cinnamon Roll,2026-06-22,14
+Centro,Cinnamon Roll,2026-06-23,10
+Centro,Cinnamon Roll,2026-06-24,5
+Centro,Almond Croissant,2026-04-28,5
+Centro,Almond Croissant,2026-05-04,1
+Centro,Almond Croissant,2026-05-05,1
+Centro,Almond Croissant,2026-05-12,9
+Barrio,Croissant,2026-04-20,13
+Barrio,Croissant,2026-04-21,4
+Barrio,Croissant,2026-04-22,6
+Barrio,Croissant,2026-04-24,13
+Barrio,Croissant,2026-04-28,11
+Barrio,Croissant,2026-04-29,15
+Barrio,Croissant,2026-04-30,4
+Barrio,Croissant,2026-05-04,15
+Barrio,Croissant,2026-05-05,6
+Barrio,Croissant,2026-05-06,10
+Barrio,Croissant,2026-05-11,4
+Barrio,Croissant,2026-05-12,18
+Barrio,Croissant,2026-05-13,12
+Barrio,Croissant,2026-05-14,9
+Barrio,Croissant,2026-05-19,3
+Barrio,Croissant,2026-05-20,5
+Barrio,Croissant,2026-05-21,7
+Barrio,Croissant,2026-05-25,8
+Barrio,Croissant,2026-05-26,18
+Barrio,Croissant,2026-06-02,5
+Barrio,Croissant,2026-06-04,1
+Barrio,Croissant,2026-06-08,8
+Barrio,Croissant,2026-06-09,6
+Barrio,Croissant,2026-06-17,1
+Barrio,Croissant,2026-06-18,6
+Barrio,Croissant,2026-06-22,2
+Barrio,Croissant,2026-06-23,1
+Barrio,Pain au Chocolat,2026-04-20,13
+Barrio,Pain au Chocolat,2026-04-21,6
+Barrio,Pain au Chocolat,2026-04-22,8
+Barrio,Pain au Chocolat,2026-04-23,8
+Barrio,Pain au Chocolat,2026-04-27,2
+Barrio,Pain au Chocolat,2026-04-28,4
+Barrio,Pain au Chocolat,2026-04-29,11
+Barrio,Pain au Chocolat,2026-04-30,6
+Barrio,Pain au Chocolat,2026-05-04,8
+Barrio,Pain au Chocolat,2026-05-05,3
+Barrio,Pain au Chocolat,2026-05-06,12
+Barrio,Pain au Chocolat,2026-05-07,1
+Barrio,Pain au Chocolat,2026-05-11,4
+Barrio,Pain au Chocolat,2026-05-13,6
+Barrio,Pain au Chocolat,2026-05-14,9
+Barrio,Pain au Chocolat,2026-05-18,4
+Barrio,Pain au Chocolat,2026-05-19,10
+Barrio,Pain au Chocolat,2026-05-21,8
+Barrio,Pain au Chocolat,2026-05-25,5
+Barrio,Pain au Chocolat,2026-05-27,1
+Barrio,Pain au Chocolat,2026-06-02,3
+Barrio,Pain au Chocolat,2026-06-03,2
+Barrio,Pain au Chocolat,2026-06-08,4
+Barrio,Pain au Chocolat,2026-06-09,2
+Barrio,Pain au Chocolat,2026-06-10,3
+Barrio,Pain au Chocolat,2026-06-17,6
+Barrio,Pain au Chocolat,2026-06-18,10
+Barrio,Pain au Chocolat,2026-06-22,3
+Barrio,Pain au Chocolat,2026-06-23,11
+Barrio,Pain au Chocolat,2026-06-24,4
+Barrio,Pain au Chocolat,2026-06-25,4
+Barrio,Baguette,2026-04-21,6
+Barrio,Baguette,2026-04-22,7
+Barrio,Baguette,2026-04-26,4
+Barrio,Baguette,2026-04-27,12
+Barrio,Baguette,2026-04-30,1
+Barrio,Baguette,2026-05-03,3
+Barrio,Baguette,2026-05-04,2
+Barrio,Baguette,2026-05-05,5
+Barrio,Baguette,2026-05-06,7
+Barrio,Baguette,2026-05-13,6
+Barrio,Baguette,2026-05-14,1
+Barrio,Baguette,2026-05-18,6
+Barrio,Baguette,2026-05-19,12
+Barrio,Baguette,2026-05-26,8
+Barrio,Baguette,2026-06-02,1
+Barrio,Baguette,2026-06-11,6
+Barrio,Baguette,2026-06-14,17
+Barrio,Baguette,2026-06-17,1
+Barrio,Sourdough,2026-04-20,5
+Barrio,Sourdough,2026-04-21,10
+Barrio,Sourdough,2026-04-22,5
+Barrio,Sourdough,2026-04-23,5
+Barrio,Sourdough,2026-04-27,8
+Barrio,Sourdough,2026-04-28,3
+Barrio,Sourdough,2026-04-29,3
+Barrio,Sourdough,2026-04-30,2
+Barrio,Sourdough,2026-05-01,7
+Barrio,Sourdough,2026-05-03,4
+Barrio,Sourdough,2026-05-04,5
+Barrio,Sourdough,2026-05-05,3
+Barrio,Sourdough,2026-05-06,5
+Barrio,Sourdough,2026-05-07,4
+Barrio,Sourdough,2026-05-11,9
+Barrio,Sourdough,2026-05-12,7
+Barrio,Sourdough,2026-05-13,1
+Barrio,Sourdough,2026-05-14,4
+Barrio,Sourdough,2026-05-15,3
+Barrio,Sourdough,2026-05-18,6
+Barrio,Sourdough,2026-05-19,3
+Barrio,Sourdough,2026-05-20,6
+Barrio,Sourdough,2026-05-21,3
+Barrio,Sourdough,2026-05-22,1
+Barrio,Sourdough,2026-05-25,5
+Barrio,Sourdough,2026-05-26,6
+Barrio,Sourdough,2026-05-27,2
+Barrio,Sourdough,2026-05-28,6
+Barrio,Sourdough,2026-06-01,7
+Barrio,Sourdough,2026-06-02,4
+Barrio,Sourdough,2026-06-03,5
+Barrio,Sourdough,2026-06-04,4
+Barrio,Sourdough,2026-06-05,3
+Barrio,Sourdough,2026-06-08,9
+Barrio,Sourdough,2026-06-09,6
+Barrio,Sourdough,2026-06-10,7
+Barrio,Sourdough,2026-06-11,4
+Barrio,Sourdough,2026-06-15,4
+Barrio,Sourdough,2026-06-16,5
+Barrio,Sourdough,2026-06-17,5
+Barrio,Sourdough,2026-06-18,3
+Barrio,Sourdough,2026-06-19,2
+Barrio,Sourdough,2026-06-22,5
+Barrio,Sourdough,2026-06-23,6
+Barrio,Sourdough,2026-06-24,6
+Barrio,Sourdough,2026-06-28,4
+Barrio,Cinnamon Roll,2026-04-20,15
+Barrio,Cinnamon Roll,2026-04-21,8
+Barrio,Cinnamon Roll,2026-04-22,11
+Barrio,Cinnamon Roll,2026-04-23,8
+Barrio,Cinnamon Roll,2026-04-24,2
+Barrio,Cinnamon Roll,2026-04-26,4
+Barrio,Cinnamon Roll,2026-04-27,10
+Barrio,Cinnamon Roll,2026-04-28,11
+Barrio,Cinnamon Roll,2026-04-29,7
+Barrio,Cinnamon Roll,2026-04-30,11
+Barrio,Cinnamon Roll,2026-05-01,1
+Barrio,Cinnamon Roll,2026-05-04,8
+Barrio,Cinnamon Roll,2026-05-05,10
+Barrio,Cinnamon Roll,2026-05-06,9
+Barrio,Cinnamon Roll,2026-05-07,5
+Barrio,Cinnamon Roll,2026-05-11,14
+Barrio,Cinnamon Roll,2026-05-12,8
+Barrio,Cinnamon Roll,2026-05-13,8
+Barrio,Cinnamon Roll,2026-05-14,6
+Barrio,Cinnamon Roll,2026-05-18,8
+Barrio,Cinnamon Roll,2026-05-19,5
+Barrio,Cinnamon Roll,2026-05-20,7
+Barrio,Cinnamon Roll,2026-05-21,9
+Barrio,Cinnamon Roll,2026-05-25,4
+Barrio,Cinnamon Roll,2026-05-26,9
+Barrio,Cinnamon Roll,2026-05-27,3
+Barrio,Cinnamon Roll,2026-05-28,4
+Barrio,Cinnamon Roll,2026-06-01,10
+Barrio,Cinnamon Roll,2026-06-02,12
+Barrio,Cinnamon Roll,2026-06-03,3
+Barrio,Cinnamon Roll,2026-06-04,5
+Barrio,Cinnamon Roll,2026-06-08,8
+Barrio,Cinnamon Roll,2026-06-09,8
+Barrio,Cinnamon Roll,2026-06-10,10
+Barrio,Cinnamon Roll,2026-06-11,10
+Barrio,Cinnamon Roll,2026-06-15,10
+Barrio,Cinnamon Roll,2026-06-16,11
+Barrio,Cinnamon Roll,2026-06-17,7
+Barrio,Cinnamon Roll,2026-06-18,6
+Barrio,Cinnamon Roll,2026-06-19,1
+Barrio,Cinnamon Roll,2026-06-22,8
+Barrio,Cinnamon Roll,2026-06-23,7
+Barrio,Cinnamon Roll,2026-06-24,7
+Barrio,Cinnamon Roll,2026-06-25,6
+Barrio,Almond Croissant,2026-04-20,22
+Barrio,Almond Croissant,2026-04-21,20
+Barrio,Almond Croissant,2026-04-22,19
+Barrio,Almond Croissant,2026-04-23,18
+Barrio,Almond Croissant,2026-04-24,11
+Barrio,Almond Croissant,2026-04-25,2
+Barrio,Almond Croissant,2026-04-26,13
+Barrio,Almond Croissant,2026-04-27,21
+Barrio,Almond Croissant,2026-04-28,23
+Barrio,Almond Croissant,2026-04-29,15
+Barrio,Almond Croissant,2026-04-30,22
+Barrio,Almond Croissant,2026-05-01,12
+Barrio,Almond Croissant,2026-05-02,10
+Barrio,Almond Croissant,2026-05-03,14
+Barrio,Almond Croissant,2026-05-04,22
+Barrio,Almond Croissant,2026-05-05,21
+Barrio,Almond Croissant,2026-05-06,20
+Barrio,Almond Croissant,2026-05-07,20
+Barrio,Almond Croissant,2026-05-08,16
+Barrio,Almond Croissant,2026-05-09,9
+Barrio,Almond Croissant,2026-05-10,10
+Barrio,Almond Croissant,2026-05-11,19
+Barrio,Almond Croissant,2026-05-12,25
+Barrio,Almond Croissant,2026-05-13,20
+Barrio,Almond Croissant,2026-05-14,16
+Barrio,Almond Croissant,2026-05-15,8
+Barrio,Almond Croissant,2026-05-16,9
+Barrio,Almond Croissant,2026-05-17,5
+Barrio,Almond Croissant,2026-05-18,27
+Barrio,Almond Croissant,2026-05-19,18
+Barrio,Almond Croissant,2026-05-20,16
+Barrio,Almond Croissant,2026-05-21,16
+Barrio,Almond Croissant,2026-05-22,14
+Barrio,Almond Croissant,2026-05-23,7
+Barrio,Almond Croissant,2026-05-24,6
+Barrio,Almond Croissant,2026-05-25,22
+Barrio,Almond Croissant,2026-05-26,26
+Barrio,Almond Croissant,2026-05-27,14
+Barrio,Almond Croissant,2026-05-28,11
+Barrio,Almond Croissant,2026-05-29,15
+Barrio,Almond Croissant,2026-05-30,7
+Barrio,Almond Croissant,2026-05-31,3
+Barrio,Almond Croissant,2026-06-01,24
+Barrio,Almond Croissant,2026-06-02,20
+Barrio,Almond Croissant,2026-06-03,11
+Barrio,Almond Croissant,2026-06-04,13
+Barrio,Almond Croissant,2026-06-05,13
+Barrio,Almond Croissant,2026-06-06,9
+Barrio,Almond Croissant,2026-06-07,9
+Barrio,Almond Croissant,2026-06-08,18
+Barrio,Almond Croissant,2026-06-09,20
+Barrio,Almond Croissant,2026-06-10,18
+Barrio,Almond Croissant,2026-06-11,17
+Barrio,Almond Croissant,2026-06-12,16
+Barrio,Almond Croissant,2026-06-13,1
+Barrio,Almond Croissant,2026-06-14,8
+Barrio,Almond Croissant,2026-06-15,17
+Barrio,Almond Croissant,2026-06-16,18
+Barrio,Almond Croissant,2026-06-17,19
+Barrio,Almond Croissant,2026-06-18,21
+Barrio,Almond Croissant,2026-06-19,8
+Barrio,Almond Croissant,2026-06-20,8
+Barrio,Almond Croissant,2026-06-21,3
+Barrio,Almond Croissant,2026-06-22,14
+Barrio,Almond Croissant,2026-06-23,27
+Barrio,Almond Croissant,2026-06-24,17
+Barrio,Almond Croissant,2026-06-25,13
+Barrio,Almond Croissant,2026-06-26,15
+Barrio,Almond Croissant,2026-06-28,9

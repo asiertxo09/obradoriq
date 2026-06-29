@@ -1,0 +1,31 @@
+# Local full-stack run: `docker compose up --build` then open http://localhost:8000
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: obrador
+      POSTGRES_PASSWORD: obrador
+      POSTGRES_DB: obradoriq
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U obrador"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://obrador:obrador@db:5432/obradoriq
+      JWT_SECRET: local-dev-secret
+      SEED_ON_START: "true"
+      LLM_OFFLINE: "true"           # set false + ANTHROPIC_API_KEY for live phrasing
+      # ANTHROPIC_API_KEY: sk-...
+    ports: ["8000:8000"]
+
+volumes:
+  pgdata:

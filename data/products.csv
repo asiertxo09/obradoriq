@@ -1,0 +1,7 @@
+name,category,price,ingredient_cost,batch_size
+Croissant,Viennoiserie,1.8,0.55,6
+Pain au Chocolat,Viennoiserie,2.1,0.7,6
+Baguette,Bread,1.2,0.3,10
+Sourdough,Bread,4.5,1.1,4
+Cinnamon Roll,Pastry,2.8,0.85,6
+Almond Croissant,Viennoiserie,2.6,0.95,6

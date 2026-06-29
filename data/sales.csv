@@ -1,0 +1,841 @@
+site,product,date,quantity_sold,revenue,sold_out
+Centro,Croissant,2026-04-20,73,131.4,false
+Centro,Croissant,2026-04-21,90,162.0,true
+Centro,Croissant,2026-04-22,67,120.6,false
+Centro,Croissant,2026-04-23,70,126.0,false
+Centro,Croissant,2026-04-24,90,162.0,true
+Centro,Croissant,2026-04-25,90,162.0,true
+Centro,Croissant,2026-04-26,90,162.0,true
+Centro,Croissant,2026-04-27,86,154.8,false
+Centro,Croissant,2026-04-28,83,149.4,false
+Centro,Croissant,2026-04-29,70,126.0,false
+Centro,Croissant,2026-04-30,86,154.8,false
+Centro,Croissant,2026-05-01,82,147.6,false
+Centro,Croissant,2026-05-02,90,162.0,true
+Centro,Croissant,2026-05-03,90,162.0,true
+Centro,Croissant,2026-05-04,68,122.4,false
+Centro,Croissant,2026-05-05,80,144.0,false
+Centro,Croissant,2026-05-06,85,153.0,false
+Centro,Croissant,2026-05-07,77,138.6,false
+Centro,Croissant,2026-05-08,89,160.2,false
+Centro,Croissant,2026-05-09,90,162.0,true
+Centro,Croissant,2026-05-10,90,162.0,true
+Centro,Croissant,2026-05-11,90,162.0,true
+Centro,Croissant,2026-05-12,77,138.6,false
+Centro,Croissant,2026-05-13,82,147.6,false
+Centro,Croissant,2026-05-14,72,129.6,false
+Centro,Croissant,2026-05-15,90,162.0,true
+Centro,Croissant,2026-05-16,90,162.0,true
+Centro,Croissant,2026-05-17,90,162.0,true
+Centro,Croissant,2026-05-18,88,158.4,false
+Centro,Croissant,2026-05-19,90,162.0,true
+Centro,Croissant,2026-05-20,86,154.8,false
+Centro,Croissant,2026-05-21,90,162.0,true
+Centro,Croissant,2026-05-22,90,162.0,true
+Centro,Croissant,2026-05-23,90,162.0,true
+Centro,Croissant,2026-05-24,90,162.0,true
+Centro,Croissant,2026-05-25,88,158.4,false
+Centro,Croissant,2026-05-26,87,156.6,false
+Centro,Croissant,2026-05-27,90,162.0,true
+Centro,Croissant,2026-05-28,84,151.2,false
+Centro,Croissant,2026-05-29,90,162.0,true
+Centro,Croissant,2026-05-30,90,162.0,true
+Centro,Croissant,2026-05-31,90,162.0,true
+Centro,Croissant,2026-06-01,88,158.4,false
+Centro,Croissant,2026-06-02,90,162.0,true
+Centro,Croissant,2026-06-03,72,129.6,false
+Centro,Croissant,2026-06-04,80,144.0,false
+Centro,Croissant,2026-06-05,90,162.0,false
+Centro,Croissant,2026-06-06,90,162.0,true
+Centro,Croissant,2026-06-07,90,162.0,true
+Centro,Croissant,2026-06-08,90,162.0,true
+Centro,Croissant,2026-06-09,73,131.4,false
+Centro,Croissant,2026-06-10,56,100.8,false
+Centro,Croissant,2026-06-11,90,162.0,true
+Centro,Croissant,2026-06-12,90,162.0,false
+Centro,Croissant,2026-06-13,90,162.0,true
+Centro,Croissant,2026-06-14,90,162.0,true
+Centro,Croissant,2026-06-15,89,160.2,false
+Centro,Croissant,2026-06-16,90,162.0,true
+Centro,Croissant,2026-06-17,90,162.0,true
+Centro,Croissant,2026-06-18,74,133.2,false
+Centro,Croissant,2026-06-19,87,156.6,false
+Centro,Croissant,2026-06-20,90,162.0,true
+Centro,Croissant,2026-06-21,90,162.0,true
+Centro,Croissant,2026-06-22,90,162.0,true
+Centro,Croissant,2026-06-23,81,145.8,false
+Centro,Croissant,2026-06-24,76,136.8,false
+Centro,Croissant,2026-06-25,76,136.8,false
+Centro,Croissant,2026-06-26,90,162.0,true
+Centro,Croissant,2026-06-27,90,162.0,true
+Centro,Croissant,2026-06-28,90,162.0,true
+Centro,Pain au Chocolat,2026-04-20,60,126.0,false
+Centro,Pain au Chocolat,2026-04-21,66,138.6,true
+Centro,Pain au Chocolat,2026-04-22,65,136.5,false
+Centro,Pain au Chocolat,2026-04-23,56,117.6,false
+Centro,Pain au Chocolat,2026-04-24,63,132.3,false
+Centro,Pain au Chocolat,2026-04-25,66,138.6,true
+Centro,Pain au Chocolat,2026-04-26,66,138.6,true
+Centro,Pain au Chocolat,2026-04-27,61,128.1,false
+Centro,Pain au Chocolat,2026-04-28,59,123.9,false
+Centro,Pain au Chocolat,2026-04-29,63,132.3,false
+Centro,Pain au Chocolat,2026-04-30,64,134.4,false
+Centro,Pain au Chocolat,2026-05-01,66,138.6,true
+Centro,Pain au Chocolat,2026-05-02,66,138.6,true
+Centro,Pain au Chocolat,2026-05-03,66,138.6,true
+Centro,Pain au Chocolat,2026-05-04,66,138.6,true
+Centro,Pain au Chocolat,2026-05-05,52,109.2,false
+Centro,Pain au Chocolat,2026-05-06,54,113.4,false
+Centro,Pain au Chocolat,2026-05-07,55,115.5,false
+Centro,Pain au Chocolat,2026-05-08,66,138.6,true
+Centro,Pain au Chocolat,2026-05-09,66,138.6,true
+Centro,Pain au Chocolat,2026-05-10,66,138.6,true
+Centro,Pain au Chocolat,2026-05-11,66,138.6,true
+Centro,Pain au Chocolat,2026-05-12,52,109.2,false
+Centro,Pain au Chocolat,2026-05-13,44,92.4,false
+Centro,Pain au Chocolat,2026-05-14,64,134.4,false
+Centro,Pain au Chocolat,2026-05-15,66,138.6,true
+Centro,Pain au Chocolat,2026-05-16,66,138.6,true
+Centro,Pain au Chocolat,2026-05-17,66,138.6,true
+Centro,Pain au Chocolat,2026-05-18,66,138.6,true
+Centro,Pain au Chocolat,2026-05-19,66,138.6,true
+Centro,Pain au Chocolat,2026-05-20,56,117.6,false
+Centro,Pain au Chocolat,2026-05-21,66,138.6,true
+Centro,Pain au Chocolat,2026-05-22,66,138.6,true
+Centro,Pain au Chocolat,2026-05-23,66,138.6,true
+Centro,Pain au Chocolat,2026-05-24,66,138.6,true
+Centro,Pain au Chocolat,2026-05-25,66,138.6,true
+Centro,Pain au Chocolat,2026-05-26,62,130.2,false
+Centro,Pain au Chocolat,2026-05-27,60,126.0,false
+Centro,Pain au Chocolat,2026-05-28,66,138.6,true
+Centro,Pain au Chocolat,2026-05-29,66,138.6,true
+Centro,Pain au Chocolat,2026-05-30,66,138.6,true
+Centro,Pain au Chocolat,2026-05-31,66,138.6,true
+Centro,Pain au Chocolat,2026-06-01,66,138.6,true
+Centro,Pain au Chocolat,2026-06-02,50,105.0,false
+Centro,Pain au Chocolat,2026-06-03,59,123.9,false
+Centro,Pain au Chocolat,2026-06-04,66,138.6,true
+Centro,Pain au Chocolat,2026-06-05,66,138.6,true
+Centro,Pain au Chocolat,2026-06-06,66,138.6,true
+Centro,Pain au Chocolat,2026-06-07,66,138.6,true
+Centro,Pain au Chocolat,2026-06-08,65,136.5,false
+Centro,Pain au Chocolat,2026-06-09,66,138.6,true
+Centro,Pain au Chocolat,2026-06-10,64,134.4,false
+Centro,Pain au Chocolat,2026-06-11,55,115.5,false
+Centro,Pain au Chocolat,2026-06-12,66,138.6,true
+Centro,Pain au Chocolat,2026-06-13,66,138.6,true
+Centro,Pain au Chocolat,2026-06-14,66,138.6,true
+Centro,Pain au Chocolat,2026-06-15,66,138.6,true
+Centro,Pain au Chocolat,2026-06-16,54,113.4,false
+Centro,Pain au Chocolat,2026-06-17,58,121.8,false
+Centro,Pain au Chocolat,2026-06-18,59,123.9,false
+Centro,Pain au Chocolat,2026-06-19,66,138.6,true
+Centro,Pain au Chocolat,2026-06-20,66,138.6,true
+Centro,Pain au Chocolat,2026-06-21,66,138.6,true
+Centro,Pain au Chocolat,2026-06-22,66,138.6,true
+Centro,Pain au Chocolat,2026-06-23,65,136.5,false
+Centro,Pain au Chocolat,2026-06-24,66,138.6,true
+Centro,Pain au Chocolat,2026-06-25,58,121.8,false
+Centro,Pain au Chocolat,2026-06-26,66,138.6,true
+Centro,Pain au Chocolat,2026-06-27,66,138.6,true
+Centro,Pain au Chocolat,2026-06-28,66,138.6,true
+Centro,Baguette,2026-04-20,117,140.4,false
+Centro,Baguette,2026-04-21,120,144.0,true
+Centro,Baguette,2026-04-22,120,144.0,true
+Centro,Baguette,2026-04-23,77,92.4,false
+Centro,Baguette,2026-04-24,104,124.8,false
+Centro,Baguette,2026-04-25,120,144.0,true
+Centro,Baguette,2026-04-26,103,123.6,false
+Centro,Baguette,2026-04-27,84,100.8,false
+Centro,Baguette,2026-04-28,101,121.2,false
+Centro,Baguette,2026-04-29,120,144.0,false
+Centro,Baguette,2026-04-30,120,144.0,true
+Centro,Baguette,2026-05-01,120,144.0,true
+Centro,Baguette,2026-05-02,120,144.0,true
+Centro,Baguette,2026-05-03,120,144.0,true
+Centro,Baguette,2026-05-04,120,144.0,true
+Centro,Baguette,2026-05-05,108,129.6,false
+Centro,Baguette,2026-05-06,120,144.0,true
+Centro,Baguette,2026-05-07,105,126.0,false
+Centro,Baguette,2026-05-08,120,144.0,true
+Centro,Baguette,2026-05-09,120,144.0,true
+Centro,Baguette,2026-05-10,120,144.0,true
+Centro,Baguette,2026-05-11,116,139.2,false
+Centro,Baguette,2026-05-12,113,135.6,false
+Centro,Baguette,2026-05-13,107,128.4,false
+Centro,Baguette,2026-05-14,88,105.6,false
+Centro,Baguette,2026-05-15,120,144.0,true
+Centro,Baguette,2026-05-16,120,144.0,true
+Centro,Baguette,2026-05-17,120,144.0,true
+Centro,Baguette,2026-05-18,116,139.2,false
+Centro,Baguette,2026-05-19,86,103.2,false
+Centro,Baguette,2026-05-20,104,124.8,false
+Centro,Baguette,2026-05-21,120,144.0,true
+Centro,Baguette,2026-05-22,120,144.0,true
+Centro,Baguette,2026-05-23,120,144.0,true
+Centro,Baguette,2026-05-24,120,144.0,true
+Centro,Baguette,2026-05-25,99,118.8,false
+Centro,Baguette,2026-05-26,97,116.4,false
+Centro,Baguette,2026-05-27,103,123.6,false
+Centro,Baguette,2026-05-28,108,129.6,false
+Centro,Baguette,2026-05-29,106,127.2,false
+Centro,Baguette,2026-05-30,120,144.0,true
+Centro,Baguette,2026-05-31,109,130.8,false
+Centro,Baguette,2026-06-01,120,144.0,true
+Centro,Baguette,2026-06-02,120,144.0,true
+Centro,Baguette,2026-06-03,120,144.0,true
+Centro,Baguette,2026-06-04,103,123.6,false
+Centro,Baguette,2026-06-05,120,144.0,true
+Centro,Baguette,2026-06-06,120,144.0,true
+Centro,Baguette,2026-06-07,120,144.0,true
+Centro,Baguette,2026-06-08,120,144.0,true
+Centro,Baguette,2026-06-09,114,136.8,false
+Centro,Baguette,2026-06-10,110,132.0,false
+Centro,Baguette,2026-06-11,120,144.0,true
+Centro,Baguette,2026-06-12,120,144.0,true
+Centro,Baguette,2026-06-13,120,144.0,true
+Centro,Baguette,2026-06-14,120,144.0,true
+Centro,Baguette,2026-06-15,92,110.4,false
+Centro,Baguette,2026-06-16,102,122.4,false
+Centro,Baguette,2026-06-17,120,144.0,true
+Centro,Baguette,2026-06-18,120,144.0,true
+Centro,Baguette,2026-06-19,120,144.0,true
+Centro,Baguette,2026-06-20,120,144.0,true
+Centro,Baguette,2026-06-21,120,144.0,true
+Centro,Baguette,2026-06-22,120,144.0,true
+Centro,Baguette,2026-06-23,120,144.0,true
+Centro,Baguette,2026-06-24,120,144.0,true
+Centro,Baguette,2026-06-25,120,144.0,true
+Centro,Baguette,2026-06-26,120,144.0,true
+Centro,Baguette,2026-06-27,120,144.0,true
+Centro,Baguette,2026-06-28,120,144.0,true
+Centro,Sourdough,2026-04-20,30,135.0,false
+Centro,Sourdough,2026-04-21,26,117.0,false
+Centro,Sourdough,2026-04-22,30,135.0,false
+Centro,Sourdough,2026-04-23,34,153.0,false
+Centro,Sourdough,2026-04-24,36,162.0,true
+Centro,Sourdough,2026-04-25,36,162.0,true
+Centro,Sourdough,2026-04-26,36,162.0,true
+Centro,Sourdough,2026-04-27,29,130.5,false
+Centro,Sourdough,2026-04-28,30,135.0,false
+Centro,Sourdough,2026-04-29,29,130.5,false
+Centro,Sourdough,2026-04-30,32,144.0,false
+Centro,Sourdough,2026-05-01,36,162.0,true
+Centro,Sourdough,2026-05-02,36,162.0,true
+Centro,Sourdough,2026-05-03,36,162.0,true
+Centro,Sourdough,2026-05-04,27,121.5,false
+Centro,Sourdough,2026-05-05,28,126.0,false
+Centro,Sourdough,2026-05-06,32,144.0,false
+Centro,Sourdough,2026-05-07,34,153.0,false
+Centro,Sourdough,2026-05-08,36,162.0,true
+Centro,Sourdough,2026-05-09,36,162.0,true
+Centro,Sourdough,2026-05-10,36,162.0,true
+Centro,Sourdough,2026-05-11,26,117.0,false
+Centro,Sourdough,2026-05-12,28,126.0,false
+Centro,Sourdough,2026-05-13,29,130.5,false
+Centro,Sourdough,2026-05-14,29,130.5,false
+Centro,Sourdough,2026-05-15,36,162.0,true
+Centro,Sourdough,2026-05-16,36,162.0,true
+Centro,Sourdough,2026-05-17,36,162.0,true
+Centro,Sourdough,2026-05-18,27,121.5,false
+Centro,Sourdough,2026-05-19,36,162.0,true
+Centro,Sourdough,2026-05-20,31,139.5,false
+Centro,Sourdough,2026-05-21,28,126.0,false
+Centro,Sourdough,2026-05-22,36,162.0,false
+Centro,Sourdough,2026-05-23,36,162.0,true
+Centro,Sourdough,2026-05-24,36,162.0,true
+Centro,Sourdough,2026-05-25,24,108.0,false
+Centro,Sourdough,2026-05-26,35,157.5,false
+Centro,Sourdough,2026-05-27,36,162.0,true
+Centro,Sourdough,2026-05-28,36,162.0,false
+Centro,Sourdough,2026-05-29,31,139.5,false
+Centro,Sourdough,2026-05-30,36,162.0,true
+Centro,Sourdough,2026-05-31,36,162.0,true
+Centro,Sourdough,2026-06-01,31,139.5,false
+Centro,Sourdough,2026-06-02,25,112.5,false
+Centro,Sourdough,2026-06-03,34,153.0,false
+Centro,Sourdough,2026-06-04,30,135.0,false
+Centro,Sourdough,2026-06-05,36,162.0,true
+Centro,Sourdough,2026-06-06,36,162.0,true
+Centro,Sourdough,2026-06-07,36,162.0,true
+Centro,Sourdough,2026-06-08,28,126.0,false
+Centro,Sourdough,2026-06-09,26,117.0,false
+Centro,Sourdough,2026-06-10,36,162.0,false
+Centro,Sourdough,2026-06-11,34,153.0,false
+Centro,Sourdough,2026-06-12,36,162.0,true
+Centro,Sourdough,2026-06-13,36,162.0,true
+Centro,Sourdough,2026-06-14,36,162.0,true
+Centro,Sourdough,2026-06-15,28,126.0,false
+Centro,Sourdough,2026-06-16,29,130.5,false
+Centro,Sourdough,2026-06-17,36,162.0,true
+Centro,Sourdough,2026-06-18,33,148.5,false
+Centro,Sourdough,2026-06-19,34,153.0,false
+Centro,Sourdough,2026-06-20,36,162.0,true
+Centro,Sourdough,2026-06-21,36,162.0,true
+Centro,Sourdough,2026-06-22,31,139.5,false
+Centro,Sourdough,2026-06-23,31,139.5,false
+Centro,Sourdough,2026-06-24,36,162.0,true
+Centro,Sourdough,2026-06-25,33,148.5,false
+Centro,Sourdough,2026-06-26,36,162.0,true
+Centro,Sourdough,2026-06-27,36,162.0,true
+Centro,Sourdough,2026-06-28,36,162.0,true
+Centro,Cinnamon Roll,2026-04-20,31,86.8,false
+Centro,Cinnamon Roll,2026-04-21,25,70.0,false
+Centro,Cinnamon Roll,2026-04-22,34,95.2,false
+Centro,Cinnamon Roll,2026-04-23,33,92.4,false
+Centro,Cinnamon Roll,2026-04-24,42,117.6,true
+Centro,Cinnamon Roll,2026-04-25,42,117.6,true
+Centro,Cinnamon Roll,2026-04-26,42,117.6,true
+Centro,Cinnamon Roll,2026-04-27,30,84.0,false
+Centro,Cinnamon Roll,2026-04-28,31,86.8,false
+Centro,Cinnamon Roll,2026-04-29,34,95.2,false
+Centro,Cinnamon Roll,2026-04-30,42,117.6,true
+Centro,Cinnamon Roll,2026-05-01,42,117.6,true
+Centro,Cinnamon Roll,2026-05-02,42,117.6,true
+Centro,Cinnamon Roll,2026-05-03,42,117.6,true
+Centro,Cinnamon Roll,2026-05-04,34,95.2,false
+Centro,Cinnamon Roll,2026-05-05,36,100.8,false
+Centro,Cinnamon Roll,2026-05-06,29,81.2,false
+Centro,Cinnamon Roll,2026-05-07,35,98.0,false
+Centro,Cinnamon Roll,2026-05-08,37,103.6,false
+Centro,Cinnamon Roll,2026-05-09,42,117.6,true
+Centro,Cinnamon Roll,2026-05-10,42,117.6,true
+Centro,Cinnamon Roll,2026-05-11,30,84.0,false
+Centro,Cinnamon Roll,2026-05-12,29,81.2,false
+Centro,Cinnamon Roll,2026-05-13,32,89.6,false
+Centro,Cinnamon Roll,2026-05-14,37,103.6,false
+Centro,Cinnamon Roll,2026-05-15,42,117.6,true
+Centro,Cinnamon Roll,2026-05-16,42,117.6,true
+Centro,Cinnamon Roll,2026-05-17,42,117.6,true
+Centro,Cinnamon Roll,2026-05-18,36,100.8,false
+Centro,Cinnamon Roll,2026-05-19,36,100.8,false
+Centro,Cinnamon Roll,2026-05-20,32,89.6,false
+Centro,Cinnamon Roll,2026-05-21,41,114.8,false
+Centro,Cinnamon Roll,2026-05-22,41,114.8,false
+Centro,Cinnamon Roll,2026-05-23,42,117.6,true
+Centro,Cinnamon Roll,2026-05-24,42,117.6,true
+Centro,Cinnamon Roll,2026-05-25,23,64.4,false
+Centro,Cinnamon Roll,2026-05-26,40,112.0,false
+Centro,Cinnamon Roll,2026-05-27,42,117.6,false
+Centro,Cinnamon Roll,2026-05-28,42,117.6,true
+Centro,Cinnamon Roll,2026-05-29,33,92.4,false
+Centro,Cinnamon Roll,2026-05-30,42,117.6,true
+Centro,Cinnamon Roll,2026-05-31,42,117.6,true
+Centro,Cinnamon Roll,2026-06-01,39,109.2,false
+Centro,Cinnamon Roll,2026-06-02,35,98.0,false
+Centro,Cinnamon Roll,2026-06-03,39,109.2,false
+Centro,Cinnamon Roll,2026-06-04,39,109.2,false
+Centro,Cinnamon Roll,2026-06-05,42,117.6,true
+Centro,Cinnamon Roll,2026-06-06,42,117.6,true
+Centro,Cinnamon Roll,2026-06-07,42,117.6,true
+Centro,Cinnamon Roll,2026-06-08,38,106.4,false
+Centro,Cinnamon Roll,2026-06-09,38,106.4,false
+Centro,Cinnamon Roll,2026-06-10,37,103.6,false
+Centro,Cinnamon Roll,2026-06-11,42,117.6,false
+Centro,Cinnamon Roll,2026-06-12,42,117.6,true
+Centro,Cinnamon Roll,2026-06-13,42,117.6,true
+Centro,Cinnamon Roll,2026-06-14,42,117.6,true
+Centro,Cinnamon Roll,2026-06-15,33,92.4,false
+Centro,Cinnamon Roll,2026-06-16,40,112.0,false
+Centro,Cinnamon Roll,2026-06-17,36,100.8,false
+Centro,Cinnamon Roll,2026-06-18,42,117.6,true
+Centro,Cinnamon Roll,2026-06-19,42,117.6,true
+Centro,Cinnamon Roll,2026-06-20,42,117.6,true
+Centro,Cinnamon Roll,2026-06-21,42,117.6,true
+Centro,Cinnamon Roll,2026-06-22,28,78.4,false
+Centro,Cinnamon Roll,2026-06-23,32,89.6,false
+Centro,Cinnamon Roll,2026-06-24,37,103.6,false
+Centro,Cinnamon Roll,2026-06-25,42,117.6,false
+Centro,Cinnamon Roll,2026-06-26,42,117.6,true
+Centro,Cinnamon Roll,2026-06-27,42,117.6,true
+Centro,Cinnamon Roll,2026-06-28,42,117.6,true
+Centro,Almond Croissant,2026-04-20,30,78.0,true
+Centro,Almond Croissant,2026-04-21,30,78.0,false
+Centro,Almond Croissant,2026-04-22,30,78.0,true
+Centro,Almond Croissant,2026-04-23,30,78.0,true
+Centro,Almond Croissant,2026-04-24,30,78.0,true
+Centro,Almond Croissant,2026-04-25,30,78.0,true
+Centro,Almond Croissant,2026-04-26,30,78.0,true
+Centro,Almond Croissant,2026-04-27,30,78.0,false
+Centro,Almond Croissant,2026-04-28,25,65.0,false
+Centro,Almond Croissant,2026-04-29,30,78.0,true
+Centro,Almond Croissant,2026-04-30,30,78.0,true
+Centro,Almond Croissant,2026-05-01,30,78.0,true
+Centro,Almond Croissant,2026-05-02,30,78.0,true
+Centro,Almond Croissant,2026-05-03,30,78.0,true
+Centro,Almond Croissant,2026-05-04,29,75.4,false
+Centro,Almond Croissant,2026-05-05,29,75.4,false
+Centro,Almond Croissant,2026-05-06,30,78.0,true
+Centro,Almond Croissant,2026-05-07,30,78.0,true
+Centro,Almond Croissant,2026-05-08,30,78.0,true
+Centro,Almond Croissant,2026-05-09,30,78.0,true
+Centro,Almond Croissant,2026-05-10,30,78.0,true
+Centro,Almond Croissant,2026-05-11,30,78.0,true
+Centro,Almond Croissant,2026-05-12,21,54.6,false
+Centro,Almond Croissant,2026-05-13,30,78.0,true
+Centro,Almond Croissant,2026-05-14,30,78.0,true
+Centro,Almond Croissant,2026-05-15,30,78.0,true
+Centro,Almond Croissant,2026-05-16,30,78.0,true
+Centro,Almond Croissant,2026-05-17,30,78.0,true
+Centro,Almond Croissant,2026-05-18,30,78.0,true
+Centro,Almond Croissant,2026-05-19,30,78.0,true
+Centro,Almond Croissant,2026-05-20,30,78.0,true
+Centro,Almond Croissant,2026-05-21,30,78.0,true
+Centro,Almond Croissant,2026-05-22,30,78.0,true
+Centro,Almond Croissant,2026-05-23,30,78.0,true
+Centro,Almond Croissant,2026-05-24,30,78.0,true
+Centro,Almond Croissant,2026-05-25,30,78.0,true
+Centro,Almond Croissant,2026-05-26,30,78.0,true
+Centro,Almond Croissant,2026-05-27,30,78.0,true
+Centro,Almond Croissant,2026-05-28,30,78.0,true
+Centro,Almond Croissant,2026-05-29,30,78.0,true
+Centro,Almond Croissant,2026-05-30,30,78.0,true
+Centro,Almond Croissant,2026-05-31,30,78.0,true
+Centro,Almond Croissant,2026-06-01,30,78.0,true
+Centro,Almond Croissant,2026-06-02,30,78.0,true
+Centro,Almond Croissant,2026-06-03,30,78.0,true
+Centro,Almond Croissant,2026-06-04,30,78.0,true
+Centro,Almond Croissant,2026-06-05,30,78.0,true
+Centro,Almond Croissant,2026-06-06,30,78.0,true
+Centro,Almond Croissant,2026-06-07,30,78.0,true
+Centro,Almond Croissant,2026-06-08,30,78.0,true
+Centro,Almond Croissant,2026-06-09,30,78.0,true
+Centro,Almond Croissant,2026-06-10,30,78.0,true
+Centro,Almond Croissant,2026-06-11,30,78.0,true
+Centro,Almond Croissant,2026-06-12,30,78.0,true
+Centro,Almond Croissant,2026-06-13,30,78.0,true
+Centro,Almond Croissant,2026-06-14,30,78.0,true
+Centro,Almond Croissant,2026-06-15,30,78.0,true
+Centro,Almond Croissant,2026-06-16,30,78.0,true
+Centro,Almond Croissant,2026-06-17,30,78.0,true
+Centro,Almond Croissant,2026-06-18,30,78.0,true
+Centro,Almond Croissant,2026-06-19,30,78.0,true
+Centro,Almond Croissant,2026-06-20,30,78.0,true
+Centro,Almond Croissant,2026-06-21,30,78.0,true
+Centro,Almond Croissant,2026-06-22,30,78.0,true
+Centro,Almond Croissant,2026-06-23,30,78.0,true
+Centro,Almond Croissant,2026-06-24,30,78.0,true
+Centro,Almond Croissant,2026-06-25,30,78.0,true
+Centro,Almond Croissant,2026-06-26,30,78.0,true
+Centro,Almond Croissant,2026-06-27,30,78.0,true
+Centro,Almond Croissant,2026-06-28,30,78.0,true
+Barrio,Croissant,2026-04-20,41,73.8,false
+Barrio,Croissant,2026-04-21,50,90.0,false
+Barrio,Croissant,2026-04-22,48,86.4,false
+Barrio,Croissant,2026-04-23,54,97.2,true
+Barrio,Croissant,2026-04-24,41,73.8,false
+Barrio,Croissant,2026-04-25,54,97.2,true
+Barrio,Croissant,2026-04-26,54,97.2,true
+Barrio,Croissant,2026-04-27,54,97.2,true
+Barrio,Croissant,2026-04-28,43,77.4,false
+Barrio,Croissant,2026-04-29,39,70.2,false
+Barrio,Croissant,2026-04-30,50,90.0,false
+Barrio,Croissant,2026-05-01,54,97.2,true
+Barrio,Croissant,2026-05-02,54,97.2,true
+Barrio,Croissant,2026-05-03,54,97.2,true
+Barrio,Croissant,2026-05-04,39,70.2,false
+Barrio,Croissant,2026-05-05,48,86.4,false
+Barrio,Croissant,2026-05-06,44,79.2,false
+Barrio,Croissant,2026-05-07,54,97.2,true
+Barrio,Croissant,2026-05-08,54,97.2,true
+Barrio,Croissant,2026-05-09,54,97.2,true
+Barrio,Croissant,2026-05-10,54,97.2,true
+Barrio,Croissant,2026-05-11,50,90.0,false
+Barrio,Croissant,2026-05-12,36,64.8,false
+Barrio,Croissant,2026-05-13,42,75.6,false
+Barrio,Croissant,2026-05-14,45,81.0,false
+Barrio,Croissant,2026-05-15,54,97.2,true
+Barrio,Croissant,2026-05-16,54,97.2,true
+Barrio,Croissant,2026-05-17,54,97.2,true
+Barrio,Croissant,2026-05-18,54,97.2,true
+Barrio,Croissant,2026-05-19,51,91.8,false
+Barrio,Croissant,2026-05-20,49,88.2,false
+Barrio,Croissant,2026-05-21,47,84.6,false
+Barrio,Croissant,2026-05-22,54,97.2,true
+Barrio,Croissant,2026-05-23,54,97.2,true
+Barrio,Croissant,2026-05-24,54,97.2,true
+Barrio,Croissant,2026-05-25,46,82.8,false
+Barrio,Croissant,2026-05-26,36,64.8,false
+Barrio,Croissant,2026-05-27,54,97.2,false
+Barrio,Croissant,2026-05-28,54,97.2,true
+Barrio,Croissant,2026-05-29,54,97.2,true
+Barrio,Croissant,2026-05-30,54,97.2,true
+Barrio,Croissant,2026-05-31,54,97.2,true
+Barrio,Croissant,2026-06-01,54,97.2,true
+Barrio,Croissant,2026-06-02,49,88.2,false
+Barrio,Croissant,2026-06-03,54,97.2,true
+Barrio,Croissant,2026-06-04,53,95.4,false
+Barrio,Croissant,2026-06-05,54,97.2,true
+Barrio,Croissant,2026-06-06,54,97.2,true
+Barrio,Croissant,2026-06-07,54,97.2,true
+Barrio,Croissant,2026-06-08,46,82.8,false
+Barrio,Croissant,2026-06-09,48,86.4,false
+Barrio,Croissant,2026-06-10,54,97.2,true
+Barrio,Croissant,2026-06-11,54,97.2,true
+Barrio,Croissant,2026-06-12,54,97.2,true
+Barrio,Croissant,2026-06-13,54,97.2,true
+Barrio,Croissant,2026-06-14,54,97.2,true
+Barrio,Croissant,2026-06-15,54,97.2,true
+Barrio,Croissant,2026-06-16,54,97.2,true
+Barrio,Croissant,2026-06-17,53,95.4,false
+Barrio,Croissant,2026-06-18,48,86.4,false
+Barrio,Croissant,2026-06-19,54,97.2,true
+Barrio,Croissant,2026-06-20,54,97.2,true
+Barrio,Croissant,2026-06-21,54,97.2,true
+Barrio,Croissant,2026-06-22,52,93.6,false
+Barrio,Croissant,2026-06-23,53,95.4,false
+Barrio,Croissant,2026-06-24,54,97.2,true
+Barrio,Croissant,2026-06-25,54,97.2,true
+Barrio,Croissant,2026-06-26,54,97.2,true
+Barrio,Croissant,2026-06-27,54,97.2,true
+Barrio,Croissant,2026-06-28,54,97.2,true
+Barrio,Pain au Chocolat,2026-04-20,29,60.9,false
+Barrio,Pain au Chocolat,2026-04-21,36,75.6,false
+Barrio,Pain au Chocolat,2026-04-22,34,71.4,false
+Barrio,Pain au Chocolat,2026-04-23,34,71.4,false
+Barrio,Pain au Chocolat,2026-04-24,42,88.2,false
+Barrio,Pain au Chocolat,2026-04-25,42,88.2,true
+Barrio,Pain au Chocolat,2026-04-26,42,88.2,true
+Barrio,Pain au Chocolat,2026-04-27,40,84.0,false
+Barrio,Pain au Chocolat,2026-04-28,38,79.8,false
+Barrio,Pain au Chocolat,2026-04-29,31,65.1,false
+Barrio,Pain au Chocolat,2026-04-30,36,75.6,false
+Barrio,Pain au Chocolat,2026-05-01,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-02,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-03,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-04,34,71.4,false
+Barrio,Pain au Chocolat,2026-05-05,39,81.9,false
+Barrio,Pain au Chocolat,2026-05-06,30,63.0,false
+Barrio,Pain au Chocolat,2026-05-07,41,86.1,false
+Barrio,Pain au Chocolat,2026-05-08,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-09,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-10,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-11,38,79.8,false
+Barrio,Pain au Chocolat,2026-05-12,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-13,36,75.6,false
+Barrio,Pain au Chocolat,2026-05-14,33,69.3,false
+Barrio,Pain au Chocolat,2026-05-15,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-16,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-17,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-18,38,79.8,false
+Barrio,Pain au Chocolat,2026-05-19,32,67.2,false
+Barrio,Pain au Chocolat,2026-05-20,42,88.2,false
+Barrio,Pain au Chocolat,2026-05-21,34,71.4,false
+Barrio,Pain au Chocolat,2026-05-22,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-23,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-24,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-25,37,77.7,false
+Barrio,Pain au Chocolat,2026-05-26,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-27,41,86.1,false
+Barrio,Pain au Chocolat,2026-05-28,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-29,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-30,42,88.2,true
+Barrio,Pain au Chocolat,2026-05-31,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-01,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-02,39,81.9,false
+Barrio,Pain au Chocolat,2026-06-03,40,84.0,false
+Barrio,Pain au Chocolat,2026-06-04,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-05,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-06,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-07,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-08,38,79.8,false
+Barrio,Pain au Chocolat,2026-06-09,40,84.0,false
+Barrio,Pain au Chocolat,2026-06-10,39,81.9,false
+Barrio,Pain au Chocolat,2026-06-11,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-12,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-13,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-14,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-15,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-16,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-17,36,75.6,false
+Barrio,Pain au Chocolat,2026-06-18,32,67.2,false
+Barrio,Pain au Chocolat,2026-06-19,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-20,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-21,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-22,39,81.9,false
+Barrio,Pain au Chocolat,2026-06-23,31,65.1,false
+Barrio,Pain au Chocolat,2026-06-24,38,79.8,false
+Barrio,Pain au Chocolat,2026-06-25,38,79.8,false
+Barrio,Pain au Chocolat,2026-06-26,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-27,42,88.2,true
+Barrio,Pain au Chocolat,2026-06-28,42,88.2,true
+Barrio,Baguette,2026-04-20,70,84.0,true
+Barrio,Baguette,2026-04-21,64,76.8,false
+Barrio,Baguette,2026-04-22,63,75.6,false
+Barrio,Baguette,2026-04-23,70,84.0,true
+Barrio,Baguette,2026-04-24,70,84.0,true
+Barrio,Baguette,2026-04-25,70,84.0,true
+Barrio,Baguette,2026-04-26,66,79.2,false
+Barrio,Baguette,2026-04-27,58,69.6,false
+Barrio,Baguette,2026-04-28,70,84.0,true
+Barrio,Baguette,2026-04-29,70,84.0,true
+Barrio,Baguette,2026-04-30,69,82.8,false
+Barrio,Baguette,2026-05-01,70,84.0,true
+Barrio,Baguette,2026-05-02,70,84.0,true
+Barrio,Baguette,2026-05-03,67,80.4,false
+Barrio,Baguette,2026-05-04,68,81.6,false
+Barrio,Baguette,2026-05-05,65,78.0,false
+Barrio,Baguette,2026-05-06,63,75.6,false
+Barrio,Baguette,2026-05-07,70,84.0,true
+Barrio,Baguette,2026-05-08,70,84.0,true
+Barrio,Baguette,2026-05-09,70,84.0,true
+Barrio,Baguette,2026-05-10,70,84.0,true
+Barrio,Baguette,2026-05-11,70,84.0,true
+Barrio,Baguette,2026-05-12,70,84.0,true
+Barrio,Baguette,2026-05-13,64,76.8,false
+Barrio,Baguette,2026-05-14,69,82.8,false
+Barrio,Baguette,2026-05-15,70,84.0,true
+Barrio,Baguette,2026-05-16,70,84.0,true
+Barrio,Baguette,2026-05-17,70,84.0,true
+Barrio,Baguette,2026-05-18,64,76.8,false
+Barrio,Baguette,2026-05-19,58,69.6,false
+Barrio,Baguette,2026-05-20,70,84.0,true
+Barrio,Baguette,2026-05-21,70,84.0,true
+Barrio,Baguette,2026-05-22,70,84.0,false
+Barrio,Baguette,2026-05-23,70,84.0,true
+Barrio,Baguette,2026-05-24,70,84.0,true
+Barrio,Baguette,2026-05-25,70,84.0,true
+Barrio,Baguette,2026-05-26,62,74.4,false
+Barrio,Baguette,2026-05-27,70,84.0,true
+Barrio,Baguette,2026-05-28,70,84.0,false
+Barrio,Baguette,2026-05-29,70,84.0,true
+Barrio,Baguette,2026-05-30,70,84.0,true
+Barrio,Baguette,2026-05-31,70,84.0,true
+Barrio,Baguette,2026-06-01,70,84.0,true
+Barrio,Baguette,2026-06-02,69,82.8,false
+Barrio,Baguette,2026-06-03,70,84.0,true
+Barrio,Baguette,2026-06-04,70,84.0,true
+Barrio,Baguette,2026-06-05,70,84.0,true
+Barrio,Baguette,2026-06-06,70,84.0,true
+Barrio,Baguette,2026-06-07,70,84.0,true
+Barrio,Baguette,2026-06-08,70,84.0,true
+Barrio,Baguette,2026-06-09,70,84.0,true
+Barrio,Baguette,2026-06-10,70,84.0,true
+Barrio,Baguette,2026-06-11,64,76.8,false
+Barrio,Baguette,2026-06-12,70,84.0,true
+Barrio,Baguette,2026-06-13,70,84.0,true
+Barrio,Baguette,2026-06-14,53,63.6,false
+Barrio,Baguette,2026-06-15,70,84.0,true
+Barrio,Baguette,2026-06-16,70,84.0,false
+Barrio,Baguette,2026-06-17,69,82.8,false
+Barrio,Baguette,2026-06-18,70,84.0,true
+Barrio,Baguette,2026-06-19,70,84.0,true
+Barrio,Baguette,2026-06-20,70,84.0,true
+Barrio,Baguette,2026-06-21,70,84.0,true
+Barrio,Baguette,2026-06-22,70,84.0,true
+Barrio,Baguette,2026-06-23,70,84.0,true
+Barrio,Baguette,2026-06-24,70,84.0,true
+Barrio,Baguette,2026-06-25,70,84.0,true
+Barrio,Baguette,2026-06-26,70,84.0,true
+Barrio,Baguette,2026-06-27,70,84.0,true
+Barrio,Baguette,2026-06-28,70,84.0,true
+Barrio,Sourdough,2026-04-20,19,85.5,false
+Barrio,Sourdough,2026-04-21,14,63.0,false
+Barrio,Sourdough,2026-04-22,19,85.5,false
+Barrio,Sourdough,2026-04-23,19,85.5,false
+Barrio,Sourdough,2026-04-24,24,108.0,false
+Barrio,Sourdough,2026-04-25,24,108.0,true
+Barrio,Sourdough,2026-04-26,24,108.0,true
+Barrio,Sourdough,2026-04-27,16,72.0,false
+Barrio,Sourdough,2026-04-28,21,94.5,false
+Barrio,Sourdough,2026-04-29,21,94.5,false
+Barrio,Sourdough,2026-04-30,22,99.0,false
+Barrio,Sourdough,2026-05-01,17,76.5,false
+Barrio,Sourdough,2026-05-02,24,108.0,true
+Barrio,Sourdough,2026-05-03,20,90.0,false
+Barrio,Sourdough,2026-05-04,19,85.5,false
+Barrio,Sourdough,2026-05-05,21,94.5,false
+Barrio,Sourdough,2026-05-06,19,85.5,false
+Barrio,Sourdough,2026-05-07,20,90.0,false
+Barrio,Sourdough,2026-05-08,24,108.0,false
+Barrio,Sourdough,2026-05-09,24,108.0,true
+Barrio,Sourdough,2026-05-10,24,108.0,true
+Barrio,Sourdough,2026-05-11,15,67.5,false
+Barrio,Sourdough,2026-05-12,17,76.5,false
+Barrio,Sourdough,2026-05-13,23,103.5,false
+Barrio,Sourdough,2026-05-14,20,90.0,false
+Barrio,Sourdough,2026-05-15,21,94.5,false
+Barrio,Sourdough,2026-05-16,24,108.0,true
+Barrio,Sourdough,2026-05-17,24,108.0,true
+Barrio,Sourdough,2026-05-18,18,81.0,false
+Barrio,Sourdough,2026-05-19,21,94.5,false
+Barrio,Sourdough,2026-05-20,18,81.0,false
+Barrio,Sourdough,2026-05-21,21,94.5,false
+Barrio,Sourdough,2026-05-22,23,103.5,false
+Barrio,Sourdough,2026-05-23,24,108.0,true
+Barrio,Sourdough,2026-05-24,24,108.0,false
+Barrio,Sourdough,2026-05-25,19,85.5,false
+Barrio,Sourdough,2026-05-26,18,81.0,false
+Barrio,Sourdough,2026-05-27,22,99.0,false
+Barrio,Sourdough,2026-05-28,18,81.0,false
+Barrio,Sourdough,2026-05-29,24,108.0,true
+Barrio,Sourdough,2026-05-30,24,108.0,false
+Barrio,Sourdough,2026-05-31,24,108.0,true
+Barrio,Sourdough,2026-06-01,17,76.5,false
+Barrio,Sourdough,2026-06-02,20,90.0,false
+Barrio,Sourdough,2026-06-03,19,85.5,false
+Barrio,Sourdough,2026-06-04,20,90.0,false
+Barrio,Sourdough,2026-06-05,21,94.5,false
+Barrio,Sourdough,2026-06-06,24,108.0,true
+Barrio,Sourdough,2026-06-07,24,108.0,true
+Barrio,Sourdough,2026-06-08,15,67.5,false
+Barrio,Sourdough,2026-06-09,18,81.0,false
+Barrio,Sourdough,2026-06-10,17,76.5,false
+Barrio,Sourdough,2026-06-11,20,90.0,false
+Barrio,Sourdough,2026-06-12,24,108.0,true
+Barrio,Sourdough,2026-06-13,24,108.0,true
+Barrio,Sourdough,2026-06-14,24,108.0,true
+Barrio,Sourdough,2026-06-15,20,90.0,false
+Barrio,Sourdough,2026-06-16,19,85.5,false
+Barrio,Sourdough,2026-06-17,19,85.5,false
+Barrio,Sourdough,2026-06-18,21,94.5,false
+Barrio,Sourdough,2026-06-19,22,99.0,false
+Barrio,Sourdough,2026-06-20,24,108.0,true
+Barrio,Sourdough,2026-06-21,24,108.0,true
+Barrio,Sourdough,2026-06-22,19,85.5,false
+Barrio,Sourdough,2026-06-23,18,81.0,false
+Barrio,Sourdough,2026-06-24,18,81.0,false
+Barrio,Sourdough,2026-06-25,24,108.0,true
+Barrio,Sourdough,2026-06-26,24,108.0,true
+Barrio,Sourdough,2026-06-27,24,108.0,true
+Barrio,Sourdough,2026-06-28,20,90.0,false
+Barrio,Cinnamon Roll,2026-04-20,15,42.0,false
+Barrio,Cinnamon Roll,2026-04-21,22,61.6,false
+Barrio,Cinnamon Roll,2026-04-22,19,53.2,false
+Barrio,Cinnamon Roll,2026-04-23,22,61.6,false
+Barrio,Cinnamon Roll,2026-04-24,28,78.4,false
+Barrio,Cinnamon Roll,2026-04-25,30,84.0,true
+Barrio,Cinnamon Roll,2026-04-26,26,72.8,false
+Barrio,Cinnamon Roll,2026-04-27,20,56.0,false
+Barrio,Cinnamon Roll,2026-04-28,19,53.2,false
+Barrio,Cinnamon Roll,2026-04-29,23,64.4,false
+Barrio,Cinnamon Roll,2026-04-30,19,53.2,false
+Barrio,Cinnamon Roll,2026-05-01,29,81.2,false
+Barrio,Cinnamon Roll,2026-05-02,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-03,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-04,22,61.6,false
+Barrio,Cinnamon Roll,2026-05-05,20,56.0,false
+Barrio,Cinnamon Roll,2026-05-06,21,58.8,false
+Barrio,Cinnamon Roll,2026-05-07,25,70.0,false
+Barrio,Cinnamon Roll,2026-05-08,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-09,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-10,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-11,16,44.8,false
+Barrio,Cinnamon Roll,2026-05-12,22,61.6,false
+Barrio,Cinnamon Roll,2026-05-13,22,61.6,false
+Barrio,Cinnamon Roll,2026-05-14,24,67.2,false
+Barrio,Cinnamon Roll,2026-05-15,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-16,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-17,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-18,22,61.6,false
+Barrio,Cinnamon Roll,2026-05-19,25,70.0,false
+Barrio,Cinnamon Roll,2026-05-20,23,64.4,false
+Barrio,Cinnamon Roll,2026-05-21,21,58.8,false
+Barrio,Cinnamon Roll,2026-05-22,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-23,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-24,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-25,26,72.8,false
+Barrio,Cinnamon Roll,2026-05-26,21,58.8,false
+Barrio,Cinnamon Roll,2026-05-27,27,75.6,false
+Barrio,Cinnamon Roll,2026-05-28,26,72.8,false
+Barrio,Cinnamon Roll,2026-05-29,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-30,30,84.0,true
+Barrio,Cinnamon Roll,2026-05-31,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-01,20,56.0,false
+Barrio,Cinnamon Roll,2026-06-02,18,50.4,false
+Barrio,Cinnamon Roll,2026-06-03,27,75.6,false
+Barrio,Cinnamon Roll,2026-06-04,25,70.0,false
+Barrio,Cinnamon Roll,2026-06-05,30,84.0,false
+Barrio,Cinnamon Roll,2026-06-06,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-07,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-08,22,61.6,false
+Barrio,Cinnamon Roll,2026-06-09,22,61.6,false
+Barrio,Cinnamon Roll,2026-06-10,20,56.0,false
+Barrio,Cinnamon Roll,2026-06-11,20,56.0,false
+Barrio,Cinnamon Roll,2026-06-12,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-13,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-14,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-15,20,56.0,false
+Barrio,Cinnamon Roll,2026-06-16,19,53.2,false
+Barrio,Cinnamon Roll,2026-06-17,23,64.4,false
+Barrio,Cinnamon Roll,2026-06-18,24,67.2,false
+Barrio,Cinnamon Roll,2026-06-19,29,81.2,false
+Barrio,Cinnamon Roll,2026-06-20,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-21,30,84.0,false
+Barrio,Cinnamon Roll,2026-06-22,22,61.6,false
+Barrio,Cinnamon Roll,2026-06-23,23,64.4,false
+Barrio,Cinnamon Roll,2026-06-24,23,64.4,false
+Barrio,Cinnamon Roll,2026-06-25,24,67.2,false
+Barrio,Cinnamon Roll,2026-06-26,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-27,30,84.0,true
+Barrio,Cinnamon Roll,2026-06-28,30,84.0,true
+Barrio,Almond Croissant,2026-04-20,20,52.0,false
+Barrio,Almond Croissant,2026-04-21,22,57.2,false
+Barrio,Almond Croissant,2026-04-22,23,59.8,false
+Barrio,Almond Croissant,2026-04-23,24,62.4,false
+Barrio,Almond Croissant,2026-04-24,31,80.6,false
+Barrio,Almond Croissant,2026-04-25,40,104.0,false
+Barrio,Almond Croissant,2026-04-26,29,75.4,false
+Barrio,Almond Croissant,2026-04-27,21,54.6,false
+Barrio,Almond Croissant,2026-04-28,19,49.4,false
+Barrio,Almond Croissant,2026-04-29,27,70.2,false
+Barrio,Almond Croissant,2026-04-30,20,52.0,false
+Barrio,Almond Croissant,2026-05-01,30,78.0,false
+Barrio,Almond Croissant,2026-05-02,32,83.2,false
+Barrio,Almond Croissant,2026-05-03,28,72.8,false
+Barrio,Almond Croissant,2026-05-04,20,52.0,false
+Barrio,Almond Croissant,2026-05-05,21,54.6,false
+Barrio,Almond Croissant,2026-05-06,22,57.2,false
+Barrio,Almond Croissant,2026-05-07,22,57.2,false
+Barrio,Almond Croissant,2026-05-08,26,67.6,false
+Barrio,Almond Croissant,2026-05-09,33,85.8,false
+Barrio,Almond Croissant,2026-05-10,32,83.2,false
+Barrio,Almond Croissant,2026-05-11,23,59.8,false
+Barrio,Almond Croissant,2026-05-12,17,44.2,false
+Barrio,Almond Croissant,2026-05-13,22,57.2,false
+Barrio,Almond Croissant,2026-05-14,26,67.6,false
+Barrio,Almond Croissant,2026-05-15,34,88.4,false
+Barrio,Almond Croissant,2026-05-16,33,85.8,false
+Barrio,Almond Croissant,2026-05-17,37,96.2,false
+Barrio,Almond Croissant,2026-05-18,15,39.0,false
+Barrio,Almond Croissant,2026-05-19,24,62.4,false
+Barrio,Almond Croissant,2026-05-20,26,67.6,false
+Barrio,Almond Croissant,2026-05-21,26,67.6,false
+Barrio,Almond Croissant,2026-05-22,28,72.8,false
+Barrio,Almond Croissant,2026-05-23,35,91.0,false
+Barrio,Almond Croissant,2026-05-24,36,93.6,false
+Barrio,Almond Croissant,2026-05-25,20,52.0,false
+Barrio,Almond Croissant,2026-05-26,16,41.6,false
+Barrio,Almond Croissant,2026-05-27,28,72.8,false
+Barrio,Almond Croissant,2026-05-28,31,80.6,false
+Barrio,Almond Croissant,2026-05-29,27,70.2,false
+Barrio,Almond Croissant,2026-05-30,35,91.0,false
+Barrio,Almond Croissant,2026-05-31,39,101.4,false
+Barrio,Almond Croissant,2026-06-01,18,46.8,false
+Barrio,Almond Croissant,2026-06-02,22,57.2,false
+Barrio,Almond Croissant,2026-06-03,31,80.6,false
+Barrio,Almond Croissant,2026-06-04,29,75.4,false
+Barrio,Almond Croissant,2026-06-05,29,75.4,false
+Barrio,Almond Croissant,2026-06-06,33,85.8,false
+Barrio,Almond Croissant,2026-06-07,33,85.8,false
+Barrio,Almond Croissant,2026-06-08,24,62.4,false
+Barrio,Almond Croissant,2026-06-09,22,57.2,false
+Barrio,Almond Croissant,2026-06-10,24,62.4,false
+Barrio,Almond Croissant,2026-06-11,25,65.0,false
+Barrio,Almond Croissant,2026-06-12,26,67.6,false
+Barrio,Almond Croissant,2026-06-13,41,106.6,false
+Barrio,Almond Croissant,2026-06-14,34,88.4,false
+Barrio,Almond Croissant,2026-06-15,25,65.0,false
+Barrio,Almond Croissant,2026-06-16,24,62.4,false
+Barrio,Almond Croissant,2026-06-17,23,59.8,false
+Barrio,Almond Croissant,2026-06-18,21,54.6,false
+Barrio,Almond Croissant,2026-06-19,34,88.4,false
+Barrio,Almond Croissant,2026-06-20,34,88.4,false
+Barrio,Almond Croissant,2026-06-21,39,101.4,false
+Barrio,Almond Croissant,2026-06-22,28,72.8,false
+Barrio,Almond Croissant,2026-06-23,15,39.0,false
+Barrio,Almond Croissant,2026-06-24,25,65.0,false
+Barrio,Almond Croissant,2026-06-25,29,75.4,false
+Barrio,Almond Croissant,2026-06-26,27,70.2,false
+Barrio,Almond Croissant,2026-06-27,42,109.2,true
+Barrio,Almond Croissant,2026-06-28,33,85.8,false
