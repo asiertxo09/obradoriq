@@ -73,6 +73,21 @@ def test_phrase_recommendation_is_grounded():
     assert "Croissant" in text
 
 
+def test_ungrounded_llm_output_is_rejected_to_stub(monkeypatch):
+    """If a live model invents a number, the Trust Layer rejects it and falls back
+    to the deterministic grounded stub (never shows ungrounded figures)."""
+    monkeypatch.setattr("app.llm.router.complete",
+                        lambda *a, **k: "Bake 30 and you'll magically earn €999 extra!")
+    rec = Recommendation(
+        product_id=1, site_id=1, target_date=dt.date(2026, 7, 1),
+        forecast_qty=24.0, recommended_qty=30, confidence="HIGH",
+        predicted_waste_eur=0.0, reason="x",
+    )
+    text = agents.phrase_recommendation(rec, "Croissant")
+    assert "999" not in text          # ungrounded number rejected
+    assert "30" in text and "Croissant" in text  # safe stub returned
+
+
 def test_justify_reallocation_is_grounded():
     r = Reallocation(
         product_id=1, target_date=dt.date(2026, 7, 1), from_site_id=2, to_site_id=1,

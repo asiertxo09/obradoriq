@@ -8,6 +8,17 @@ from __future__ import annotations
 
 from app.recommender.types import Reallocation, Recommendation
 from app.trust import layer
+from app.trust.layer import GroundingError
+
+
+def _grounded_or_stub(text: str, grounded: list[float], stub: str) -> str:
+    """Trust Layer gate: accept the LLM text only if it passes the grounding check;
+    otherwise reject it and return the deterministic, guaranteed-grounded stub."""
+    try:
+        layer.assert_grounded(text, grounded)
+        return text
+    except GroundingError:
+        return stub
 
 
 def phrase_recommendation(rec: Recommendation, product_name: str) -> str:
@@ -37,8 +48,7 @@ def phrase_recommendation(rec: Recommendation, product_name: str) -> str:
     from app.llm.router import complete
 
     text = complete("phrase_recommendation", prompt, offline_stub=stub)
-    layer.assert_grounded(text, grounded)
-    return text
+    return _grounded_or_stub(text, grounded, stub)
 
 
 def justify_reallocation(realloc: Reallocation, product_name: str,
@@ -58,5 +68,4 @@ def justify_reallocation(realloc: Reallocation, product_name: str,
     from app.llm.router import complete
 
     text = complete("reallocation_justify", prompt, offline_stub=stub)
-    layer.assert_grounded(text, grounded)
-    return text
+    return _grounded_or_stub(text, grounded, stub)
