@@ -81,6 +81,24 @@ def test_tenant_isolation_on_decision():
     assert r.status_code == 201
 
 
+def test_chat_endpoint_returns_grounded_tool_result():
+    token = _register("chat@x.com", "Chat Bakers")
+    client.post("/api/sites", json={"name": "S1"}, headers=_auth(token))
+    client.post("/api/products", json={"name": "Bun", "price": 2.0, "ingredient_cost": 0.5,
+                "batch_size": 4}, headers=_auth(token))
+    rows = "site,product,date,quantity_sold,sold_out\n" + "\n".join(
+        f"S1,Bun,{(dt.date(2026,1,1)+dt.timedelta(days=i)).isoformat()},20,false"
+        for i in range(40))
+    client.post("/api/uploads/sales", files={"file": ("s.csv", rows, "text/csv")},
+                headers=_auth(token))
+    r = client.post("/api/chat", json={"message": "How much should I bake on 2026-02-15?"},
+                    headers=_auth(token))
+    assert r.status_code == 200
+    body = r.json()
+    assert body["reply"]
+    assert body["tool_results"][0]["tool"] == "get_recommendations"
+
+
 def test_upload_rejects_bad_rows():
     token = _register("c@c.com", "Chain C")
     client.post("/api/sites", json={"name": "C1"}, headers=_auth(token))

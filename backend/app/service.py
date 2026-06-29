@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import datetime as dt
 from collections import defaultdict
+from dataclasses import replace
 
 from sqlalchemy.orm import Session
 
@@ -71,10 +72,15 @@ def _recent_stats(db: Session, product_id: int, site_id: int, before: dt.date):
 
 
 def generate_recommendations(db: Session, bakery_id: int, target_date: dt.date,
-                             persist: bool = True) -> list[RecommendationOut]:
+                             persist: bool = True,
+                             demand_adjustment_pct: float = 0.0) -> list[RecommendationOut]:
+    """demand_adjustment_pct: an explicit, owner-attributable nudge to forecast demand
+    (e.g. +30 for a festival the model can't know about). It is surfaced in the reason,
+    never applied silently — the agent sets it from the owner's stated context."""
     products = db.query(Product).filter_by(bakery_id=bakery_id).all()
     sites = db.query(Site).filter_by(bakery_id=bakery_id).all()
     risk = db.get(Bakery, bakery_id).risk_preference
+    factor = 1.0 + demand_adjustment_pct / 100.0
 
     out: list[RecommendationOut] = []
     for p in products:
@@ -84,11 +90,17 @@ def generate_recommendations(db: Session, bakery_id: int, target_date: dt.date,
             if not hist:
                 continue
             f = forecast(p.id, s.id, target_date, hist)
+            if factor != 1.0:
+                f = replace(f, expected_demand=round(f.expected_demand * factor, 1),
+                            sigma=round(f.sigma * factor, 2))
             waste_rate, sold_out_rate, _ = _recent_stats(db, p.id, s.id, target_date)
             rec = recommend_production(f, pinfo, waste_rate,
                                        sold_out_recently=sold_out_rate > 0,
                                        risk_preference=risk)
             reason = agents.phrase_recommendation(rec, p.name)
+            if demand_adjustment_pct:
+                reason += (f" (Adjusted {demand_adjustment_pct:+.0f}% for the context "
+                           f"you mentioned.)")
             row = RecommendationOut(
                 product_id=p.id, product_name=p.name, site_id=s.id,
                 target_date=target_date, forecast_qty=rec.forecast_qty,
@@ -109,6 +121,31 @@ def generate_recommendations(db: Session, bakery_id: int, target_date: dt.date,
         for row in out:
             row.id = stored.get((row.product_id, row.site_id))
     return out
+
+
+def draft_production_sheet(db: Session, bakery_id: int, target_date: dt.date,
+                           demand_adjustment_pct: float = 0.0) -> dict:
+    """Aggregate per-site recommendations into a chain production sheet + the estimated
+    ingredient spend — a draft the owner approves (the 'take action' output)."""
+    recs = generate_recommendations(db, bakery_id, target_date, persist=False,
+                                    demand_adjustment_pct=demand_adjustment_pct)
+    products = {p.id: p for p in db.query(Product).filter_by(bakery_id=bakery_id)}
+    sites = {s.id: s.name for s in db.query(Site).filter_by(bakery_id=bakery_id)}
+
+    lines: dict[str, dict] = {}
+    spend = 0.0
+    for r in recs:
+        line = lines.setdefault(r.product_name, {"product": r.product_name,
+                                                 "total_qty": 0, "by_site": {}})
+        line["total_qty"] += r.recommended_qty
+        line["by_site"][sites[r.site_id]] = r.recommended_qty
+        spend += r.recommended_qty * products[r.product_id].ingredient_cost
+
+    return {
+        "target_date": target_date.isoformat(),
+        "lines": sorted(lines.values(), key=lambda x: x["total_qty"], reverse=True),
+        "estimated_ingredient_spend_eur": round(spend, 2),
+    }
 
 
 def generate_reallocations(db: Session, bakery_id: int, target_date: dt.date) -> list[ReallocationOut]:

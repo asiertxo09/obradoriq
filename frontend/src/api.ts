@@ -35,7 +35,26 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ decision, final_qty: finalQty }),
     }),
+  chat: (message: string, history: ChatTurn[]) =>
+    req("/chat", { method: "POST", body: JSON.stringify({ message, history }) }),
+  ingestText: (kind: "sales" | "waste", csv_text: string) =>
+    req("/ingest/text", { method: "POST", body: JSON.stringify({ kind, csv_text }) }),
 };
+
+export interface ChatTurn {
+  role: string;
+  content: string;
+}
+export interface ToolResult {
+  tool: string;
+  args: Record<string, unknown>;
+  result: any;
+}
+export interface ChatReply {
+  reply: string;
+  tool_results: ToolResult[];
+  note?: string;
+}
 
 // types
 export interface Recommendation {

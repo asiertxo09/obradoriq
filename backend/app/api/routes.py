@@ -20,7 +20,10 @@ from app.models import (
     get_db,
 )
 from app.schemas.schemas import (
+    ChatRequest,
+    ChatResponse,
     DecisionRequest,
+    IngestTextRequest,
     LoginRequest,
     ProductCreate,
     ProductOut,
@@ -34,6 +37,7 @@ from app.schemas.schemas import (
     WasteEntry,
     WeeklySummary,
 )
+from app.llm import orchestrator
 from app.service import (
     generate_reallocations,
     generate_recommendations,
@@ -149,6 +153,22 @@ def decide(rec_id: int, body: DecisionRequest, bakery_id: int = Depends(current_
                                   final_qty=body.final_qty, note=body.note))
     db.commit()
     return {"status": "logged"}
+
+
+# ---- agent chat ----
+@router.post("/chat", response_model=ChatResponse)
+def chat(body: ChatRequest, bakery_id: int = Depends(current_bakery_id),
+         db: Session = Depends(get_db)):
+    history = [{"role": m.role, "content": m.content} for m in body.history]
+    out = orchestrator.chat(db, bakery_id, body.message, history)
+    return ChatResponse(**out)
+
+
+@router.post("/ingest/text", response_model=UploadResult)
+def ingest_text(body: IngestTextRequest, bakery_id: int = Depends(current_bakery_id),
+                db: Session = Depends(get_db)):
+    fn = import_sales if body.kind == "sales" else import_waste
+    return fn(db, bakery_id, body.csv_text)
 
 
 # ---- weekly summary ----

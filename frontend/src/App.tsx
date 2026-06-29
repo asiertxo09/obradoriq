@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import {
   api,
+  ChatTurn,
   clearToken,
   getToken,
   setToken,
   Reallocation,
   Recommendation,
   Site,
+  ToolResult,
   Weekly,
 } from "./api";
 import { eur, siteName } from "./format";
@@ -51,7 +53,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
 }
 
 function Dashboard({ onLogout }: { onLogout: () => void }) {
-  const [tab, setTab] = useState<"plan" | "realloc" | "weekly">("plan");
+  const [tab, setTab] = useState<"ask" | "plan" | "realloc" | "weekly">("ask");
   const [sites, setSites] = useState<Site[]>([]);
   useEffect(() => { api.sites().then(setSites).catch(() => {}); }, []);
 
@@ -63,13 +65,136 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       </header>
       <p className="tagline">Waste-killer for small bakery chains — every number is profit you keep.</p>
       <div className="tabs">
+        <div className={`tab ${tab === "ask" ? "active" : ""}`} onClick={() => setTab("ask")}>Ask ObradorIQ</div>
         <div className={`tab ${tab === "plan" ? "active" : ""}`} onClick={() => setTab("plan")}>Daily plan</div>
         <div className={`tab ${tab === "realloc" ? "active" : ""}`} onClick={() => setTab("realloc")}>Reallocation</div>
         <div className={`tab ${tab === "weekly" ? "active" : ""}`} onClick={() => setTab("weekly")}>Weekly review</div>
       </div>
+      {tab === "ask" && <AskView />}
       {tab === "plan" && <DailyPlan sites={sites} />}
       {tab === "realloc" && <ReallocationView sites={sites} />}
       {tab === "weekly" && <WeeklyView />}
+    </div>
+  );
+}
+
+interface Turn { role: "user" | "assistant"; content: string; tools?: ToolResult[]; }
+
+function AskView() {
+  const [turns, setTurns] = useState<Turn[]>([]);
+  const [input, setInput] = useState("");
+  const [busy, setBusy] = useState(false);
+  const examples = [
+    "How much should I bake tomorrow (2026-06-29)?",
+    "We have a street festival this Saturday — adjust 2026-06-29.",
+    "Where am I wasting the most money? Week ending 2026-06-28.",
+    "Should I move anything between my shops on 2026-06-29?",
+  ];
+
+  async function send(text: string) {
+    if (!text.trim() || busy) return;
+    const history: ChatTurn[] = turns.map((t) => ({ role: t.role, content: t.content }));
+    setTurns((t) => [...t, { role: "user", content: text }]);
+    setInput("");
+    setBusy(true);
+    try {
+      const r = await api.chat(text, history);
+      setTurns((t) => [...t, { role: "assistant", content: r.reply, tools: r.tool_results }]);
+    } catch (e: any) {
+      setTurns((t) => [...t, { role: "assistant", content: "Sorry — " + String(e) }]);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <>
+      <div className="card">
+        <div className="site-title">Ask your operations advisor</div>
+        <p className="muted" style={{ fontSize: 13, marginTop: 0 }}>
+          Plain-language questions. The agent calls the forecasting & reallocation tools and
+          answers with grounded numbers. Mention real-world context (a festival, a heatwave) and
+          it adjusts the plan.
+        </p>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+          {examples.map((e) => (
+            <button key={e} className="ghost" onClick={() => send(e)}>{e}</button>
+          ))}
+        </div>
+        <div className="chat">
+          {turns.map((t, i) => (
+            <div key={i} className={`bubble ${t.role}`}>
+              <div>{t.content}</div>
+              {t.tools && t.tools.length > 0 && <ToolData tr={t.tools[0]} />}
+            </div>
+          ))}
+          {busy && <div className="bubble assistant muted">Thinking…</div>}
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+          <input style={{ flex: 1, padding: 10, border: "1px solid var(--line)", borderRadius: 8 }}
+            value={input} placeholder="Ask about production, waste, reallocation, margins…"
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && send(input)} />
+          <button className="primary" onClick={() => send(input)} disabled={busy}>Send</button>
+        </div>
+      </div>
+      <PasteIngest />
+    </>
+  );
+}
+
+function ToolData({ tr }: { tr: ToolResult }) {
+  const r = tr.result || {};
+  if (tr.tool === "get_recommendations" && r.recommendations) {
+    const rows = r.recommendations.slice(0, 6);
+    return (
+      <table style={{ marginTop: 8 }}>
+        <thead><tr><th>Product</th><th className="num">Bake</th><th className="num">Leftover €</th></tr></thead>
+        <tbody>{rows.map((x: any, i: number) => (
+          <tr key={i}><td>{x.product_name} (site {x.site_id})</td>
+            <td className="num"><strong>{x.recommended_qty}</strong></td>
+            <td className="num eur">{x.predicted_waste_eur ? "€" + x.predicted_waste_eur.toFixed(2) : "—"}</td></tr>
+        ))}</tbody>
+      </table>
+    );
+  }
+  if (tr.tool === "draft_production_sheet" && r.lines) {
+    return <p className="muted" style={{ fontSize: 12 }}>Est. ingredient spend €{r.estimated_ingredient_spend_eur} · {r.lines.length} products</p>;
+  }
+  return <p className="muted" style={{ fontSize: 11 }}>via tool: {tr.tool}</p>;
+}
+
+function PasteIngest() {
+  const [kind, setKind] = useState<"sales" | "waste">("sales");
+  const [text, setText] = useState("");
+  const [msg, setMsg] = useState("");
+  async function go() {
+    try {
+      const r = await api.ingestText(kind, text);
+      setMsg(`Imported ${r.inserted} rows, rejected ${r.rejected}.` +
+        (r.errors?.length ? " First error: " + r.errors[0] : ""));
+    } catch (e: any) { setMsg("Error: " + String(e)); }
+  }
+  return (
+    <div className="card">
+      <div className="site-title">Paste data (CSV)</div>
+      <p className="muted" style={{ fontSize: 12, marginTop: 0 }}>
+        Paste sales or waste rows. Sales: <code>site,product,date,quantity_sold[,sold_out]</code> ·
+        Waste: <code>site,product,date,quantity_wasted</code>.
+      </p>
+      <div style={{ marginBottom: 6 }}>
+        <select value={kind} onChange={(e) => setKind(e.target.value as any)}>
+          <option value="sales">sales</option><option value="waste">waste</option>
+        </select>
+      </div>
+      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={4}
+        style={{ width: "100%", fontFamily: "monospace", fontSize: 12, padding: 8,
+          border: "1px solid var(--line)", borderRadius: 8 }}
+        placeholder={"Centro,Croissant,2026-06-29,40,false"} />
+      <div style={{ marginTop: 8 }}>
+        <button className="primary" onClick={go}>Import</button>
+        {msg && <span className="muted" style={{ marginLeft: 10, fontSize: 13 }}>{msg}</span>}
+      </div>
     </div>
   );
 }

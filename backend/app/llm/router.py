@@ -77,24 +77,39 @@ def complete(task: str, prompt: str, *, offline_stub: str | None = None) -> str:
         return offline_stub if offline_stub is not None else prompt
 
 
-def _complete_anthropic(model: str, prompt: str, api_key: str) -> str:
+def _complete_anthropic(model: str, prompt: str, api_key: str,
+                        system: str = SYSTEM_PROMPT, max_tokens: int = 300) -> str:
     from anthropic import Anthropic
 
     client = Anthropic(api_key=api_key)
     msg = client.messages.create(
-        model=model, max_tokens=300, system=SYSTEM_PROMPT,
+        model=model, max_tokens=max_tokens, system=system,
         messages=[{"role": "user", "content": prompt}],
     )
     return "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
 
 
-def _complete_openai_compatible(model: str, prompt: str, api_key: str, base_url: str) -> str:
+def _complete_openai_compatible(model: str, prompt: str, api_key: str, base_url: str,
+                                system: str = SYSTEM_PROMPT, max_tokens: int = 300) -> str:
     from openai import OpenAI
 
     client = OpenAI(api_key=api_key, base_url=base_url or None)
     resp = client.chat.completions.create(
-        model=model, max_tokens=300,
-        messages=[{"role": "system", "content": SYSTEM_PROMPT},
+        model=model, max_tokens=max_tokens,
+        messages=[{"role": "system", "content": system},
                   {"role": "user", "content": prompt}],
     )
     return resp.choices[0].message.content or ""
+
+
+def raw_complete(system: str, user: str, *, tier: str = "reasoning",
+                 max_tokens: int = 500) -> str:
+    """Plain completion with a custom system prompt (no native tool API needed).
+    Used by the orchestrator's provider-agnostic JSON tool-planning loop."""
+    s = get_settings()
+    model = (s.model_reasoning or _provider_defaults(s.llm_provider)[1]) if tier == "reasoning" \
+        else (s.model_execution or _provider_defaults(s.llm_provider)[2])
+    if s.llm_provider == "anthropic":
+        return _complete_anthropic(model, user, s.api_key(), system, max_tokens)
+    base_url = s.llm_base_url or _provider_defaults(s.llm_provider)[0]
+    return _complete_openai_compatible(model, user, s.api_key(), base_url, system, max_tokens)

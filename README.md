@@ -45,6 +45,24 @@ makes the final call.
 the LLM only *phrases* them. A recommendation can never display a figure the math didn't
 produce. See [`AGENT_FRAMEWORK.md`](AGENT_FRAMEWORK.md) §5 (Trust Layer).
 
+## Ask ObradorIQ — the conversational agent
+
+The dashboard has an **Ask ObradorIQ** tab: a chat where the agent answers plain-language
+questions by **calling the ML as tools** (forecast, newsvendor, reallocation, weekly,
+production-sheet draft) and replying with grounded numbers. This is where the LLM earns its
+keep — doing what statistics can't:
+
+- **Conversation:** *"How much should I bake tomorrow? Where am I wasting the most?"*
+- **Context the model can't know:** *"We have a street festival Saturday"* → the agent sets an
+  explicit, attributed `demand_adjustment_pct` and says so.
+- **Messy input:** paste any sales/waste rows and it imports them.
+- **Action drafts:** a chain production sheet + estimated ingredient spend to approve.
+
+It's **provider-agnostic** (a JSON tool-planning loop over plain completions, so it doesn't
+need gated native function-calling) and **degrades gracefully**: if the LLM is offline or a
+key fails, a deterministic router still calls the same tools and returns grounded data. The
+ML does the numbers; the agent does the language, the context-reasoning, and the doing.
+
 ## Headline result (backtest on the demo chain)
 
 Walk-forward backtest against **true (uncensored) demand** — the model trains only on

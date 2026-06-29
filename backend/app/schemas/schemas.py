@@ -104,6 +104,34 @@ class DecisionRequest(BaseModel):
     note: str = ""
 
 
+# ---- chat / agent ----
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+
+class ChatRequest(BaseModel):
+    message: str
+    history: list[ChatMessage] = []
+
+
+class ToolResult(BaseModel):
+    tool: str
+    args: dict = {}
+    result: dict = {}
+
+
+class ChatResponse(BaseModel):
+    reply: str
+    tool_results: list[ToolResult] = []
+    note: str = ""
+
+
+class IngestTextRequest(BaseModel):
+    kind: str  # "sales" | "waste"
+    csv_text: str
+
+
 # ---- weekly summary ----
 class ProductMargin(BaseModel):
     product_id: int
