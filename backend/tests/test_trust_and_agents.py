@@ -48,6 +48,19 @@ def test_routing_execution_uses_sonnet():
     assert "sonnet" in router.model_for("report_format").lower()
 
 
+def test_routing_switches_to_groq_models(monkeypatch):
+    """With provider=groq, tiers map to free llama models (reasoning vs execution)."""
+    from app.core.config import get_settings
+
+    monkeypatch.setenv("LLM_PROVIDER", "groq")
+    get_settings.cache_clear()
+    try:
+        assert "70b" in router.model_for("reallocation_justify")   # reasoning tier
+        assert "8b" in router.model_for("phrase_recommendation")   # execution tier
+    finally:
+        get_settings.cache_clear()  # restore default for other tests
+
+
 # ---- agents (offline stub path) keep grounding ----
 def test_phrase_recommendation_is_grounded():
     rec = Recommendation(

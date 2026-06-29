@@ -16,9 +16,14 @@ services:
         generateValue: true
       - key: SEED_ON_START
         value: "true"
+      # LLM phrasing. Default offline = deterministic stubs (free, reproducible).
+      # For live phrasing with a FREE provider: set LLM_OFFLINE=false,
+      # LLM_PROVIDER=groq (or nvidia), and LLM_API_KEY in the dashboard.
       - key: LLM_OFFLINE
-        value: "true"          # set to "false" and add ANTHROPIC_API_KEY for live phrasing
-      - key: ANTHROPIC_API_KEY
+        value: "true"
+      - key: LLM_PROVIDER
+        value: "groq"          # groq | nvidia | anthropic | openai_compatible
+      - key: LLM_API_KEY
         sync: false            # set manually in the dashboard if going live
 
 databases:

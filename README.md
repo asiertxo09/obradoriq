@@ -77,10 +77,26 @@ docker compose up --build          # http://localhost:8000  (API + UI + Postgres
 2. In Render: **New → Blueprint**, point at the repo. [`render.yaml`](render.yaml) provisions
    one free web service (API + UI) and a free PostgreSQL database.
 3. `JWT_SECRET` is auto-generated; `SEED_ON_START=true` loads the demo chain on first boot.
-4. For live LLM phrasing, set `LLM_OFFLINE=false` and add `ANTHROPIC_API_KEY` in the dashboard.
+4. For live LLM phrasing with a **free** provider, set `LLM_OFFLINE=false`,
+   `LLM_PROVIDER=groq` (or `nvidia`), and `LLM_API_KEY` in the dashboard (see below).
 
 > Free-tier notes: the web service sleeps when idle and the free Postgres expires after
 > ~30 days. `SEED_ON_START` re-seeds automatically on a fresh database.
+
+### Live AI phrasing — free providers (Groq / NVIDIA)
+
+The numbers always come from the recommender core; the LLM only phrases them, so any
+provider works. The Opus/Sonnet routing is preserved as a reasoning-vs-execution tier:
+
+| `LLM_PROVIDER` | Reasoning model | Execution model | Free key |
+|---|---|---|---|
+| `groq` | `llama-3.3-70b-versatile` | `llama-3.1-8b-instant` | https://console.groq.com/keys |
+| `nvidia` | `meta/llama-3.3-70b-instruct` | `meta/llama-3.1-8b-instruct` | https://build.nvidia.com |
+| `anthropic` | `claude-opus-4-8` | `claude-sonnet-4-6` | console.anthropic.com |
+
+Set `LLM_OFFLINE=false`, `LLM_PROVIDER`, and `LLM_API_KEY`. Optionally override models with
+`MODEL_REASONING` / `MODEL_EXECUTION`. (`openai_compatible` + `LLM_BASE_URL` works for any
+other OpenAI-style endpoint.)
 
 ## Project layout
 ```
