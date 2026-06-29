@@ -67,10 +67,14 @@ def complete(task: str, prompt: str, *, offline_stub: str | None = None) -> str:
         return offline_stub if offline_stub is not None else prompt
 
     model = model_for(task)
-    if s.llm_provider == "anthropic":
-        return _complete_anthropic(model, prompt, s.api_key())
-    base_url = s.llm_base_url or _provider_defaults(s.llm_provider)[0]
-    return _complete_openai_compatible(model, prompt, s.api_key(), base_url)
+    try:
+        if s.llm_provider == "anthropic":
+            return _complete_anthropic(model, prompt, s.api_key())
+        base_url = s.llm_base_url or _provider_defaults(s.llm_provider)[0]
+        return _complete_openai_compatible(model, prompt, s.api_key(), base_url)
+    except Exception:
+        # Never let an LLM error break a recommendation: fall back to grounded stub.
+        return offline_stub if offline_stub is not None else prompt
 
 
 def _complete_anthropic(model: str, prompt: str, api_key: str) -> str:
