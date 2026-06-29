@@ -1,9 +1,12 @@
 """End-to-end smoke: seed the demo chain, then walk the full HTTP path the demo uses."""
 from __future__ import annotations
 
+import os
+
 import pytest
 from fastapi.testclient import TestClient
 
+from app import main as app_main
 from app.main import app
 from app.seed import DEMO_EMAIL, DEMO_PASSWORD, seed
 
@@ -47,6 +50,10 @@ def test_full_demo_flow():
     assert weekly["margins"]
 
 
+@pytest.mark.skipif(
+    not os.path.isdir(app_main._FRONTEND_DIST),
+    reason="frontend not built (frontend/dist absent) — built only in the deploy image",
+)
 def test_frontend_is_served():
     # The built React app is mounted at / (frontend/dist must exist from `npm run build`).
     r = client.get("/")
