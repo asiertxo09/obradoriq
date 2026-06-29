@@ -3,6 +3,10 @@
 > The AI that turns your bakery data into smarter daily decisions.
 > **Produce smarter. Sell better. Waste less.**
 
+### 🔗 Live demo: **https://obradoriq.onrender.com**
+Sign in with **`owner@obradoriq.demo`** / **`bakery123`**.
+*(Free tier sleeps when idle — the first load may take ~30–60s to wake.)*
+
 ObradorIQ is a **waste-reduction tool for small bakery chains (2–4 sites)** that increases
 profit directly. It gives each shop a daily, per-site production recommendation framed in
 **euros of waste avoided**, and — the differentiator — suggests **plan-level reallocation**
@@ -12,6 +16,34 @@ makes the final call.
 - **Concept & one-pager:** [`docs/ideas/obradoriq-waste-killer.md`](docs/ideas/obradoriq-waste-killer.md)
 - **Agent architecture (Salesforce-Agentforce-style):** [`AGENT_FRAMEWORK.md`](AGENT_FRAMEWORK.md)
 - **Technical spec:** [`TECH_SPEC.md`](TECH_SPEC.md)
+
+## How it works
+
+```
+1. INGEST   Each site uploads daily sales + end-of-day waste (CSV / POS export).
+            The Data Hub validates and normalizes everything per-site.
+                         │
+2. FORECAST Per (product, site): recency-weighted same-weekday demand + trend,
+            with a HIGH/LOW confidence flag.            ← deterministic core
+                         │
+3. PLAN     Forecast → batch-rounded production, adjusted for waste history and the
+            owner's risk preference, expressed as € of waste avoided.
+                         │
+4. REALLOCATE  Across sites, spot a chronic over-producer vs. a chronic sell-out for
+            the same product and suggest shifting *planned* production (no goods moved).
+                         │
+5. PHRASE   The Trust Layer masks sensitive fields and sends only grounded numbers to
+            the LLM (Opus/Sonnet tier, or free Groq/NVIDIA Llama) to write it in the
+            owner's voice. If the model alters or invents a number, the output is
+            rejected and the grounded text is used instead.
+                         │
+6. DECIDE   Owner accepts / edits / rejects each suggestion — every decision is logged.
+            Weekly review shows total waste and waste-adjusted ("True") margin.
+```
+
+**The one rule that makes it trustworthy:** the recommender core computes every number;
+the LLM only *phrases* them. A recommendation can never display a figure the math didn't
+produce. See [`AGENT_FRAMEWORK.md`](AGENT_FRAMEWORK.md) §5 (Trust Layer).
 
 ## Headline result (backtest on the demo chain)
 
