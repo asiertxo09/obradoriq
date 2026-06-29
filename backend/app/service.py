@@ -177,5 +177,5 @@ def weekly_summary(db: Session, bakery_id: int, week_end: dt.date) -> WeeklySumm
     return WeeklySummary(
         week_start=week_start, week_end=week_end,
         total_waste_units=total_waste_units, total_waste_eur=round(total_waste_eur, 2),
-        eur_avoided_estimate=round(total_waste_eur * 0.46, 2),  # backtest-derived rate
+        eur_avoided_estimate=round(total_waste_eur * 0.28, 2),  # backtest-derived rate
         margins=margins)

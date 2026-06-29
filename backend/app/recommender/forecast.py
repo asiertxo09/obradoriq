@@ -60,11 +60,13 @@ def forecast(
     if not window:
         # No same-weekday data: fall back to overall recent average, low confidence.
         recent = [effective_demand(o) for o in history[-7:]] or [0.0]
+        mean = statistics.mean(recent)
+        sigma = statistics.pstdev(recent) if len(recent) >= 2 else mean * 0.25
         return Forecast(
             product_id, site_id, target_date,
-            expected_demand=round(statistics.mean(recent), 1),
+            expected_demand=round(mean, 1),
             confidence="LOW", sample_size=len(same_weekday),
-            missing="no same-weekday history",
+            sigma=round(sigma, 2), missing="no same-weekday history",
         )
 
     base = _weighted_mean([effective_demand(o) for o in window])
@@ -73,7 +75,8 @@ def forecast(
     n = len(same_weekday)
     vals = [effective_demand(o) for o in same_weekday]
     mean = statistics.mean(vals)
-    cv = (statistics.pstdev(vals) / mean) if mean > 0 else 1.0
+    sigma = statistics.pstdev(vals) if n >= 2 else mean * 0.25  # demand variability
+    cv = (sigma / mean) if mean > 0 else 1.0
     if n >= HIGH_CONF_MIN_SAMPLES and cv <= HIGH_CONF_MAX_CV:
         confidence, missing = "HIGH", ""
     else:
@@ -86,5 +89,5 @@ def forecast(
     return Forecast(
         product_id, site_id, target_date,
         expected_demand=round(demand, 1),
-        confidence=confidence, sample_size=n, missing=missing,
+        confidence=confidence, sample_size=n, sigma=round(sigma, 2), missing=missing,
     )

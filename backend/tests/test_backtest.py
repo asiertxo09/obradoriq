@@ -31,6 +31,32 @@ def test_backtest_reduces_waste_against_overproducing_baseline():
     assert r.waste_avoided_pct > 50
 
 
+HIGH_MARGIN = ProductInfo(product_id=2, name="Cake", batch_size=1, price=10.0, ingredient_cost=1.0)
+
+
+def _series_volatile(days: int = 70, base: int = 50, swing: int = 12):
+    """Demand alternates by week (so same-weekday history has real variance), and the
+    baker bakes to the mean. A high-margin product should profit from an availability
+    buffer on the high weeks."""
+    start = dt.date(2026, 1, 5)  # a Monday
+    recs = []
+    for i in range(days):
+        week = i // 7
+        demand = base + (swing if week % 2 == 0 else -swing)
+        production = base  # baseline bakes to the mean
+        sold = min(demand, production)
+        recs.append(DayRecord(start + dt.timedelta(days=i), sold,
+                              demand > production, max(0, production - demand), demand))
+    return {("Cake", "Centro"): recs}
+
+
+def test_newsvendor_beats_naive_on_high_margin_volatile_demand():
+    r = run_backtest(_series_volatile(), {"Cake": HIGH_MARGIN},
+                     risk_preference="availability", eval_days=21)
+    assert r.model_profit > r.naive_profit
+    assert r.profit_uplift_vs_naive_eur > 0
+
+
 def test_backtest_reproducible():
     series = _series_overproducing()
     r1 = run_backtest(series, {"Roll": ROLL}, eval_days=21)

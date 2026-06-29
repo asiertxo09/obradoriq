@@ -45,6 +45,7 @@ class Forecast:
     expected_demand: float
     confidence: Confidence
     sample_size: int
+    sigma: float = 0.0  # demand std-dev — drives the newsvendor safety buffer
     missing: str = ""  # what data is missing, when confidence is LOW
 
 
@@ -86,13 +87,21 @@ class Reallocation:
 class BacktestResult:
     days_evaluated: int = 0
     products_evaluated: int = 0
+    # waste (units / €) for each strategy
     baseline_waste_units: int = 0
+    naive_waste_units: int = 0
     model_waste_units: int = 0
     baseline_waste_eur: float = 0.0
+    naive_waste_eur: float = 0.0
     model_waste_eur: float = 0.0
+    # realised profit for each strategy (the honest metric)
+    baseline_profit: float = 0.0
+    naive_profit: float = 0.0
+    model_profit: float = 0.0
     mape: float = 0.0  # mean absolute percentage error of the forecast
     details: list[dict] = field(default_factory=list)
 
+    # ---- waste avoided (model vs the bakery's historical baseline) ----
     @property
     def waste_avoided_units(self) -> int:
         return self.baseline_waste_units - self.model_waste_units
@@ -106,3 +115,18 @@ class BacktestResult:
         if self.baseline_waste_units == 0:
             return 0.0
         return round(100 * self.waste_avoided_units / self.baseline_waste_units, 1)
+
+    # ---- profit uplift (newsvendor vs a naive bake-to-forecast rule) ----
+    @property
+    def profit_uplift_vs_naive_eur(self) -> float:
+        return round(self.model_profit - self.naive_profit, 2)
+
+    @property
+    def profit_uplift_vs_baseline_eur(self) -> float:
+        return round(self.model_profit - self.baseline_profit, 2)
+
+    @property
+    def profit_uplift_vs_naive_pct(self) -> float:
+        if self.naive_profit <= 0:
+            return 0.0
+        return round(100 * (self.model_profit - self.naive_profit) / self.naive_profit, 1)

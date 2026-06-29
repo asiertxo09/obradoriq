@@ -168,7 +168,16 @@ All routes except `/auth/*` require a valid JWT and are **scoped to the caller's
 - **Data integrity:** sales/waste/inventory are append-only history; corrections create new rows, never destructive edits.
 - **Testability:** `recommender/` is pure functions with unit tests covering normal, sparse-data, and unusual-spike cases.
 
-### The first recommendation formula (v1 — keep it simple)
+### Production rule: newsvendor profit-optimization (v2)
+The recommended quantity is the **profit-optimal newsvendor quantity** — the CR-quantile
+of the demand distribution, where `CR = Cu/(Cu+Co)`, `Cu = price − unit_cost` (lost margin),
+`Co = unit_cost` (leftover cost). So high-margin products keep an availability buffer and
+low-margin products hug the forecast; `risk_preference` tilts CR. Demand ~ Normal(mean, σ)
+with σ from same-weekday history; `q* = mean + z(CR)·σ`, batch-rounded. See
+`backend/app/recommender/newsvendor.py`. The backtest compares this against the naive rule
+below on **realised profit** using true demand. (`app.recommender.backtest`.)
+
+### The forecast formula (v1 — kept as the naive baseline)
 ```
 base_forecast   = weighted_avg(last 4 same-weekday sales)      # e.g. last 4 Tuesdays
 trend_adjust    = recent 7-day average / prior 7-day average

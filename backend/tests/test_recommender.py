@@ -70,23 +70,28 @@ def test_recommendation_rounds_and_estimates_waste():
     rec = recommend_production(f, CROISSANT, recent_waste_rate=0.0)
     assert rec.recommended_qty % CROISSANT.batch_size == 0
     assert rec.predicted_waste_eur >= 0
-    assert "Forecast demand" in rec.reason
+    assert "service level" in rec.reason
 
 
-def test_high_waste_trims_a_batch():
+def test_availability_risk_bakes_at_least_as_much_as_waste():
+    """Higher service level (availability) never recommends fewer than the waste tilt."""
     target = dt.date(2026, 7, 1)
-    f = forecast(1, 10, target, _weekday_series(target, 60, weeks=8, noise=1))
-    low = recommend_production(f, CROISSANT, recent_waste_rate=0.30)
-    base = recommend_production(f, CROISSANT, recent_waste_rate=0.0)
-    assert low.recommended_qty == base.recommended_qty - CROISSANT.batch_size
+    f = forecast(1, 10, target, _weekday_series(target, 60, weeks=8, noise=8))
+    avail = recommend_production(f, CROISSANT, risk_preference="availability")
+    waste = recommend_production(f, CROISSANT, risk_preference="waste")
+    assert avail.recommended_qty >= waste.recommended_qty
 
 
-def test_availability_risk_adds_a_batch_on_selouts():
+def test_high_margin_product_keeps_a_bigger_buffer():
+    """A high-margin product should be baked further above the mean than a low-margin one
+    with the same demand distribution (the newsvendor critical-ratio effect)."""
     target = dt.date(2026, 7, 1)
-    f = forecast(1, 10, target, _weekday_series(target, 60, weeks=8, noise=1))
-    avail = recommend_production(f, CROISSANT, sold_out_recently=True, risk_preference="availability")
-    base = recommend_production(f, CROISSANT, sold_out_recently=True, risk_preference="waste")
-    assert avail.recommended_qty == base.recommended_qty + CROISSANT.batch_size
+    f = forecast(1, 10, target, _weekday_series(target, 60, weeks=8, noise=8))
+    high = ProductInfo(1, "Cake", batch_size=1, price=10.0, ingredient_cost=1.0)   # CR high
+    low = ProductInfo(1, "Bread", batch_size=1, price=1.2, ingredient_cost=1.0)    # CR low
+    qty_high = recommend_production(f, high, risk_preference="waste").recommended_qty
+    qty_low = recommend_production(f, low, risk_preference="waste").recommended_qty
+    assert qty_high > qty_low
 
 
 # ---- reallocation ----

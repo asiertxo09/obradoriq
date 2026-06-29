@@ -86,10 +86,12 @@ def main() -> None:
                 sold = min(demand, production)
                 sold_out = demand > production
                 waste = max(0, production - demand)
+                # `demand` is the UNCENSORED true demand — used only as backtest ground
+                # truth. The model never reads it (it trains on quantity_sold + sold_out).
                 sales_rows.append({
                     "site": sname, "product": p["name"], "date": day.isoformat(),
                     "quantity_sold": sold, "revenue": round(sold * p["price"], 2),
-                    "sold_out": "true" if sold_out else "false",
+                    "sold_out": "true" if sold_out else "false", "demand": demand,
                 })
                 if waste > 0:
                     waste_rows.append({
@@ -103,7 +105,8 @@ def main() -> None:
            [{k: p[k] for k in ["name", "category", "price", "ingredient_cost", "batch_size"]}
             for p in PRODUCTS])
     _write("sales.csv",
-           ["site", "product", "date", "quantity_sold", "revenue", "sold_out"], sales_rows)
+           ["site", "product", "date", "quantity_sold", "revenue", "sold_out", "demand"],
+           sales_rows)
     _write("waste.csv", ["site", "product", "date", "quantity_wasted"], waste_rows)
 
     print(f"Wrote {len(sales_rows)} sales rows and {len(waste_rows)} waste rows "

@@ -47,14 +47,24 @@ produce. See [`AGENT_FRAMEWORK.md`](AGENT_FRAMEWORK.md) §5 (Trust Layer).
 
 ## Headline result (backtest on the demo chain)
 
-Walk-forward backtest of the forecast vs. the bakery's own historical baseline:
+Walk-forward backtest against **true (uncensored) demand** — the model trains only on
+observed sales, the evaluation knows real demand, so an availability buffer's captured
+sales are counted, not just its extra waste. Three strategies compared on realised
+**profit** (the unit of value), not waste alone:
 
-| Metric | Value |
-|---|---|
-| Forecast error (MAPE) | **13.8%** |
-| Baseline waste | 879 units (€704) |
-| Model waste | 471 units (€274) |
-| **Waste avoided** | **408 units · €430 · 46.4%** |
+| Strategy | Waste (units) | Profit |
+|---|---|---|
+| Historical baseline (what the bakery baked) | 879 | €18,005 |
+| Naive bake-to-forecast | 645 | €19,159 |
+| **Newsvendor (ours)** | 819 | **€19,316** |
+
+> **vs. the bakery's baseline: +€1,311 profit and 6.8% less waste.**
+> vs. a naive forecast rule: +€157 (0.8%) — modest here, and it grows with demand volatility
+> and margin spread. Forecast error (MAPE): 15.2%.
+
+The newsvendor model sets each product's quantity at its profit-optimal service level
+(margin vs. leftover cost), so high-margin items keep a buffer and low-margin items hug
+the forecast — the textbook-correct answer to "how many to bake."
 
 Reproduce: `cd backend && python -m app.recommender.backtest`
 

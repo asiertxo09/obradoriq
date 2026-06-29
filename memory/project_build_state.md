@@ -11,8 +11,14 @@ The ObradorIQ Waste-Killer MVP is built and passing tests. Layout under `/home/a
 `data/` (synthetic 2-site/10-week fixture + generator), `Dockerfile`, `docker-compose.yml`,
 `render.yaml`, `.github/workflows/ci.yml`, `README.md`.
 
-- **Tests:** 33 backend (pytest) + 2 frontend (Vitest) pass. Backend venv at `backend/.venv`.
-- **Headline metric:** backtest shows 46.4% waste avoided (€430, 408 units), forecast MAPE 13.8%.
+- **Tests:** 42 backend (pytest) + 2 frontend (Vitest) pass. Backend venv at `backend/.venv`.
+- **Smarter core (v2):** production rule is the **newsvendor** profit-optimizer
+  (`recommender/newsvendor.py`) — CR = Cu/(Cu+Co); high-margin items get a buffer. Backtest
+  now uses TRUE uncensored demand (fixture has a `demand` column) and compares profit across
+  historical/naive/newsvendor.
+- **Headline metric:** vs historical baseline +€1,311 profit & 6.8% less waste; vs naive rule
+  +€157 (0.8%, grows with volatility); forecast MAPE 15.2%. Live demo deployed at
+  https://obradoriq.onrender.com (NVIDIA Llama phrasing, free).
 - **Demo login:** owner@obradoriq.demo / bakery123. Run: `SEED_ON_START=true uvicorn app.main:app`.
 - **Key design:** recommender core is pure Python (computes all numbers); LLM only phrases
   (Trust Layer grounding). Model routing: Opus reasoning / Sonnet execution. Auth is JWT+bcrypt
