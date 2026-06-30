@@ -42,8 +42,11 @@ def import_sales(db: Session, bakery_id: int, csv_text: str) -> UploadResult:
                 raise ValueError("quantity_sold is negative")
             revenue = float(row["revenue"]) if row.get("revenue") else qty * product.price
             sold_out = str(row.get("sold_out", "")).strip().lower() in {"true", "1", "yes"}
+            precip = float(row["precip_mm"]) if row.get("precip_mm") else 0.0
+            holiday = str(row.get("is_holiday", "")).strip().lower() in {"true", "1", "yes"}
             db.add(SalesRecord(product_id=product.id, site_id=site_id, date=date,
-                               quantity_sold=qty, revenue=revenue, sold_out=sold_out))
+                               quantity_sold=qty, revenue=revenue, sold_out=sold_out,
+                               precip_mm=precip, is_holiday=holiday))
             inserted += 1
         except KeyError as e:
             errors.append(f"row {i}: unknown {e}")

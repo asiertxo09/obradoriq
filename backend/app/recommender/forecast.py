@@ -51,13 +51,20 @@ def forecast(
     site_id: int,
     target_date: dt.date,
     history: list[SaleObservation],
+    target_rainy: bool = False,
+    target_holiday: bool = False,
 ) -> Forecast:
-    """Forecast demand for (product, site) on target_date from sorted history."""
+    """Forecast demand for (product, site) on target_date from sorted history.
+
+    The weekday base is computed on 'normal' (dry, non-holiday) same-weekday days, then
+    scaled by learned rain/holiday elasticities for the target day's actual conditions.
+    """
+    from app.recommender.signals import context_factors
+
     history = sorted(history, key=lambda o: o.date)
     same_weekday = [o for o in history if o.date.weekday() == target_date.weekday()]
-    window = same_weekday[-SAME_WEEKDAY_WINDOW:]
 
-    if not window:
+    if not same_weekday:
         # No same-weekday data: fall back to overall recent average, low confidence.
         recent = [effective_demand(o) for o in history[-7:]] or [0.0]
         mean = statistics.mean(recent)
@@ -65,26 +72,43 @@ def forecast(
         return Forecast(
             product_id, site_id, target_date,
             expected_demand=round(mean, 1),
-            confidence="LOW", sample_size=len(same_weekday),
+            confidence="LOW", sample_size=0,
             sigma=round(sigma, 2), missing="no same-weekday history",
         )
 
+    # Prefer 'normal' (dry, non-holiday) same-weekday days for the base level so the
+    # context elasticities aren't double-counted; fall back to all same-weekday.
+    normal = [o for o in same_weekday if not o.rainy and not o.holiday]
+    base_pool = normal if len(normal) >= 2 else same_weekday
+    window = base_pool[-SAME_WEEKDAY_WINDOW:]
     base = _weighted_mean([effective_demand(o) for o in window])
     demand = base * _trend(history)
 
+    # Apply learned weather/holiday elasticities for the target day's conditions.
+    rain_f, holiday_f = context_factors(history)
+    notes = []
+    if target_rainy and rain_f != 1.0:
+        demand *= rain_f
+        notes.append(f"rain ×{rain_f:.2f}")
+    if target_holiday and holiday_f != 1.0:
+        demand *= holiday_f
+        notes.append(f"holiday ×{holiday_f:.2f}")
+
     n = len(same_weekday)
-    vals = [effective_demand(o) for o in same_weekday]
+    vals = [effective_demand(o) for o in base_pool]
     mean = statistics.mean(vals)
-    sigma = statistics.pstdev(vals) if n >= 2 else mean * 0.25  # demand variability
+    sigma = statistics.pstdev(vals) if len(vals) >= 2 else mean * 0.25
     cv = (sigma / mean) if mean > 0 else 1.0
-    if n >= HIGH_CONF_MIN_SAMPLES and cv <= HIGH_CONF_MAX_CV:
+    if len(base_pool) >= HIGH_CONF_MIN_SAMPLES and cv <= HIGH_CONF_MAX_CV:
         confidence, missing = "HIGH", ""
     else:
         confidence = "LOW"
         missing = (
-            f"only {n} same-weekday samples" if n < HIGH_CONF_MIN_SAMPLES
-            else f"high variability (cv={cv:.2f})"
+            f"only {len(base_pool)} comparable same-weekday samples"
+            if len(base_pool) < HIGH_CONF_MIN_SAMPLES else f"high variability (cv={cv:.2f})"
         )
+    if notes:
+        missing = (missing + "; " if missing else "") + "applied " + ", ".join(notes)
 
     return Forecast(
         product_id, site_id, target_date,

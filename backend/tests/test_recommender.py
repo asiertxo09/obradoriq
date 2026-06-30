@@ -23,6 +23,38 @@ def _weekday_series(target: dt.date, value: int, weeks: int, noise=0) -> list[Sa
 
 
 # ---- forecast ----
+def _weekday_series_ctx(target, dry_val, weeks, rain_val=None, holiday_val=None):
+    """Same-weekday history mixing dry, rainy, and holiday days."""
+    obs = []
+    for w in range(1, weeks + 1):
+        d = target - dt.timedelta(days=7 * w)
+        if rain_val is not None and w % 3 == 0:
+            obs.append(SaleObservation(d, rain_val, False, rainy=True))
+        elif holiday_val is not None and w % 4 == 0:
+            obs.append(SaleObservation(d, holiday_val, False, holiday=True))
+        else:
+            obs.append(SaleObservation(d, dry_val, False))
+    return obs
+
+
+def test_forecast_applies_learned_rain_factor():
+    target = dt.date(2026, 7, 1)
+    # dry ~ 80, rainy ~ 60 (learned factor ~0.75)
+    hist = _weekday_series_ctx(target, 80, weeks=12, rain_val=60)
+    dry = forecast(1, 10, target, hist, target_rainy=False)
+    wet = forecast(1, 10, target, hist, target_rainy=True)
+    assert wet.expected_demand < dry.expected_demand
+    assert "rain" in wet.missing
+
+
+def test_forecast_applies_learned_holiday_factor():
+    target = dt.date(2026, 7, 1)
+    hist = _weekday_series_ctx(target, 60, weeks=12, holiday_val=90)  # holidays busier
+    normal = forecast(1, 10, target, hist, target_holiday=False)
+    holiday = forecast(1, 10, target, hist, target_holiday=True)
+    assert holiday.expected_demand > normal.expected_demand
+
+
 def test_forecast_normal_is_high_confidence():
     target = dt.date(2026, 7, 1)  # Wednesday
     hist = _weekday_series(target, 60, weeks=8, noise=2)

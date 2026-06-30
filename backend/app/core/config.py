@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     llm_offline: bool = True
     # Seed the demo chain on startup (set true on the Render deploy).
     seed_on_start: bool = False
+    # Force a wipe + re-seed on startup (e.g. to backfill weather/holiday columns once).
+    reseed_on_start: bool = False
 
     # LLM provider: "anthropic" | "groq" | "nvidia" | "openai_compatible".
     # Groq and NVIDIA are free, OpenAI-compatible endpoints.

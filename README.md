@@ -13,7 +13,8 @@ profit directly. It gives each shop a daily, per-site production recommendation 
 of planned production across sites (something a solo bakery cannot do). The owner always
 makes the final call.
 
-- **Concept & one-pager:** [`docs/ideas/obradoriq-waste-killer.md`](docs/ideas/obradoriq-waste-killer.md)
+- **One-pager (what/why/how/results):** [`docs/ONE_PAGER.md`](docs/ONE_PAGER.md)
+- **Concept & idea one-pager:** [`docs/ideas/obradoriq-waste-killer.md`](docs/ideas/obradoriq-waste-killer.md)
 - **Agent architecture (Salesforce-Agentforce-style):** [`AGENT_FRAMEWORK.md`](AGENT_FRAMEWORK.md)
 - **Technical spec:** [`TECH_SPEC.md`](TECH_SPEC.md)
 
@@ -72,17 +73,21 @@ sales are counted, not just its extra waste. Three strategies compared on realis
 
 | Strategy | Waste (units) | Profit |
 |---|---|---|
-| Historical baseline (what the bakery baked) | 879 | €18,005 |
-| Naive bake-to-forecast | 645 | €19,159 |
-| **Newsvendor (ours)** | 819 | **€19,316** |
+| Historical baseline (what the bakery baked) | 1007 | €17,798 |
+| Naive bake-to-forecast | 554 | €18,376 |
+| **Newsvendor (ours)** | 664 | **€18,630** |
 
-> **vs. the bakery's baseline: +€1,311 profit and 6.8% less waste.**
-> vs. a naive forecast rule: +€157 (0.8%) — modest here, and it grows with demand volatility
-> and margin spread. Forecast error (MAPE): 15.2%.
+> **vs. the bakery's baseline: +€832 profit and 34% less waste.**
+> vs. a naive forecast rule: +€255 (1.4%) — grows with demand volatility and margin spread.
 
 The newsvendor model sets each product's quantity at its profit-optimal service level
 (margin vs. leftover cost), so high-margin items keep a buffer and low-margin items hug
 the forecast — the textbook-correct answer to "how many to bake."
+
+**Weather + holiday signals** (learned elasticities, the edge ML/gut lack): forecast error on
+the rainy/holiday days where the signal acts drops **21.5% → 19.3%** (all-days MAPE 16.1% →
+15.7%). The model learns each product's rain/holiday sensitivity from its own history and
+applies it to the target day's conditions.
 
 Reproduce: `cd backend && python -m app.recommender.backtest`
 

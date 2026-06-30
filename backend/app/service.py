@@ -46,7 +46,9 @@ def _history(db: Session, product_id: int, site_id: int, before: dt.date) -> lis
             .filter(SalesRecord.product_id == product_id, SalesRecord.site_id == site_id,
                     SalesRecord.date < before)
             .order_by(SalesRecord.date).all())
-    return [SaleObservation(r.date, r.quantity_sold, r.sold_out) for r in rows]
+    return [SaleObservation(r.date, r.quantity_sold, r.sold_out,
+                            rainy=(r.precip_mm or 0) >= 2.0, holiday=bool(r.is_holiday))
+            for r in rows]
 
 
 def _recent_stats(db: Session, product_id: int, site_id: int, before: dt.date):
@@ -73,14 +75,20 @@ def _recent_stats(db: Session, product_id: int, site_id: int, before: dt.date):
 
 def generate_recommendations(db: Session, bakery_id: int, target_date: dt.date,
                              persist: bool = True,
-                             demand_adjustment_pct: float = 0.0) -> list[RecommendationOut]:
+                             demand_adjustment_pct: float = 0.0,
+                             rainy: bool = False) -> list[RecommendationOut]:
     """demand_adjustment_pct: an explicit, owner-attributable nudge to forecast demand
     (e.g. +30 for a festival the model can't know about). It is surfaced in the reason,
-    never applied silently — the agent sets it from the owner's stated context."""
+    never applied silently — the agent sets it from the owner's stated context.
+    rainy: whether the target day is forecast rainy (the owner/agent supplies this).
+    Holiday is detected automatically from the calendar."""
+    from app.data_hub.calendar import is_holiday
+
     products = db.query(Product).filter_by(bakery_id=bakery_id).all()
     sites = db.query(Site).filter_by(bakery_id=bakery_id).all()
     risk = db.get(Bakery, bakery_id).risk_preference
     factor = 1.0 + demand_adjustment_pct / 100.0
+    holiday = is_holiday(target_date)
 
     out: list[RecommendationOut] = []
     for p in products:
@@ -89,7 +97,8 @@ def generate_recommendations(db: Session, bakery_id: int, target_date: dt.date,
             hist = _history(db, p.id, s.id, target_date)
             if not hist:
                 continue
-            f = forecast(p.id, s.id, target_date, hist)
+            f = forecast(p.id, s.id, target_date, hist,
+                         target_rainy=rainy, target_holiday=holiday)
             if factor != 1.0:
                 f = replace(f, expected_demand=round(f.expected_demand * factor, 1),
                             sigma=round(f.sigma * factor, 2))
@@ -124,11 +133,11 @@ def generate_recommendations(db: Session, bakery_id: int, target_date: dt.date,
 
 
 def draft_production_sheet(db: Session, bakery_id: int, target_date: dt.date,
-                           demand_adjustment_pct: float = 0.0) -> dict:
+                           demand_adjustment_pct: float = 0.0, rainy: bool = False) -> dict:
     """Aggregate per-site recommendations into a chain production sheet + the estimated
     ingredient spend — a draft the owner approves (the 'take action' output)."""
     recs = generate_recommendations(db, bakery_id, target_date, persist=False,
-                                    demand_adjustment_pct=demand_adjustment_pct)
+                                    demand_adjustment_pct=demand_adjustment_pct, rainy=rainy)
     products = {p.id: p for p in db.query(Product).filter_by(bakery_id=bakery_id)}
     sites = {s.id: s.name for s in db.query(Site).filter_by(bakery_id=bakery_id)}
 

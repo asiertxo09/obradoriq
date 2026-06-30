@@ -19,6 +19,23 @@ The ObradorIQ Waste-Killer MVP is built and passing tests. Layout under `/home/a
 - **Headline metric:** vs historical baseline +€1,311 profit & 6.8% less waste; vs naive rule
   +€157 (0.8%, grows with volatility); forecast MAPE 15.2%. Live demo deployed at
   https://obradoriq.onrender.com (NVIDIA Llama phrasing, free).
+- **Conversational agent (phase 3):** "Ask ObradorIQ" chat — LLM calls the ML as TOOLS
+  (`app/llm/tools.py`) via a provider-agnostic JSON tool-planning loop
+  (`app/llm/orchestrator.py`; plain completions, NOT native function-calling — NVIDIA 403s
+  on tools). Translates stated context ("festival") → attributed `demand_adjustment_pct`.
+  `/chat` + `/ingest/text` endpoints; never breaks (online failure → deterministic offline
+  router). Verified live doing real tool-planning. 50 backend + 2 frontend tests.
+- **LLM provider gotcha:** NVIDIA free tier gates native tool-calling (403) AND the shared
+  key was later revoked. Use plain-completions only (we do) and Groq if native tools needed.
+- **Weather + holidays signal (phase 4):** forecast learns per-product rain & holiday
+  elasticities from history (`recommender/signals.py`) and applies them to the target day.
+  Fixture has precip_mm/is_holiday + true `demand`; backtest shows context-day MAPE 21.5%→19.3%.
+  Live wiring: SalesRecord gained precip_mm/is_holiday (+ idempotent `_ensure_columns` ALTER
+  for the existing Postgres), ingest parses them, holidays auto-detected via `holidays` lib
+  (ES/CT), `rainy` passed by owner/agent. 52 backend tests pass.
+- **Activate weather on the EXISTING live demo:** its seeded rows predate the columns, so set
+  `RESEED_ON_START=true` on Render once (wipes+reseeds the demo with weather), then set back
+  to false. Fresh deploys/local already have it. One-pager: `docs/ONE_PAGER.md`.
 - **Demo login:** owner@obradoriq.demo / bakery123. Run: `SEED_ON_START=true uvicorn app.main:app`.
 - **Key design:** recommender core is pure Python (computes all numbers); LLM only phrases
   (Trust Layer grounding). Model routing: Opus reasoning / Sonnet execution. Auth is JWT+bcrypt

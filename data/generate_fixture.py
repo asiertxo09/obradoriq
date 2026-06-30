@@ -33,6 +33,19 @@ SITES = [
     {"name": "Barrio", "location": "Residential"},
 ]
 
+# Latent demand effects the baker can't predict from the calendar alone.
+RAIN_EFFECT = 0.82       # rainy days lose foot traffic
+HOLIDAY_EFFECT = 1.35    # holidays are busier
+# Public / regional / bridge days in the window (Spain) — enough history for the model
+# to learn a holiday elasticity before the evaluation window.
+HOLIDAYS = {
+    dt.date(2026, 4, 23),  # Sant Jordi
+    dt.date(2026, 5, 1),   # Labour Day
+    dt.date(2026, 5, 15),  # local festa major
+    dt.date(2026, 6, 1),   # bridge day
+    dt.date(2026, 6, 24),  # Sant Joan (falls in the eval window)
+}
+
 # weekday_profile: multipliers Mon..Sun (0=Mon). base = average weekday demand at a typical site.
 PRODUCTS = [
     {"name": "Croissant", "category": "Viennoiserie", "price": 1.80, "ingredient_cost": 0.55,
@@ -69,6 +82,12 @@ def main() -> None:
     sales_rows = []
     waste_rows = []
 
+    # City-wide weather, shared by both sites: ~30% of days rainy.
+    precip_by_day = {}
+    for i in range(DAYS):
+        day = START_DATE + dt.timedelta(days=i)
+        precip_by_day[day] = round(random.uniform(2, 16), 1) if random.random() < 0.30 else 0.0
+
     for site in SITES:
         sname = site["name"]
         for p in PRODUCTS:
@@ -78,10 +97,15 @@ def main() -> None:
             for i in range(DAYS):
                 day = START_DATE + dt.timedelta(days=i)
                 wd = day.weekday()
-                # demand = mean * weekday seasonality * mild trend * noise
+                precip = precip_by_day[day]
+                rainy = precip >= 2.0
+                holiday = day in HOLIDAYS
+                # demand = mean * weekday * trend * noise * weather * holiday
                 trend = 1.0 + 0.0015 * i  # slight growth over the 10 weeks
                 noise = random.gauss(1.0, 0.12)
-                demand = max(0, mean_demand * p["weekday"][wd] * trend * noise)
+                weather = RAIN_EFFECT if rainy else 1.0
+                hol = HOLIDAY_EFFECT if holiday else 1.0
+                demand = max(0, mean_demand * p["weekday"][wd] * trend * noise * weather * hol)
                 demand = int(round(demand))
                 sold = min(demand, production)
                 sold_out = demand > production
@@ -92,6 +116,7 @@ def main() -> None:
                     "site": sname, "product": p["name"], "date": day.isoformat(),
                     "quantity_sold": sold, "revenue": round(sold * p["price"], 2),
                     "sold_out": "true" if sold_out else "false", "demand": demand,
+                    "precip_mm": precip, "is_holiday": "true" if holiday else "false",
                 })
                 if waste > 0:
                     waste_rows.append({
@@ -105,7 +130,8 @@ def main() -> None:
            [{k: p[k] for k in ["name", "category", "price", "ingredient_cost", "batch_size"]}
             for p in PRODUCTS])
     _write("sales.csv",
-           ["site", "product", "date", "quantity_sold", "revenue", "sold_out", "demand"],
+           ["site", "product", "date", "quantity_sold", "revenue", "sold_out", "demand",
+            "precip_mm", "is_holiday"],
            sales_rows)
     _write("waste.csv", ["site", "product", "date", "quantity_wasted"], waste_rows)
 

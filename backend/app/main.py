@@ -17,10 +17,11 @@ async def lifespan(app: FastAPI):
     init_db()
     from app.core.config import get_settings
 
-    if get_settings().seed_on_start:
+    settings = get_settings()
+    if settings.seed_on_start or settings.reseed_on_start:
         from app.seed import seed
 
-        seed()
+        seed(force=settings.reseed_on_start)
     yield
 
 

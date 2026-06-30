@@ -67,6 +67,9 @@ class SalesRecord(Base):
     quantity_sold: Mapped[int] = mapped_column(Integer)
     revenue: Mapped[float] = mapped_column(Float, default=0.0)
     sold_out: Mapped[bool] = mapped_column(Boolean, default=False)
+    # External signals (optional): the day's weather and whether it was a holiday.
+    precip_mm: Mapped[float] = mapped_column(Float, default=0.0)
+    is_holiday: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
 class WasteRecord(Base):

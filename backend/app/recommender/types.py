@@ -18,6 +18,8 @@ class SaleObservation:
     date: dt.date
     quantity_sold: int
     sold_out: bool = False
+    rainy: bool = False
+    holiday: bool = False
 
 
 @dataclass(frozen=True)
@@ -98,7 +100,11 @@ class BacktestResult:
     baseline_profit: float = 0.0
     naive_profit: float = 0.0
     model_profit: float = 0.0
-    mape: float = 0.0  # mean absolute percentage error of the forecast
+    mape: float = 0.0  # forecast error WITH weather/holiday signals (all days)
+    mape_weather_naive: float = 0.0  # forecast error WITHOUT them (all days)
+    mape_context: float = 0.0  # error on rainy/holiday days, WITH signals
+    mape_context_naive: float = 0.0  # error on those same days, WITHOUT signals
+    context_days: int = 0
     details: list[dict] = field(default_factory=list)
 
     # ---- waste avoided (model vs the bakery's historical baseline) ----

@@ -27,10 +27,10 @@ def _profit(qty: int, demand: int, price: float, unit_cost: float) -> float:
 
 
 class DayRecord:
-    __slots__ = ("date", "sold", "sold_out", "waste", "demand")
+    __slots__ = ("date", "sold", "sold_out", "waste", "demand", "rainy", "holiday")
 
     def __init__(self, date: dt.date, sold: int, sold_out: bool, waste: int,
-                 demand: int | None = None):
+                 demand: int | None = None, rainy: bool = False, holiday: bool = False):
         self.date = date
         self.sold = sold
         self.sold_out = sold_out
@@ -38,6 +38,8 @@ class DayRecord:
         # True uncensored demand for evaluation. Defaults to sold when unknown
         # (correct on non-sold-out days, where everyone who wanted one got one).
         self.demand = demand if demand is not None else sold
+        self.rainy = rainy
+        self.holiday = holiday
 
     @property
     def production(self) -> int:
@@ -53,6 +55,9 @@ def run_backtest(
     """series keyed by (product_name, site_name) -> chronological DayRecords."""
     result = BacktestResult()
     mape_terms: list[float] = []
+    mape_naive_terms: list[float] = []
+    ctx_terms: list[float] = []        # weather-aware error on rainy/holiday days
+    ctx_naive_terms: list[float] = []  # weather-naive error on those same days
 
     for (pname, sname), days in series.items():
         product = products[pname]
@@ -65,9 +70,13 @@ def run_backtest(
         for idx in range(split, len(days)):
             today = days[idx]
             history = [
-                SaleObservation(d.date, d.sold, d.sold_out) for d in days[:idx]
+                SaleObservation(d.date, d.sold, d.sold_out, d.rainy, d.holiday)
+                for d in days[:idx]
             ]
-            f = forecast(product.product_id, 0, today.date, history)
+            f = forecast(product.product_id, 0, today.date, history,
+                         target_rainy=today.rainy, target_holiday=today.holiday)
+            # Weather-naive comparison: ignore the target day's conditions.
+            f_naive = forecast(product.product_id, 0, today.date, history)
 
             recent = days[max(0, idx - 14):idx]
             prod_sum = sum(d.production for d in recent) or 1
@@ -101,7 +110,13 @@ def run_backtest(
             result.model_profit += _profit(rec.recommended_qty, demand, price, uc)
 
             if demand > 0:
-                mape_terms.append(abs(f.expected_demand - demand) / demand)
+                aware_err = abs(f.expected_demand - demand) / demand
+                naive_err = abs(f_naive.expected_demand - demand) / demand
+                mape_terms.append(aware_err)
+                mape_naive_terms.append(naive_err)
+                if today.rainy or today.holiday:
+                    ctx_terms.append(aware_err)
+                    ctx_naive_terms.append(naive_err)
 
     result.baseline_waste_eur = round(result.baseline_waste_eur, 2)
     result.naive_waste_eur = round(result.naive_waste_eur, 2)
@@ -110,6 +125,12 @@ def run_backtest(
     result.naive_profit = round(result.naive_profit, 2)
     result.model_profit = round(result.model_profit, 2)
     result.mape = round(100 * statistics.mean(mape_terms), 1) if mape_terms else 0.0
+    result.mape_weather_naive = (
+        round(100 * statistics.mean(mape_naive_terms), 1) if mape_naive_terms else 0.0)
+    result.context_days = len(ctx_terms)
+    result.mape_context = round(100 * statistics.mean(ctx_terms), 1) if ctx_terms else 0.0
+    result.mape_context_naive = (
+        round(100 * statistics.mean(ctx_naive_terms), 1) if ctx_naive_terms else 0.0)
     return result
 
 
@@ -132,9 +153,11 @@ def load_from_csv(data_dir: str) -> tuple[dict, dict]:
         date = dt.date.fromisoformat(row["date"])
         waste = waste_lookup.get((row["product"], row["site"], row["date"]), 0)
         demand = int(row["demand"]) if row.get("demand") else None
+        rainy = float(row.get("precip_mm") or 0) >= 2.0
+        holiday = str(row.get("is_holiday", "")).lower() == "true"
         series[key].append(
             DayRecord(date, int(row["quantity_sold"]), row["sold_out"] == "true",
-                      waste, demand)
+                      waste, demand, rainy, holiday)
         )
     return series, products
 
@@ -146,7 +169,10 @@ def main() -> None:
     r = run_backtest(series, products)
     print("=== ObradorIQ backtest ===")
     print(f"Evaluated {r.days_evaluated} site-product-days across {r.products_evaluated} series")
-    print(f"Forecast error (MAPE): {r.mape}%\n")
+    print(f"Forecast error (MAPE), all days: {r.mape}% with weather+holidays vs "
+          f"{r.mape_weather_naive}% without")
+    print(f"Forecast error on the {r.context_days} rainy/holiday days (where the signal "
+          f"acts): {r.mape_context}% vs {r.mape_context_naive}% without\n")
     print(f"{'strategy':<22}{'waste units':>12}{'waste €':>12}{'profit €':>12}")
     print(f"{'historical baseline':<22}{r.baseline_waste_units:>12}{r.baseline_waste_eur:>12}{r.baseline_profit:>12}")
     print(f"{'naive bake-to-forecast':<22}{r.naive_waste_units:>12}{r.naive_waste_eur:>12}{r.naive_profit:>12}")

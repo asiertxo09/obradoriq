@@ -30,11 +30,14 @@ def tool_specs() -> list[dict]:
     adj_prop = {"type": "number", "description":
                 "explicit % nudge to forecast demand for context the model can't know "
                 "(e.g. 30 for a festival, -20 for a heatwave). Default 0."}
+    rain_prop = {"type": "boolean", "description":
+                 "set true if the owner says the target day will be rainy (applies the "
+                 "learned rain elasticity). Holidays are detected automatically."}
     return [
         _fn("get_recommendations",
             "Per-site production recommendation (how much to bake) for a date, framed in "
-            "euros of waste avoided.",
-            {"target_date": date_prop, "demand_adjustment_pct": adj_prop}),
+            "euros of waste avoided. Auto-applies weather/holiday signals.",
+            {"target_date": date_prop, "demand_adjustment_pct": adj_prop, "rainy": rain_prop}),
         _fn("get_reallocations",
             "Cross-site plan-level reallocation suggestions (shift planned production "
             "from an over-producing site to a sell-out site).",
@@ -44,7 +47,7 @@ def tool_specs() -> list[dict]:
             {"week_end": date_prop}),
         _fn("draft_production_sheet",
             "Draft a chain-wide production sheet + estimated ingredient spend for approval.",
-            {"target_date": date_prop, "demand_adjustment_pct": adj_prop}),
+            {"target_date": date_prop, "demand_adjustment_pct": adj_prop, "rainy": rain_prop}),
         _fn("ingest_data",
             "Import sales or waste rows the owner pasted. Pass kind and CSV text with the "
             "required columns (sales: site,product,date,quantity_sold[,sold_out]; "
@@ -64,10 +67,11 @@ def execute_tool(db: Session, bakery_id: int, name: str, args: dict) -> dict:
     """Run a tool by name with model-provided args; returns grounded data."""
     td = _parse_date(args.get("target_date"))
     adj = float(args.get("demand_adjustment_pct") or 0.0)
+    rainy = bool(args.get("rainy") or False)
     if name == "get_recommendations":
         recs = generate_recommendations(db, bakery_id, td, persist=False,
-                                        demand_adjustment_pct=adj)
-        return {"target_date": td.isoformat(), "demand_adjustment_pct": adj,
+                                        demand_adjustment_pct=adj, rainy=rainy)
+        return {"target_date": td.isoformat(), "demand_adjustment_pct": adj, "rainy": rainy,
                 "recommendations": [r.model_dump() for r in recs]}
     if name == "get_reallocations":
         return {"target_date": td.isoformat(),
@@ -76,7 +80,7 @@ def execute_tool(db: Session, bakery_id: int, name: str, args: dict) -> dict:
         we = _parse_date(args.get("week_end"))
         return weekly_summary(db, bakery_id, we).model_dump()
     if name == "draft_production_sheet":
-        return draft_production_sheet(db, bakery_id, td, demand_adjustment_pct=adj)
+        return draft_production_sheet(db, bakery_id, td, demand_adjustment_pct=adj, rainy=rainy)
     if name == "ingest_data":
         kind = args.get("kind")
         text = args.get("csv_text", "")
