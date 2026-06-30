@@ -16,6 +16,13 @@ services:
         generateValue: true
       - key: SEED_ON_START
         value: "true"
+      # Fetch the target day's real Madrid weather (Open-Meteo) when building a plan.
+      - key: WEATHER_AUTOFETCH
+        value: "true"
+      # Set to "true" ONCE to wipe+reseed the demo with Madrid locations + weather history,
+      # then set back to "false". (Needed only for the pre-existing deployment.)
+      - key: RESEED_ON_START
+        value: "false"
       # LLM phrasing. Default offline = deterministic stubs (free, reproducible).
       # For live phrasing with a FREE provider: set LLM_OFFLINE=false,
       # LLM_PROVIDER=groq (or nvidia), and LLM_API_KEY in the dashboard.

@@ -31,6 +31,8 @@ class Site(Base):
     bakery_id: Mapped[int] = mapped_column(ForeignKey("bakery.id"), index=True)
     name: Mapped[str] = mapped_column(String(120))
     location: Mapped[str] = mapped_column(String(200), default="")
+    latitude: Mapped[float] = mapped_column(Float, default=0.0)
+    longitude: Mapped[float] = mapped_column(Float, default=0.0)
 
     bakery: Mapped[Bakery] = relationship(back_populates="sites")
 

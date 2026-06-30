@@ -12,6 +12,7 @@ from dataclasses import replace
 
 from sqlalchemy.orm import Session
 
+from app.core.config import get_settings
 from app.llm import agents
 from app.models.entities import (
     Bakery,
@@ -89,6 +90,14 @@ def generate_recommendations(db: Session, bakery_id: int, target_date: dt.date,
     risk = db.get(Bakery, bakery_id).risk_preference
     factor = 1.0 + demand_adjustment_pct / 100.0
     holiday = is_holiday(target_date)
+
+    # Optionally fetch the target day's real weather (best-effort) when enabled.
+    if not rainy and get_settings().weather_autofetch and sites and sites[0].latitude:
+        from app.data_hub.weather import forecast_is_rainy
+
+        fetched = forecast_is_rainy(sites[0].latitude, sites[0].longitude, target_date)
+        if fetched is not None:
+            rainy = fetched
 
     out: list[RecommendationOut] = []
     for p in products:

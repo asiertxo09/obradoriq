@@ -21,8 +21,8 @@ makes the final call.
 ## How it works
 
 ```
-1. INGEST   Each site uploads daily sales + end-of-day waste (CSV / POS export).
-            The Data Hub validates and normalizes everything per-site.
+1. INGEST   Each site uploads daily sales + end-of-day waste (CSV / POS export), tagged
+            with the day's real weather (Open-Meteo) and holiday flag (Madrid calendar).
                          │
 2. FORECAST Per (product, site): recency-weighted same-weekday demand + trend,
             with a HIGH/LOW confidence flag.            ← deterministic core
@@ -73,21 +73,23 @@ sales are counted, not just its extra waste. Three strategies compared on realis
 
 | Strategy | Waste (units) | Profit |
 |---|---|---|
-| Historical baseline (what the bakery baked) | 1007 | €17,798 |
-| Naive bake-to-forecast | 554 | €18,376 |
-| **Newsvendor (ours)** | 664 | **€18,630** |
+| Historical baseline (what the bakery baked) | 933 | €17,894 |
+| Naive bake-to-forecast | 700 | €18,738 |
+| **Newsvendor (ours)** | 832 | **€18,891** |
 
-> **vs. the bakery's baseline: +€832 profit and 34% less waste.**
-> vs. a naive forecast rule: +€255 (1.4%) — grows with demand volatility and margin spread.
+> **vs. the bakery's baseline: +€997 profit and 11% less waste.**
+> vs. a naive forecast rule: +€153 (0.8%) — grows with demand volatility and margin spread.
 
 The newsvendor model sets each product's quantity at its profit-optimal service level
-(margin vs. leftover cost), so high-margin items keep a buffer and low-margin items hug
-the forecast — the textbook-correct answer to "how many to bake."
+(margin vs. leftover cost): it trades a little extra waste for captured high-demand sales,
+netting higher profit — the textbook-correct answer to "how many to bake."
 
 **Weather + holiday signals** (learned elasticities, the edge ML/gut lack): forecast error on
-the rainy/holiday days where the signal acts drops **21.5% → 19.3%** (all-days MAPE 16.1% →
-15.7%). The model learns each product's rain/holiday sensitivity from its own history and
-applies it to the target day's conditions.
+the rainy/holiday days where the signal acts drops **19.8% → 17.4%** (all-days MAPE 15.1% →
+14.7%). The model learns each product's rain/holiday sensitivity from its own history and
+applies it to the target day. **Weather is real:** the two demo shops sit on real Madrid
+streets and the dataset is driven by **actual historical Madrid precipitation** from
+Open-Meteo (free, keyless); holidays are real Comunidad de Madrid public holidays.
 
 Reproduce: `cd backend && python -m app.recommender.backtest`
 

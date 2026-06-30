@@ -31,7 +31,11 @@ def _ensure_columns() -> None:
         "sales_record": {
             "precip_mm": "FLOAT DEFAULT 0",
             "is_holiday": "BOOLEAN DEFAULT FALSE",
-        }
+        },
+        "site": {
+            "latitude": "FLOAT DEFAULT 0",
+            "longitude": "FLOAT DEFAULT 0",
+        },
     }
     inspector = inspect(engine)
     with engine.begin() as conn:

@@ -8,15 +8,15 @@ from __future__ import annotations
 
 import datetime as dt
 
-_FALLBACK = {
-    (4, 23),  # Sant Jordi
+_FALLBACK = {  # Madrid (Comunidad + city) public holidays
     (5, 1),   # Labour Day
-    (6, 24),  # Sant Joan
-    (1, 1), (1, 6), (8, 15), (10, 12), (11, 1), (12, 6), (12, 25), (12, 26),
+    (5, 2),   # Dos de Mayo (Comunidad de Madrid)
+    (5, 15),  # San Isidro (Madrid city)
+    (1, 1), (1, 6), (8, 15), (10, 12), (11, 1), (11, 9), (12, 6), (12, 8), (12, 25),
 }
 
 
-def is_holiday(date: dt.date, country: str = "ES", subdiv: str = "CT") -> bool:
+def is_holiday(date: dt.date, country: str = "ES", subdiv: str = "MD") -> bool:
     try:
         import holidays as _h
 

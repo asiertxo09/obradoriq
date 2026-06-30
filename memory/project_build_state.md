@@ -33,9 +33,17 @@ The ObradorIQ Waste-Killer MVP is built and passing tests. Layout under `/home/a
   Live wiring: SalesRecord gained precip_mm/is_holiday (+ idempotent `_ensure_columns` ALTER
   for the existing Postgres), ingest parses them, holidays auto-detected via `holidays` lib
   (ES/CT), `rainy` passed by owner/agent. 52 backend tests pass.
-- **Activate weather on the EXISTING live demo:** its seeded rows predate the columns, so set
-  `RESEED_ON_START=true` on Render once (wipes+reseeds the demo with weather), then set back
-  to false. Fresh deploys/local already have it. One-pager: `docs/ONE_PAGER.md`.
+- **Real weather + Madrid locations (phase 5):** two fictitious shops on real Madrid streets
+  with lat/lon (Site gained latitude/longitude + ensure_columns). Fixture demand is driven by
+  **real historical Madrid precipitation** fetched from **Open-Meteo archive** (free, keyless;
+  OpenWeatherMap historical needs a paid key). `app/data_hub/weather.py` = archive (dataset) +
+  forecast (live target, best-effort). Holidays = real Comunidad de Madrid (subdiv MD).
+  Backtest on real weather: context-day MAPE 19.8%→17.4%, profit vs baseline +€997.
+- **Activate on the EXISTING live demo (one-time):** set `RESEED_ON_START=true` on Render once
+  (wipes+reseeds with Madrid coords + weather history), then back to `false`; `WEATHER_AUTOFETCH=true`
+  makes the live plan fetch tomorrow's Madrid weather. Fresh deploys/local already have it.
+- **NOTE:** generating the fixture (`python data/generate_fixture.py`) calls Open-Meteo (network);
+  CI/tests use the committed CSVs and stay offline. One-pager: `docs/ONE_PAGER.md`.
 - **Demo login:** owner@obradoriq.demo / bakery123. Run: `SEED_ON_START=true uvicorn app.main:app`.
 - **Key design:** recommender core is pure Python (computes all numbers); LLM only phrases
   (Trust Layer grounding). Model routing: Opus reasoning / Sonnet execution. Auth is JWT+bcrypt

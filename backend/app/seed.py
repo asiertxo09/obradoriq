@@ -49,7 +49,9 @@ def seed(data_dir: str = DATA_DIR, force: bool = False) -> dict:
                     password_hash=hash_password(DEMO_PASSWORD), role="owner"))
 
         for row in csv.DictReader(open(os.path.join(data_dir, "sites.csv"))):
-            db.add(Site(bakery_id=bakery.id, name=row["name"], location=row["location"]))
+            db.add(Site(bakery_id=bakery.id, name=row["name"], location=row["location"],
+                        latitude=float(row.get("latitude") or 0),
+                        longitude=float(row.get("longitude") or 0)))
         for row in csv.DictReader(open(os.path.join(data_dir, "products.csv"))):
             db.add(Product(bakery_id=bakery.id, name=row["name"], category=row["category"],
                            price=float(row["price"]), ingredient_cost=float(row["ingredient_cost"]),

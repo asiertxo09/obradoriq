@@ -28,23 +28,25 @@ DAYS = 70
 END_DATE = dt.date(2026, 6, 28)
 START_DATE = END_DATE - dt.timedelta(days=DAYS - 1)
 
+# Two fictitious shops on real Madrid streets (real coordinates → real weather).
 SITES = [
-    {"name": "Centro", "location": "Downtown"},
-    {"name": "Barrio", "location": "Residential"},
+    {"name": "Centro", "location": "Gran Vía 28, Madrid",
+     "latitude": 40.4203, "longitude": -3.7058},
+    {"name": "Barrio", "location": "Calle de Bravo Murillo 110, Madrid",
+     "latitude": 40.4470, "longitude": -3.7030},
 ]
 
 # Latent demand effects the baker can't predict from the calendar alone.
 RAIN_EFFECT = 0.82       # rainy days lose foot traffic
 HOLIDAY_EFFECT = 1.35    # holidays are busier
-# Public / regional / bridge days in the window (Spain) — enough history for the model
-# to learn a holiday elasticity before the evaluation window.
+# Real Madrid public holidays inside the history window (learnable before the eval window).
 HOLIDAYS = {
-    dt.date(2026, 4, 23),  # Sant Jordi
     dt.date(2026, 5, 1),   # Labour Day
-    dt.date(2026, 5, 15),  # local festa major
-    dt.date(2026, 6, 1),   # bridge day
-    dt.date(2026, 6, 24),  # Sant Joan (falls in the eval window)
+    dt.date(2026, 5, 2),   # Dos de Mayo (Comunidad de Madrid)
+    dt.date(2026, 5, 15),  # San Isidro (Madrid city)
 }
+
+RAIN_THRESHOLD_MM = 2.0
 
 # weekday_profile: multipliers Mon..Sun (0=Mon). base = average weekday demand at a typical site.
 PRODUCTS = [
@@ -78,18 +80,47 @@ def round_to_batch(x: float, batch: int) -> int:
     return max(batch, int(round(x / batch)) * batch)
 
 
+def fetch_real_precip(lat: float, lon: float) -> dict:
+    """Real daily precipitation (mm) for a Madrid coordinate over the window, from the
+    free keyless Open-Meteo archive. Falls back to seeded synthetic rain if offline."""
+    import json
+    import urllib.parse
+    import urllib.request
+
+    params = urllib.parse.urlencode({
+        "latitude": lat, "longitude": lon,
+        "start_date": START_DATE.isoformat(), "end_date": END_DATE.isoformat(),
+        "daily": "precipitation_sum", "timezone": "Europe/Madrid",
+    })
+    url = "https://archive-api.open-meteo.com/v1/archive?" + params
+    try:
+        with urllib.request.urlopen(url, timeout=25) as r:
+            data = json.load(r)
+        out = {}
+        for d, mm in zip(data["daily"]["time"], data["daily"]["precipitation_sum"]):
+            out[dt.date.fromisoformat(d)] = float(mm) if mm is not None else 0.0
+        if out:
+            print(f"  fetched {len(out)} real precip days for ({lat},{lon})")
+            return out
+    except Exception as e:
+        print(f"  weather fetch failed ({e}); using synthetic rain")
+    # offline fallback: seeded synthetic precipitation
+    return {START_DATE + dt.timedelta(days=i):
+            (round(random.uniform(2, 16), 1) if random.random() < 0.30 else 0.0)
+            for i in range(DAYS)}
+
+
 def main() -> None:
     sales_rows = []
     waste_rows = []
 
-    # City-wide weather, shared by both sites: ~30% of days rainy.
-    precip_by_day = {}
-    for i in range(DAYS):
-        day = START_DATE + dt.timedelta(days=i)
-        precip_by_day[day] = round(random.uniform(2, 16), 1) if random.random() < 0.30 else 0.0
+    # Real per-site weather from Open-Meteo (Madrid coordinates).
+    print("Fetching real Madrid weather from Open-Meteo…")
+    precip_by_site = {s["name"]: fetch_real_precip(s["latitude"], s["longitude"]) for s in SITES}
 
     for site in SITES:
         sname = site["name"]
+        precip_by_day = precip_by_site[sname]
         for p in PRODUCTS:
             mean_demand = p["base"] * SITE_DEMAND[sname]
             factor = HABITUAL.get((sname, p["name"]), DEFAULT_HABITUAL)
@@ -97,8 +128,8 @@ def main() -> None:
             for i in range(DAYS):
                 day = START_DATE + dt.timedelta(days=i)
                 wd = day.weekday()
-                precip = precip_by_day[day]
-                rainy = precip >= 2.0
+                precip = precip_by_day.get(day, 0.0)
+                rainy = precip >= RAIN_THRESHOLD_MM
                 holiday = day in HOLIDAYS
                 # demand = mean * weekday * trend * noise * weather * holiday
                 trend = 1.0 + 0.0015 * i  # slight growth over the 10 weeks
@@ -124,7 +155,7 @@ def main() -> None:
                         "quantity_wasted": waste,
                     })
 
-    _write("sites.csv", ["name", "location"], SITES)
+    _write("sites.csv", ["name", "location", "latitude", "longitude"], SITES)
     _write("products.csv",
            ["name", "category", "price", "ingredient_cost", "batch_size"],
            [{k: p[k] for k in ["name", "category", "price", "ingredient_cost", "batch_size"]}

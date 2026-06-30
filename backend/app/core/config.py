@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     seed_on_start: bool = False
     # Force a wipe + re-seed on startup (e.g. to backfill weather/holiday columns once).
     reseed_on_start: bool = False
+    # Auto-fetch the target day's weather (Open-Meteo) per site when generating a plan.
+    # Off by default so tests/CI stay offline and the request path has no network dep.
+    weather_autofetch: bool = False
 
     # LLM provider: "anthropic" | "groq" | "nvidia" | "openai_compatible".
     # Groq and NVIDIA are free, OpenAI-compatible endpoints.
