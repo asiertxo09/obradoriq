@@ -19,6 +19,12 @@ async function req(path: string, opts: RequestInit = {}) {
   const token = getToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
   const res = await fetch(BASE + path, { ...opts, headers });
+  if (res.status === 401 && token) {
+    // Expired/invalid session — drop the token and return to the login screen.
+    clearToken();
+    window.location.reload();
+    throw new Error("Session expired — please sign in again.");
+  }
   if (!res.ok) throw new Error((await res.text()) || res.statusText);
   return res.status === 204 ? null : res.json();
 }

@@ -8,6 +8,7 @@ from app.models.entities import (  # noqa: F401
     Reallocation,
     Recommendation,
     RecommendationDecision,
+    SaleEvent,
     SalesRecord,
     Site,
     User,

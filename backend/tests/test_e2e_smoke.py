@@ -17,7 +17,7 @@ WEEK_END = "2026-06-28"
 
 @pytest.fixture(scope="module", autouse=True)
 def _seed():
-    seed()
+    seed(force=True)  # ensure the canonical demo, independent of other suites
 
 
 def _token() -> str:

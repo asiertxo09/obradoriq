@@ -16,6 +16,7 @@ from app.models import (
     Reallocation,
     Recommendation,
     RecommendationDecision,
+    SaleEvent,
     SalesRecord,
     SessionLocal,
     Site,
@@ -79,7 +80,8 @@ def _wipe_bakery(db, bakery_id: int) -> None:
         Recommendation.site_id.in_(site_ids or [-1]))]
     db.query(RecommendationDecision).filter(
         RecommendationDecision.recommendation_id.in_(rec_ids or [-1])).delete(synchronize_session=False)
-    for model in (Recommendation, Reallocation, SalesRecord, WasteRecord, InventoryRecord):
+    for model in (Recommendation, Reallocation, SalesRecord, WasteRecord, InventoryRecord,
+                  SaleEvent):
         col = model.site_id if hasattr(model, "site_id") else model.bakery_id
         ids = site_ids if hasattr(model, "site_id") else [bakery_id]
         db.query(model).filter(col.in_(ids or [-1])).delete(synchronize_session=False)

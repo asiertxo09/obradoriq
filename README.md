@@ -122,6 +122,17 @@ python -m app.seed                  # seed the demo chain into ./obradoriq.db
 SEED_ON_START=true uvicorn app.main:app --reload   # http://localhost:8000
 ```
 
+### Generate a full year of data (all tables, minute-stamped sales)
+```bash
+cd backend
+python -m app.generate_data --days 365              # real Madrid weather (Open-Meteo)
+python -m app.generate_data --days 365 --no-weather # offline
+```
+Populates every table — a year of daily sales/waste/inventory plus **~130k transaction-level
+`sale_event` rows timestamped to the minute** during opening hours (07:00–20:00), and sample
+recommendations/decisions/reallocations/audit logs. (~15 MB; run deliberately against your
+`DATABASE_URL` — it is **not** run on startup.)
+
 ### Frontend
 ```bash
 cd frontend

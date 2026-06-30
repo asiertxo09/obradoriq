@@ -74,6 +74,18 @@ class SalesRecord(Base):
     is_holiday: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
+class SaleEvent(Base):
+    """Transaction-level sale, timestamped to the minute (intraday detail)."""
+
+    __tablename__ = "sale_event"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    product_id: Mapped[int] = mapped_column(ForeignKey("product.id"), index=True)
+    site_id: Mapped[int] = mapped_column(ForeignKey("site.id"), index=True)
+    ts: Mapped[dt.datetime] = mapped_column(DateTime, index=True)
+    quantity: Mapped[int] = mapped_column(Integer, default=1)
+    unit_price: Mapped[float] = mapped_column(Float, default=0.0)
+
+
 class WasteRecord(Base):
     __tablename__ = "waste_record"
     id: Mapped[int] = mapped_column(primary_key=True)

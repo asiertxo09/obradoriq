@@ -15,7 +15,7 @@ TARGET = "2026-06-29"
 @pytest.fixture(scope="module", autouse=True)
 def _seeded():
     init_db()
-    seed()
+    seed(force=True)
 
 
 @pytest.fixture()

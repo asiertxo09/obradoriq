@@ -138,7 +138,6 @@ function AskView() {
           <button className="primary" onClick={() => send(input)} disabled={busy}>Send</button>
         </div>
       </div>
-      <PasteIngest />
     </>
   );
 }
@@ -164,40 +163,6 @@ function ToolData({ tr }: { tr: ToolResult }) {
   return <p className="muted" style={{ fontSize: 11 }}>via tool: {tr.tool}</p>;
 }
 
-function PasteIngest() {
-  const [kind, setKind] = useState<"sales" | "waste">("sales");
-  const [text, setText] = useState("");
-  const [msg, setMsg] = useState("");
-  async function go() {
-    try {
-      const r = await api.ingestText(kind, text);
-      setMsg(`Imported ${r.inserted} rows, rejected ${r.rejected}.` +
-        (r.errors?.length ? " First error: " + r.errors[0] : ""));
-    } catch (e: any) { setMsg("Error: " + String(e)); }
-  }
-  return (
-    <div className="card">
-      <div className="site-title">Paste data (CSV)</div>
-      <p className="muted" style={{ fontSize: 12, marginTop: 0 }}>
-        Paste sales or waste rows. Sales: <code>site,product,date,quantity_sold[,sold_out]</code> ·
-        Waste: <code>site,product,date,quantity_wasted</code>.
-      </p>
-      <div style={{ marginBottom: 6 }}>
-        <select value={kind} onChange={(e) => setKind(e.target.value as any)}>
-          <option value="sales">sales</option><option value="waste">waste</option>
-        </select>
-      </div>
-      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={4}
-        style={{ width: "100%", fontFamily: "monospace", fontSize: 12, padding: 8,
-          border: "1px solid var(--line)", borderRadius: 8 }}
-        placeholder={"Centro,Croissant,2026-06-29,40,false"} />
-      <div style={{ marginTop: 8 }}>
-        <button className="primary" onClick={go}>Import</button>
-        {msg && <span className="muted" style={{ marginLeft: 10, fontSize: 13 }}>{msg}</span>}
-      </div>
-    </div>
-  );
-}
 
 function DailyPlan({ sites }: { sites: Site[] }) {
   const [recs, setRecs] = useState<Recommendation[]>([]);

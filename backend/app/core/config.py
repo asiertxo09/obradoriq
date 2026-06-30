@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./obradoriq.db"
     jwt_secret: str = "dev-secret-change-me"
     jwt_algorithm: str = "HS256"
-    access_token_minutes: int = 30
+    access_token_minutes: int = 60 * 24 * 7  # 7 days — demo-friendly, avoids mid-demo logouts
 
     # When true (default in tests/CI), the LLM layer returns deterministic stub
     # text instead of calling the network. Never call a real model in tests.

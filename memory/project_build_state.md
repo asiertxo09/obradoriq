@@ -44,6 +44,13 @@ The ObradorIQ Waste-Killer MVP is built and passing tests. Layout under `/home/a
   makes the live plan fetch tomorrow's Madrid weather. Fresh deploys/local already have it.
 - **NOTE:** generating the fixture (`python data/generate_fixture.py`) calls Open-Meteo (network);
   CI/tests use the committed CSVs and stay offline. One-pager: `docs/ONE_PAGER.md`.
+- **JWT TTL** raised 30min → 7 days (`access_token_minutes`) to stop mid-demo "invalid/expired
+  token" errors; frontend now clears the token + returns to login on any 401.
+- **Full-year data generator (phase 6):** `app/generate_data.py` + new `SaleEvent` table
+  (minute-resolution timestamps). `python -m app.generate_data --days 365` fills ALL tables:
+  a year of daily sales/waste/inventory + ~130k minute-stamped sale_events (open hours
+  07–20, weekday/intraday/weather/holiday patterns) + sample recs/decisions/reallocations/
+  audit. NOT run on startup (too heavy for free tier; ~15MB). Removed the frontend paste-CSV box.
 - **Demo login:** owner@obradoriq.demo / bakery123. Run: `SEED_ON_START=true uvicorn app.main:app`.
 - **Key design:** recommender core is pure Python (computes all numbers); LLM only phrases
   (Trust Layer grounding). Model routing: Opus reasoning / Sonnet execution. Auth is JWT+bcrypt

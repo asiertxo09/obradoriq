@@ -15,8 +15,9 @@ TARGET = dt.date(2026, 6, 29)  # day after the fixture's last day
 @pytest.fixture(scope="module")
 def seeded():
     init_db()
-    info = seed()
-    assert info["status"] in {"seeded", "already-seeded"}
+    # force a clean canonical seed (other suites may have replaced the demo bakery)
+    info = seed(force=True)
+    assert info["status"] == "seeded"
     return info["bakery_id"]
 
 
