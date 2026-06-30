@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import datetime as dt
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
 # ---- auth ----
@@ -130,6 +130,28 @@ class ChatResponse(BaseModel):
 class IngestTextRequest(BaseModel):
     kind: str  # "sales" | "waste"
     csv_text: str
+
+
+# ---- simulate (no-auth demo) ----
+class SimulateRequest(BaseModel):
+    product_name: str
+    sales_history: list[int]
+    rainy_tomorrow: bool = False
+
+    @field_validator("sales_history")
+    @classmethod
+    def _min_length(cls, v: list[int]) -> list[int]:
+        if len(v) < 7:
+            raise ValueError("sales_history must contain at least 7 values")
+        return v
+
+
+class SimulateResult(BaseModel):
+    product_name: str
+    forecast_qty: float
+    recommended_qty: int
+    predicted_waste_eur: float
+    reason: str
 
 
 # ---- weekly summary ----

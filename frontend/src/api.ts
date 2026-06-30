@@ -45,6 +45,11 @@ export const api = {
     req("/chat", { method: "POST", body: JSON.stringify({ message, history }) }),
   ingestText: (kind: "sales" | "waste", csv_text: string) =>
     req("/ingest/text", { method: "POST", body: JSON.stringify({ kind, csv_text }) }),
+  simulate: (product_name: string, sales_history: number[], rainy_tomorrow: boolean) =>
+    req("/simulate", {
+      method: "POST",
+      body: JSON.stringify({ product_name, sales_history, rainy_tomorrow }),
+    }),
 };
 
 export interface ChatTurn {
@@ -103,4 +108,12 @@ export interface Weekly {
   total_waste_eur: number;
   eur_avoided_estimate: number;
   margins: Margin[];
+}
+
+export interface SimulateResult {
+  product_name: string;
+  forecast_qty: number;
+  recommended_qty: number;
+  predicted_waste_eur: number;
+  reason: string;
 }

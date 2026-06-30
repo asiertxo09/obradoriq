@@ -30,6 +30,8 @@ from app.schemas.schemas import (
     RegisterRequest,
     ReallocationOut,
     RecommendationOut,
+    SimulateRequest,
+    SimulateResult,
     SiteCreate,
     SiteOut,
     TokenResponse,
@@ -176,6 +178,63 @@ def ingest_text(body: IngestTextRequest, bakery_id: int = Depends(current_bakery
 def get_weekly(week_end: dt.date, bakery_id: int = Depends(current_bakery_id),
                db: Session = Depends(get_db)):
     return weekly_summary(db, bakery_id, week_end)
+
+
+# ---- public demo endpoint (no auth) ----
+@router.post("/simulate", response_model=SimulateResult)
+def simulate(body: SimulateRequest) -> SimulateResult:
+    """No-auth demo endpoint: run a real newsvendor recommendation from raw sales history."""
+    import statistics
+
+    from app.recommender.forecast import forecast as _forecast
+    from app.recommender.newsvendor import critical_ratio, newsvendor_quantity
+    from app.recommender.types import SaleObservation
+
+    cost_per_unit = 1.20
+    selling_price = 2.80
+
+    today = dt.date.today()
+    n = len(body.sales_history)
+    history = [
+        SaleObservation(
+            date=today - dt.timedelta(days=n - i),
+            quantity_sold=qty,
+        )
+        for i, qty in enumerate(body.sales_history)
+    ]
+
+    f = _forecast(
+        product_id=0,
+        site_id=0,
+        target_date=today,
+        history=history,
+        target_rainy=False,
+        target_holiday=False,
+    )
+
+    forecast_qty = f.expected_demand
+    if body.rainy_tomorrow:
+        forecast_qty = round(forecast_qty * 0.88, 1)
+
+    cr = critical_ratio(selling_price, cost_per_unit, "waste")
+    raw_qty = newsvendor_quantity(forecast_qty, f.sigma, cr)
+    recommended_qty = max(1, round(raw_qty))
+
+    predicted_waste_eur = round(max(0.0, recommended_qty - forecast_qty) * cost_per_unit, 2)
+
+    reason = (
+        "Rain expected tomorrow — forecast adjusted down 12%."
+        if body.rainy_tomorrow
+        else "Based on your recent sales history."
+    )
+
+    return SimulateResult(
+        product_name=body.product_name,
+        forecast_qty=forecast_qty,
+        recommended_qty=recommended_qty,
+        predicted_waste_eur=predicted_waste_eur,
+        reason=reason,
+    )
 
 
 # ---- helpers ----

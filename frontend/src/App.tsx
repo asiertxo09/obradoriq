@@ -52,6 +52,26 @@ function Login({ onLogin }: { onLogin: () => void }) {
   );
 }
 
+function HeroBanner() {
+  const [w, setW] = useState<Weekly | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    api.weekly(WEEK_END)
+      .then((data: Weekly) => { setW(data); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+  if (loading) return <div className="hero-skeleton" />;
+  if (!w) return null;
+  return (
+    <div className="hero">
+      <div className="hero-main">{eur(w.eur_avoided_estimate)}</div>
+      <div className="hero-label">Waste avoided this week</div>
+      <div className="hero-sub">{w.week_start} → {w.week_end}</div>
+      <div className="hero-secondary">{eur(w.total_waste_eur)} total waste tracked</div>
+    </div>
+  );
+}
+
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [tab, setTab] = useState<"ask" | "plan" | "realloc" | "weekly">("ask");
   const [sites, setSites] = useState<Site[]>([]);
@@ -63,7 +83,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         <div className="brand">Obrador<span>IQ</span></div>
         <button className="ghost" onClick={onLogout}>Sign out</button>
       </header>
-      <p className="tagline">Waste-killer for small bakery chains — every number is profit you keep.</p>
+      <HeroBanner />
       <div className="tabs">
         <div className={`tab ${tab === "ask" ? "active" : ""}`} onClick={() => setTab("ask")}>Ask ObradorIQ</div>
         <div className={`tab ${tab === "plan" ? "active" : ""}`} onClick={() => setTab("plan")}>Daily plan</div>
@@ -179,6 +199,7 @@ function DailyPlan({ sites }: { sites: Site[] }) {
         <div className="kpi">
           <div className="label">Production plan for</div>
           <div className="big">{DAILY_DATE}</div>
+          <button className="ghost" onClick={() => window.print()}>Print plan</button>
         </div>
         <div className="kpi">
           <div className="label">Predicted leftover if you over-bake</div>
@@ -213,6 +234,7 @@ function DailyPlan({ sites }: { sites: Site[] }) {
           </div>
         );
       })}
+      <div className="print-footer">ObradorIQ production sheet — {DAILY_DATE}</div>
     </>
   );
 }

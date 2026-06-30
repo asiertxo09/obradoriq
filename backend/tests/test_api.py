@@ -114,3 +114,34 @@ def test_upload_rejects_bad_rows():
     assert body["inserted"] == 1
     assert body["rejected"] == 2
     assert len(body["errors"]) == 2
+
+
+# ---- simulate (no-auth demo) ----
+
+def test_simulate_endpoint():
+    payload = {
+        "product_name": "Croissant",
+        "sales_history": [20, 18, 22, 19, 21, 17, 20, 19, 22, 18, 21, 20, 19, 18],
+        "rainy_tomorrow": False,
+    }
+    r = client.post("/api/simulate", json=payload)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["product_name"] == "Croissant"
+    assert data["recommended_qty"] > 0
+    assert data["forecast_qty"] > 0
+
+
+def test_simulate_rainy_lower():
+    history = [20, 18, 22, 19, 21, 17, 20, 19, 22, 18, 21, 20, 19, 18]
+    dry = client.post("/api/simulate", json={"product_name": "X", "sales_history": history,
+                                             "rainy_tomorrow": False}).json()
+    rainy = client.post("/api/simulate", json={"product_name": "X", "sales_history": history,
+                                               "rainy_tomorrow": True}).json()
+    assert rainy["forecast_qty"] < dry["forecast_qty"]
+
+
+def test_simulate_too_short():
+    r = client.post("/api/simulate", json={"product_name": "X", "sales_history": [10, 20],
+                                           "rainy_tomorrow": False})
+    assert r.status_code == 422

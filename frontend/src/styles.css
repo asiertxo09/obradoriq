@@ -54,3 +54,32 @@ button.ghost { background: transparent; border: 1px solid var(--line); padding: 
 .bubble.assistant { align-self: flex-start; background: var(--accent-soft); color: var(--ink); }
 .bubble table { background: rgba(255,255,255,0.6); border-radius: 6px; }
 code { background: var(--accent-soft); padding: 1px 4px; border-radius: 4px; font-size: 11px; }
+
+/* Hero banner */
+@keyframes hero-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.hero {
+  background: linear-gradient(135deg, #1b5436 0%, var(--good) 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 28px 24px 24px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-main { font-size: 3rem; font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
+.hero-label { font-size: 14px; font-weight: 600; opacity: 0.9; margin-top: 6px; }
+.hero-sub { font-size: 13px; opacity: 0.65; margin-top: 2px; }
+.hero-secondary { font-size: 13px; opacity: 0.65; margin-top: 8px; }
+.hero-skeleton { height: 130px; background: var(--line); border-radius: 12px; margin-bottom: 18px; animation: hero-pulse 1.4s ease-in-out infinite; }
+
+/* Print */
+.print-footer { display: none; }
+@media print {
+  .top, .tabs, .tagline, button, .hero, .hero-skeleton { display: none !important; }
+  .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+  .print-footer { display: block; text-align: center; font-size: 11px; color: #888; margin-top: 24px; border-top: 1px solid #eee; padding-top: 8px; }
+}

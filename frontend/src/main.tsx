@@ -1,10 +1,13 @@
-import React from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import Simulate from "./Simulate";
 import "./styles.css";
 
-createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const root = document.getElementById("root")!;
+
+if (window.location.pathname === "/simulate") {
+  createRoot(root).render(<StrictMode><Simulate /></StrictMode>);
+} else {
+  createRoot(root).render(<StrictMode><App /></StrictMode>);
+}
