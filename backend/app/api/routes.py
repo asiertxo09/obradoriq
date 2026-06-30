@@ -3,10 +3,13 @@ from __future__ import annotations
 
 import datetime as dt
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
+import hmac
+
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import current_bakery_id, get_current_user
+from app.core.config import get_settings
 from app.core.security import create_access_token, hash_password, verify_password
 from app.data_hub.ingest import import_sales, import_waste
 from app.models import (
@@ -235,6 +238,26 @@ def simulate(body: SimulateRequest) -> SimulateResult:
         predicted_waste_eur=predicted_waste_eur,
         reason=reason,
     )
+
+
+# ---- admin (token-guarded one-off) ----
+@router.post("/admin/generate")
+def admin_generate(
+    days: int = Query(default=120, ge=1, le=400),
+    weather: bool = Query(default=True),
+    x_admin_token: str = Header(default=""),
+):
+    """Populate ALL tables with `days` of synthetic data (sales timestamped to the minute).
+    Guarded by the ADMIN_TOKEN env var; runs synchronously (may take ~30-60s)."""
+    settings = get_settings()
+    if not settings.admin_token:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "admin endpoint disabled")
+    if not hmac.compare_digest(x_admin_token, settings.admin_token):
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "bad admin token")
+    from app.generate_data import generate
+
+    counts = generate(days=days, use_weather=weather)
+    return {"status": "ok", **counts}
 
 
 # ---- helpers ----

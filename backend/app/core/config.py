@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     # Render/compose inject a real Postgres DATABASE_URL.
     database_url: str = "sqlite:///./obradoriq.db"
     jwt_secret: str = "dev-secret-change-me"
+    # Token guarding the one-off /admin/generate endpoint. Empty = endpoint disabled.
+    admin_token: str = ""
     jwt_algorithm: str = "HS256"
     access_token_minutes: int = 60 * 24 * 7  # 7 days — demo-friendly, avoids mid-demo logouts
 

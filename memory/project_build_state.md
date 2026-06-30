@@ -51,6 +51,11 @@ The ObradorIQ Waste-Killer MVP is built and passing tests. Layout under `/home/a
   a year of daily sales/waste/inventory + ~130k minute-stamped sale_events (open hours
   07–20, weekday/intraday/weather/holiday patterns) + sample recs/decisions/reallocations/
   audit. NOT run on startup (too heavy for free tier; ~15MB). Removed the frontend paste-CSV box.
+- **Admin endpoint:** `POST /api/admin/generate?days=120` (token via `X-Admin-Token` header vs
+  `ADMIN_TOKEN` env; empty disables it) populates the live DB on demand. render.yaml auto-generates
+  ADMIN_TOKEN. Default 120 days to stay within free-tier limits.
+- **Collaborator:** Charles De Wouters added "simulate mode" (public `/api/simulate`, hero banner,
+  print sheet, `/simulate` page). Merged cleanly via fast-forward; my changes coexist. Total 59 tests.
 - **Demo login:** owner@obradoriq.demo / bakery123. Run: `SEED_ON_START=true uvicorn app.main:app`.
 - **Key design:** recommender core is pure Python (computes all numbers); LLM only phrases
   (Trust Layer grounding). Model routing: Opus reasoning / Sonnet execution. Auth is JWT+bcrypt
