@@ -53,6 +53,22 @@ def test_reallocation_moves_almond_croissant_barrio_to_centro(seeded):
         db.close()
 
 
+def test_reallocation_persisted_with_id_by_default(seeded):
+    """The dashboard's Approve/Dismiss buttons need a persisted id to act on."""
+    db = SessionLocal()
+    try:
+        reallocs = generate_reallocations(db, seeded, TARGET)
+        almond = next(r for r in reallocs if r.product_name == "Almond Croissant")
+        assert almond.id is not None
+        from app.models.entities import Reallocation
+
+        row = db.get(Reallocation, almond.id)
+        assert row is not None
+        assert row.bakery_id == seeded
+    finally:
+        db.close()
+
+
 def test_weekly_summary_has_true_margin(seeded):
     db = SessionLocal()
     try:

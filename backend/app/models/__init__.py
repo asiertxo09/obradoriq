@@ -6,6 +6,7 @@ from app.models.entities import (  # noqa: F401
     InventoryRecord,
     Product,
     Reallocation,
+    ReallocationDecision,
     Recommendation,
     RecommendationDecision,
     SaleEvent,

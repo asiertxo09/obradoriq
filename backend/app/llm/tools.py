@@ -82,8 +82,9 @@ def execute_tool(db: Session, bakery_id: int, name: str, args: dict) -> dict:
         return {"target_date": td.isoformat(), "demand_adjustment_pct": adj, "rainy": rainy,
                 "recommendations": [r.model_dump() for r in recs]}
     if name == "get_reallocations":
+        recs = generate_reallocations(db, bakery_id, td, persist=False)
         return {"target_date": td.isoformat(),
-                "reallocations": [r.model_dump() for r in generate_reallocations(db, bakery_id, td)]}
+                "reallocations": [r.model_dump() for r in recs]}
     if name == "get_weekly_summary":
         we = _parse_date(args.get("week_end"))
         return weekly_summary(db, bakery_id, we).model_dump()

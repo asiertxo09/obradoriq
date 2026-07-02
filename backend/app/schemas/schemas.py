@@ -88,6 +88,7 @@ class RecommendationOut(BaseModel):
 
 
 class ReallocationOut(BaseModel):
+    id: int | None = None
     product_id: int
     product_name: str = ""
     target_date: dt.date
@@ -102,6 +103,10 @@ class DecisionRequest(BaseModel):
     decision: str  # accepted | edited | rejected | deferred
     final_qty: int | None = None
     note: str = ""
+
+
+class ReallocationDecisionRequest(BaseModel):
+    decision: str  # accepted | dismissed
 
 
 # ---- chat / agent ----

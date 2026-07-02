@@ -191,7 +191,7 @@ def _seed_decisions_and_audit(db, bakery_id: int, end: dt.date) -> None:
                 recommendation_id=r.id, decision=choice,
                 final_qty=r.recommended_qty if choice != "edited" else r.recommended_qty - r.id % 3,
                 note=""))
-        for rr in generate_reallocations(db, bakery_id, day):
+        for rr in generate_reallocations(db, bakery_id, day, persist=False):
             db.add(Reallocation(bakery_id=bakery_id, product_id=rr.product_id, target_date=day,
                                 from_site_id=rr.from_site_id, to_site_id=rr.to_site_id,
                                 quantity=rr.quantity, eur_waste_avoided=rr.eur_waste_avoided,

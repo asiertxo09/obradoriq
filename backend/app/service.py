@@ -170,7 +170,8 @@ def draft_production_sheet(db: Session, bakery_id: int, target_date: dt.date,
     }
 
 
-def generate_reallocations(db: Session, bakery_id: int, target_date: dt.date) -> list[ReallocationOut]:
+def generate_reallocations(db: Session, bakery_id: int, target_date: dt.date,
+                           persist: bool = True) -> list[ReallocationOut]:
     products = db.query(Product).filter_by(bakery_id=bakery_id).all()
     sites = db.query(Site).filter_by(bakery_id=bakery_id).all()
     site_name = {s.id: s.name for s in sites}
@@ -191,10 +192,23 @@ def generate_reallocations(db: Session, bakery_id: int, target_date: dt.date) ->
         for r in reallocate_across_sites(pinfo, target_date, states):
             text = agents.justify_reallocation(r, p.name, site_name[r.from_site_id],
                                                 site_name[r.to_site_id])
-            out.append(ReallocationOut(
+            row = ReallocationOut(
                 product_id=p.id, product_name=p.name, target_date=target_date,
                 from_site_id=r.from_site_id, to_site_id=r.to_site_id, quantity=r.quantity,
-                eur_waste_avoided=r.eur_waste_avoided, justification=text))
+                eur_waste_avoided=r.eur_waste_avoided, justification=text)
+            if persist:
+                db.add(Reallocation(
+                    bakery_id=bakery_id, product_id=p.id, target_date=target_date,
+                    from_site_id=r.from_site_id, to_site_id=r.to_site_id, quantity=r.quantity,
+                    eur_waste_avoided=r.eur_waste_avoided, justification=text))
+            out.append(row)
+    if persist:
+        db.commit()
+        # backfill ids for the rows we just stored
+        stored = {(row.product_id, row.from_site_id, row.to_site_id): row.id for row in
+                  db.query(Reallocation).filter_by(target_date=target_date, bakery_id=bakery_id)}
+        for row in out:
+            row.id = stored.get((row.product_id, row.from_site_id, row.to_site_id))
     return out
 
 

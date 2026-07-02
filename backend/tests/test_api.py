@@ -116,6 +116,52 @@ def test_upload_rejects_bad_rows():
     assert len(body["errors"]) == 2
 
 
+def test_reallocation_decision_and_tenant_isolation():
+    """Approve/Dismiss on a reallocation logs a decision; another bakery can't act on it."""
+    from app.models import SessionLocal
+    from app.models.entities import Reallocation, User
+
+    token_a = _register("realloc-a@x.com", "Realloc Alpha")
+    token_b = _register("realloc-b@x.com", "Realloc Beta")
+    site1 = client.post("/api/sites", json={"name": "A1"}, headers=_auth(token_a)).json()
+    site2 = client.post("/api/sites", json={"name": "A2"}, headers=_auth(token_a)).json()
+    prod = client.post("/api/products", json={"name": "Bun", "price": 2.0,
+                       "ingredient_cost": 0.5, "batch_size": 4}, headers=_auth(token_a)).json()
+
+    db = SessionLocal()
+    try:
+        bakery_id_a = db.query(User).filter_by(email="realloc-a@x.com").one().bakery_id
+        row = Reallocation(bakery_id=bakery_id_a, product_id=prod["id"],
+                           target_date=dt.date(2026, 1, 1), from_site_id=site1["id"],
+                           to_site_id=site2["id"], quantity=5, eur_waste_avoided=4.5,
+                           justification="test reallocation")
+        db.add(row)
+        db.commit()
+        realloc_id = row.id
+    finally:
+        db.close()
+
+    # Bakery B tries to decide on A's reallocation -> 404 (not leaked).
+    r = client.post(f"/api/reallocations/{realloc_id}/decision",
+                    json={"decision": "accepted"}, headers=_auth(token_b))
+    assert r.status_code == 404
+
+    # An invalid decision value is rejected.
+    r = client.post(f"/api/reallocations/{realloc_id}/decision",
+                    json={"decision": "bogus"}, headers=_auth(token_a))
+    assert r.status_code == 422
+
+    # Owner A can approve it.
+    r = client.post(f"/api/reallocations/{realloc_id}/decision",
+                    json={"decision": "accepted"}, headers=_auth(token_a))
+    assert r.status_code == 201
+
+    # Unknown reallocation id -> 404.
+    r = client.post("/api/reallocations/999999/decision",
+                    json={"decision": "dismissed"}, headers=_auth(token_a))
+    assert r.status_code == 404
+
+
 # ---- simulate (no-auth demo) ----
 
 def test_simulate_page_served():

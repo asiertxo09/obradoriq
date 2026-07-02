@@ -265,14 +265,29 @@ function DailyPlan({ sites }: { sites: Site[] }) {
   );
 }
 
-function ReallocationView({ sites }: { sites: Site[] }) {
+export function ReallocationView({ sites }: { sites: Site[] }) {
   const [items, setItems] = useState<Reallocation[]>([]);
   const [err, setErr] = useState("");
+  const [decided, setDecided] = useState<Record<number, "accepted" | "dismissed">>({});
+  const [busyId, setBusyId] = useState<number | null>(null);
   useEffect(() => {
     api.reallocations(DAILY_DATE).then(setItems).catch((e) => setErr(String(e)));
   }, []);
   if (err) return <p className="err">{err}</p>;
   const total = items.reduce((s, r) => s + r.eur_waste_avoided, 0);
+
+  async function decide(id: number, decision: "accepted" | "dismissed") {
+    setBusyId(id);
+    try {
+      await api.decideReallocation(id, decision);
+      setDecided((d) => ({ ...d, [id]: decision }));
+    } catch {
+      // Leave it undecided so the owner can retry.
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   return (
     <>
       <div className="card kpis">
@@ -286,19 +301,30 @@ function ReallocationView({ sites }: { sites: Site[] }) {
         </div>
       </div>
       {items.length === 0 && <div className="card muted">No reallocation needed — sites are balanced.</div>}
-      {items.map((r, i) => (
-        <div key={i} className="card realloc">
-          <div className="move">
-            Shift {r.quantity} × {r.product_name}: {siteName(sites, r.from_site_id)} → {siteName(sites, r.to_site_id)}
-            <span className="eur"> (recovers {eur(r.eur_waste_avoided)})</span>
+      {items.map((r, i) => {
+        const state = r.id != null ? decided[r.id] : undefined;
+        return (
+          <div key={i} className="card realloc">
+            <div className="move">
+              Shift {r.quantity} × {r.product_name}: {siteName(sites, r.from_site_id)} → {siteName(sites, r.to_site_id)}
+              <span className="eur"> (recovers {eur(r.eur_waste_avoided)})</span>
+            </div>
+            <p className="reason">{r.justification}</p>
+            {state ? (
+              <p className={`decision-status ${state}`}>
+                {state === "accepted" ? "Approved" : "Dismissed"}
+              </p>
+            ) : (
+              <div>
+                <button className="ghost" disabled={r.id == null || busyId === r.id}
+                  onClick={() => r.id != null && decide(r.id, "accepted")}>Approve</button>
+                <button className="ghost" disabled={r.id == null || busyId === r.id}
+                  onClick={() => r.id != null && decide(r.id, "dismissed")}>Dismiss</button>
+              </div>
+            )}
           </div>
-          <p className="reason">{r.justification}</p>
-          <div>
-            <button className="ghost">Approve</button>
-            <button className="ghost">Dismiss</button>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </>
   );
 }

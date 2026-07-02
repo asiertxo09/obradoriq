@@ -15,6 +15,8 @@ from app.data_hub.ingest import import_sales, import_waste
 from app.models import (
     Bakery,
     Product,
+    Reallocation,
+    ReallocationDecision,
     Recommendation,
     RecommendationDecision,
     Site,
@@ -32,6 +34,7 @@ from app.schemas.schemas import (
     ProductCreate,
     ProductOut,
     RegisterRequest,
+    ReallocationDecisionRequest,
     ReallocationOut,
     RecommendationOut,
     SimulateRequest,
@@ -141,7 +144,7 @@ def get_recommendations(target_date: dt.date, bakery_id: int = Depends(current_b
 @router.get("/recommendations/{target_date}/reallocation", response_model=list[ReallocationOut])
 def get_reallocations(target_date: dt.date, bakery_id: int = Depends(current_bakery_id),
                       db: Session = Depends(get_db)):
-    return generate_reallocations(db, bakery_id, target_date)
+    return generate_reallocations(db, bakery_id, target_date, persist=True)
 
 
 # ---- intraday ----
@@ -165,6 +168,20 @@ def decide(rec_id: int, body: DecisionRequest, bakery_id: int = Depends(current_
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "invalid decision")
     db.add(RecommendationDecision(recommendation_id=rec_id, decision=body.decision,
                                   final_qty=body.final_qty, note=body.note))
+    db.commit()
+    return {"status": "logged"}
+
+
+@router.post("/reallocations/{realloc_id}/decision", status_code=201)
+def decide_reallocation(realloc_id: int, body: ReallocationDecisionRequest,
+                        bakery_id: int = Depends(current_bakery_id),
+                        db: Session = Depends(get_db)):
+    realloc = db.get(Reallocation, realloc_id)
+    if not realloc or realloc.bakery_id != bakery_id:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "reallocation not found")
+    if body.decision not in {"accepted", "dismissed"}:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "invalid decision")
+    db.add(ReallocationDecision(reallocation_id=realloc_id, decision=body.decision))
     db.commit()
     return {"status": "logged"}
 

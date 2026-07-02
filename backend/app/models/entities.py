@@ -144,6 +144,16 @@ class RecommendationDecision(Base):
     decided_at: Mapped[dt.datetime] = mapped_column(DateTime, server_default=func.now())
 
 
+class ReallocationDecision(Base):
+    __tablename__ = "reallocation_decision"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    reallocation_id: Mapped[int] = mapped_column(
+        ForeignKey("reallocation.id"), index=True
+    )
+    decision: Mapped[str] = mapped_column(String(12))  # accepted|dismissed
+    decided_at: Mapped[dt.datetime] = mapped_column(DateTime, server_default=func.now())
+
+
 class AuditLog(Base):
     """Trust Layer audit record — every LLM interaction + decision is logged."""
 

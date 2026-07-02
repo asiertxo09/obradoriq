@@ -41,6 +41,11 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ decision, final_qty: finalQty }),
     }),
+  decideReallocation: (reallocId: number, decision: "accepted" | "dismissed") =>
+    req(`/reallocations/${reallocId}/decision`, {
+      method: "POST",
+      body: JSON.stringify({ decision }),
+    }),
   chat: (message: string, history: ChatTurn[]) =>
     req("/chat", { method: "POST", body: JSON.stringify({ message, history }) }),
   ingestText: (kind: "sales" | "waste", csv_text: string) =>
@@ -83,6 +88,7 @@ export interface Recommendation {
   reason: string;
 }
 export interface Reallocation {
+  id: number | null;
   product_name: string;
   from_site_id: number;
   to_site_id: number;
