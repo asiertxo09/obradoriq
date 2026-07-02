@@ -42,6 +42,12 @@ SYSTEM_PROMPT = (
     "any number. Keep it to 1-2 sentences."
 )
 
+# Token budgets, by call shape — one place to tune, instead of literals scattered across
+# router.py and orchestrator.py.
+PHRASE_MAX_TOKENS = 300    # agents.py: a one-line recommendation/justification/alert
+PLAN_MAX_TOKENS = 200      # orchestrator planner: a small JSON object, no prose
+COMPOSE_MAX_TOKENS = 400   # orchestrator composer: a 1-3 sentence chat answer
+
 
 def _provider_defaults(provider: str):
     return PROVIDER_DEFAULTS.get(provider, PROVIDER_DEFAULTS["openai_compatible"])
@@ -78,38 +84,53 @@ def complete(task: str, prompt: str, *, offline_stub: str | None = None) -> str:
 
 
 def _complete_anthropic(model: str, prompt: str, api_key: str,
-                        system: str = SYSTEM_PROMPT, max_tokens: int = 300) -> str:
+                        system: str = SYSTEM_PROMPT, max_tokens: int = PHRASE_MAX_TOKENS,
+                        temperature: float | None = None) -> str:
     from anthropic import Anthropic
 
     client = Anthropic(api_key=api_key)
-    msg = client.messages.create(
-        model=model, max_tokens=max_tokens, system=system,
-        messages=[{"role": "user", "content": prompt}],
-    )
+    kwargs = {"model": model, "max_tokens": max_tokens, "system": system,
+              "messages": [{"role": "user", "content": prompt}]}
+    if temperature is not None:
+        kwargs["temperature"] = temperature
+    msg = client.messages.create(**kwargs)
     return "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
 
 
 def _complete_openai_compatible(model: str, prompt: str, api_key: str, base_url: str,
-                                system: str = SYSTEM_PROMPT, max_tokens: int = 300) -> str:
+                                system: str = SYSTEM_PROMPT, max_tokens: int = PHRASE_MAX_TOKENS,
+                                temperature: float | None = None,
+                                json_mode: bool = False) -> str:
     from openai import OpenAI
 
     client = OpenAI(api_key=api_key, base_url=base_url or None)
-    resp = client.chat.completions.create(
-        model=model, max_tokens=max_tokens,
-        messages=[{"role": "system", "content": system},
-                  {"role": "user", "content": prompt}],
-    )
+    kwargs = {"model": model, "max_tokens": max_tokens,
+              "messages": [{"role": "system", "content": system},
+                           {"role": "user", "content": prompt}]}
+    if temperature is not None:
+        kwargs["temperature"] = temperature
+    if json_mode:
+        kwargs["response_format"] = {"type": "json_object"}
+    resp = client.chat.completions.create(**kwargs)
     return resp.choices[0].message.content or ""
 
 
 def raw_complete(system: str, user: str, *, tier: str = "reasoning",
-                 max_tokens: int = 500) -> str:
+                 max_tokens: int = COMPOSE_MAX_TOKENS, temperature: float | None = None,
+                 json_mode: bool = False) -> str:
     """Plain completion with a custom system prompt (no native tool API needed).
-    Used by the orchestrator's provider-agnostic JSON tool-planning loop."""
+    Used by the orchestrator's provider-agnostic JSON tool-planning loop.
+
+    `json_mode` asks OpenAI-compatible providers (groq/nvidia/openai_compatible) to
+    constrain output to a valid JSON object. Anthropic's Messages API has no equivalent
+    flag on this plain-completions path, so it's silently ignored there — the prompt's
+    own instructions and the caller's regex fallback still apply.
+    """
     s = get_settings()
     model = (s.model_reasoning or _provider_defaults(s.llm_provider)[1]) if tier == "reasoning" \
         else (s.model_execution or _provider_defaults(s.llm_provider)[2])
     if s.llm_provider == "anthropic":
-        return _complete_anthropic(model, user, s.api_key(), system, max_tokens)
+        return _complete_anthropic(model, user, s.api_key(), system, max_tokens, temperature)
     base_url = s.llm_base_url or _provider_defaults(s.llm_provider)[0]
-    return _complete_openai_compatible(model, user, s.api_key(), base_url, system, max_tokens)
+    return _complete_openai_compatible(model, user, s.api_key(), base_url, system, max_tokens,
+                                       temperature, json_mode)

@@ -67,7 +67,8 @@ def _online_chat(db: Session, bakery_id: int, message: str, history: list[dict])
         f"busy festival, -20 for a heatwave).\nTools:\n{_tool_catalog()}"
     )
     plan_raw = router.raw_complete(
-        plan_system, f"{history_block}Owner: {message}", max_tokens=200)
+        plan_system, f"{history_block}Owner: {message}",
+        max_tokens=router.PLAN_MAX_TOKENS, temperature=0.0, json_mode=True)
     plan = _extract_json(plan_raw)
     tool = plan.get("tool")
     if tool not in {s["function"]["name"] for s in toolkit.tool_specs()}:
@@ -86,7 +87,7 @@ def _online_chat(db: Session, bakery_id: int, message: str, history: list[dict])
         compose_system,
         f"{history_block}Owner asked: {message}\nDATA (from tool {tool}): "
         f"{json.dumps(result, default=str)[:6000]}",
-        max_tokens=400)
+        max_tokens=router.COMPOSE_MAX_TOKENS)
     return {"reply": reply.strip(), "tool_results": [
         {"tool": tool, "args": args, "result": result}]}
 

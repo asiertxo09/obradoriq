@@ -88,6 +88,130 @@ def test_ungrounded_llm_output_is_rejected_to_stub(monkeypatch):
     assert "30" in text and "Croissant" in text  # safe stub returned
 
 
+# ---- provider call parameter plumbing (temperature / JSON mode) ----
+
+def test_complete_openai_compatible_passes_temperature_and_json_mode(monkeypatch):
+    captured = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            captured.update(kwargs)
+
+            class Msg:
+                content = "ok"
+
+            class Choice:
+                message = Msg()
+
+            class Resp:
+                choices = [Choice()]
+
+            return Resp()
+
+    class FakeChat:
+        completions = FakeCompletions()
+
+    class FakeOpenAI:
+        def __init__(self, api_key=None, base_url=None):
+            self.chat = FakeChat()
+
+    monkeypatch.setattr("openai.OpenAI", FakeOpenAI)
+
+    router._complete_openai_compatible(
+        "llama-3.3-70b-versatile", "hello", "key", "https://api.groq.com/openai/v1",
+        temperature=0.0, json_mode=True)
+
+    assert captured["temperature"] == 0.0
+    assert captured["response_format"] == {"type": "json_object"}
+
+
+def test_complete_openai_compatible_omits_temperature_and_json_mode_by_default(monkeypatch):
+    captured = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            captured.update(kwargs)
+
+            class Msg:
+                content = "ok"
+
+            class Choice:
+                message = Msg()
+
+            class Resp:
+                choices = [Choice()]
+
+            return Resp()
+
+    class FakeChat:
+        completions = FakeCompletions()
+
+    class FakeOpenAI:
+        def __init__(self, api_key=None, base_url=None):
+            self.chat = FakeChat()
+
+    monkeypatch.setattr("openai.OpenAI", FakeOpenAI)
+
+    router._complete_openai_compatible("model", "hello", "key", "https://x")
+
+    assert "temperature" not in captured
+    assert "response_format" not in captured
+
+
+def test_complete_anthropic_passes_temperature(monkeypatch):
+    captured = {}
+
+    class FakeMessages:
+        def create(self, **kwargs):
+            captured.update(kwargs)
+
+            class Block:
+                type = "text"
+                text = "ok"
+
+            class Msg:
+                content = [Block()]
+
+            return Msg()
+
+    class FakeAnthropic:
+        def __init__(self, api_key=None):
+            self.messages = FakeMessages()
+
+    monkeypatch.setattr("anthropic.Anthropic", FakeAnthropic)
+
+    router._complete_anthropic("claude-opus-4-8", "hello", "key", temperature=0.0)
+
+    assert captured["temperature"] == 0.0
+
+
+def test_complete_anthropic_omits_temperature_by_default(monkeypatch):
+    captured = {}
+
+    class FakeMessages:
+        def create(self, **kwargs):
+            captured.update(kwargs)
+
+            class Block:
+                type = "text"
+                text = "ok"
+
+            class Msg:
+                content = [Block()]
+
+            return Msg()
+
+    class FakeAnthropic:
+        def __init__(self, api_key=None):
+            self.messages = FakeMessages()
+
+    monkeypatch.setattr("anthropic.Anthropic", FakeAnthropic)
+
+    router._complete_anthropic("claude-opus-4-8", "hello", "key")
+
+    assert "temperature" not in captured
+
+
 def test_justify_reallocation_is_grounded():
     r = Reallocation(
         product_id=1, target_date=dt.date(2026, 7, 1), from_site_id=2, to_site_id=1,

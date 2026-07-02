@@ -5,7 +5,7 @@ import datetime as dt
 
 import pytest
 
-from app.llm import orchestrator, tools as toolkit
+from app.llm import orchestrator, router, tools as toolkit
 from app.models import SessionLocal, init_db
 from app.seed import seed
 
@@ -149,3 +149,32 @@ def test_online_chat_truncates_history_to_recent_turns(db, monkeypatch):
     assert "turn 3" not in calls[0]  # oldest turns dropped
     assert "turn 4" in calls[0]      # only the most recent window kept
     assert "turn 9" in calls[0]
+
+
+def test_online_chat_planner_is_pinned_to_deterministic_json_mode(db, monkeypatch):
+    """The planner picks a tool from a fixed catalog — that's routing, not prose, so it
+    should be low-temperature and (where the provider supports it) JSON-constrained. The
+    composer writes a sentence for the owner, so neither applies there."""
+    get_settings = _force_online(monkeypatch)
+    calls = []
+
+    def fake_raw_complete(system, user, **kwargs):
+        calls.append(kwargs)
+        if len(calls) == 1:
+            return '{"tool": "get_recommendations", "args": {}}'
+        return "ok"
+
+    monkeypatch.setattr(orchestrator.router, "raw_complete", fake_raw_complete)
+    try:
+        orchestrator.chat(db, 1, "How much should I bake tomorrow?", [])
+    finally:
+        get_settings.cache_clear()
+
+    plan_kwargs, compose_kwargs = calls
+    assert plan_kwargs["temperature"] == 0.0
+    assert plan_kwargs["json_mode"] is True
+    assert plan_kwargs["max_tokens"] == router.PLAN_MAX_TOKENS
+
+    assert compose_kwargs.get("temperature") is None
+    assert not compose_kwargs.get("json_mode", False)
+    assert compose_kwargs["max_tokens"] == router.COMPOSE_MAX_TOKENS
