@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import router
@@ -47,4 +48,11 @@ _FRONTEND_DIST = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")
 )
 if os.path.isdir(_FRONTEND_DIST):
+
+    @app.get("/simulate", include_in_schema=False)
+    def simulate_page():
+        # Client-side route: StaticFiles only falls back to index.html for "/",
+        # so serve it explicitly here.
+        return FileResponse(os.path.join(_FRONTEND_DIST, "index.html"))
+
     app.mount("/", StaticFiles(directory=_FRONTEND_DIST, html=True), name="frontend")

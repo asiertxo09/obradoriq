@@ -118,6 +118,17 @@ def test_upload_rejects_bad_rows():
 
 # ---- simulate (no-auth demo) ----
 
+def test_simulate_page_served():
+    """/simulate is a client-side route: it must serve the SPA, not 404."""
+    from app.main import _FRONTEND_DIST
+    import os
+    if not os.path.isdir(_FRONTEND_DIST):
+        pytest.skip("frontend/dist not built in this environment")
+    r = client.get("/simulate")
+    assert r.status_code == 200
+    assert "text/html" in r.headers["content-type"]
+
+
 def test_simulate_endpoint():
     payload = {
         "product_name": "Croissant",
