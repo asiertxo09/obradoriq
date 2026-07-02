@@ -17,6 +17,8 @@ from app.core.config import get_settings
 from app.llm import router
 from app.llm import tools as toolkit
 
+MAX_HISTORY_TURNS = 6
+
 
 def chat(db: Session, bakery_id: int, message: str, history: list[dict] | None = None) -> dict:
     s = get_settings()
@@ -29,6 +31,16 @@ def chat(db: Session, bakery_id: int, message: str, history: list[dict] | None =
         out = _offline_chat(db, bakery_id, message)
         out["note"] = f"(fell back to offline routing: {type(e).__name__})"
         return out
+
+
+def _format_history(history: list[dict]) -> str:
+    """Render the last few turns as a transcript so follow-ups ("what about that day?")
+    resolve against what was actually said, not just the latest message in isolation."""
+    recent = history[-MAX_HISTORY_TURNS:]
+    if not recent:
+        return ""
+    lines = [f"{h.get('role', 'user')}: {h.get('content', '')}" for h in recent]
+    return "Conversation so far:\n" + "\n".join(lines) + "\n\n"
 
 
 def _tool_catalog() -> str:
@@ -44,6 +56,7 @@ def _tool_catalog() -> str:
 # completions — no gated native function-calling API needed).
 def _online_chat(db: Session, bakery_id: int, message: str, history: list[dict]) -> dict:
     today = dt.date.today().isoformat()
+    history_block = _format_history(history)
     plan_system = (
         "You are the planner for ObradorIQ, a bakery-chain ops advisor. Pick the ONE best "
         "tool to answer the owner, and its arguments. Respond with ONLY a JSON object: "
@@ -53,7 +66,8 @@ def _online_chat(db: Session, bakery_id: int, message: str, history: list[dict])
         "a launch, a supplier issue, a competitor), set demand_adjustment_pct (e.g. 30 for a "
         f"busy festival, -20 for a heatwave).\nTools:\n{_tool_catalog()}"
     )
-    plan_raw = router.raw_complete(plan_system, message, max_tokens=200)
+    plan_raw = router.raw_complete(
+        plan_system, f"{history_block}Owner: {message}", max_tokens=200)
     plan = _extract_json(plan_raw)
     tool = plan.get("tool")
     if tool not in {s["function"]["name"] for s in toolkit.tool_specs()}:
@@ -65,11 +79,12 @@ def _online_chat(db: Session, bakery_id: int, message: str, history: list[dict])
     compose_system = (
         "You are ObradorIQ, a calm bakery operations advisor. Answer the owner in 1-3 short, "
         "practical sentences using ONLY the numbers in DATA — never invent or change a number. "
-        "If an adjustment was applied for context they mentioned, say so."
+        "If an adjustment was applied for context they mentioned, say so. Use the conversation "
+        "so far for context, but don't repeat earlier answers verbatim."
     )
     reply = router.raw_complete(
         compose_system,
-        f"Owner asked: {message}\nDATA (from tool {tool}): "
+        f"{history_block}Owner asked: {message}\nDATA (from tool {tool}): "
         f"{json.dumps(result, default=str)[:6000]}",
         max_tokens=400)
     return {"reply": reply.strip(), "tool_results": [

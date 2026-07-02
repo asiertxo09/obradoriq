@@ -25,6 +25,17 @@ def _tomorrow() -> str:
     return (dt.date.today() + dt.timedelta(days=1)).isoformat()
 
 
+# The LLM picks this value from stated context (e.g. "festival" -> +30). It is never
+# fully trusted: clamp it server-side so a hallucinated or adversarial figure (500%,
+# -100%) can't drive the forecast to a nonsensical or negative quantity.
+MIN_DEMAND_ADJUSTMENT_PCT = -50.0
+MAX_DEMAND_ADJUSTMENT_PCT = 100.0
+
+
+def _clamp_demand_adjustment(pct: float) -> float:
+    return max(MIN_DEMAND_ADJUSTMENT_PCT, min(MAX_DEMAND_ADJUSTMENT_PCT, pct))
+
+
 def tool_specs() -> list[dict]:
     """OpenAI-style function specs (works with NVIDIA/Groq/OpenAI tool-calling)."""
     date_prop = {"type": "string", "description": "ISO date YYYY-MM-DD"}
@@ -74,7 +85,7 @@ def _fn(name: str, desc: str, props: dict, required: list[str] | None = None) ->
 def execute_tool(db: Session, bakery_id: int, name: str, args: dict) -> dict:
     """Run a tool by name with model-provided args; returns grounded data."""
     td = _parse_date(args.get("target_date"))
-    adj = float(args.get("demand_adjustment_pct") or 0.0)
+    adj = _clamp_demand_adjustment(float(args.get("demand_adjustment_pct") or 0.0))
     rainy = bool(args.get("rainy") or False)
     if name == "get_recommendations":
         recs = generate_recommendations(db, bakery_id, td, persist=False,
