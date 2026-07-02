@@ -41,11 +41,31 @@ Plan: approved build plan; concept: `docs/ideas/obradoriq-waste-killer.md`; spec
 - [x] Track F: Deploy (Dockerfile + docker-compose + render.yaml) + CI.
 - [x] Integration + E2E on seeded 2-site demo; headline metric recorded.
 
+## Intraday "living plan" phase — contract-first parallel multi-agent build
+
+Opus coordinated (froze contracts, integrated); Sonnet/Haiku sub-agents built the tracks.
+
+- [x] Track 0 (Opus): freeze contracts — `IntradaySignal`/`SiteCapability` in `types.py`,
+      `IntradaySignalOut` in `schemas.py`, stub signatures.
+- [x] Track A (Sonnet): pure-Python intraday core — pace curve, end-of-day projection,
+      sellout time, `intraday_signal` (bake_more/move/markdown/hold). `test_intraday.py`.
+- [x] Track B (Sonnet): walk-forward intraday backtest + headline metric. `test_intraday_backtest.py`.
+- [x] Track C (Haiku): `backfill_sale_events` in `seed()` so the demo has minute-level data
+      out-of-the-box (deterministic). `test_intraday_seed.py`.
+- [x] Track D (Sonnet): `intraday_status` service, `GET /api/intraday`, `get_intraday_status`
+      tool, grounded `phrase_intraday`, offline keyword route. `test_intraday_api.py`.
+- [x] Track E (Sonnet): Live tab + time scrubber (07:00→20:00) + `getIntraday` client.
+- [x] Integration (Opus): full gate green; fixed Live demo-day anchor to a day with same-day
+      events (06-28, not 06-29); tidied the seed identity-map SAWarning.
+
 ## Status
 
-- **33 backend tests + Vitest frontend tests pass.** Live uvicorn boots, seeds, serves the
-  API + built React app, and produces the Almond Croissant reallocation (Barrio→Centro).
-- **Headline metric:** 46.4% waste avoided (€430, 408 units), forecast MAPE 13.8% — see `README.md`.
+- **102 backend tests + Vitest frontend tests (3) pass; frontend build green.** Live uvicorn
+  boots, seeds (now incl. minute-stamped `sale_event`s), serves the API + built React app,
+  produces the Almond Croissant reallocation (Barrio→Centro), and the Live intraday plan.
+- **Dawn-plan headline:** 46.4% waste avoided (€430, 408 units), forecast MAPE 13.8%.
+- **Intraday headline:** an 11:00 check-in recovers ≈ **€1,154** across the chain vs. €0
+  do-nothing baseline (`python -m app.recommender.intraday_backtest`). See `README.md`.
 
 ## Remaining (requires the user's accounts / permissions)
 

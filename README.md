@@ -64,6 +64,28 @@ need gated native function-calling) and **degrades gracefully**: if the LLM is o
 key fails, a deterministic router still calls the same tools and returns grounded data. The
 ML does the numbers; the agent does the language, the context-reasoning, and the doing.
 
+## Live — the intraday "living plan"
+
+The dawn plan is only half the story: demand reveals itself *during* the day, and lost sales
+are invisible money. The **Live tab** turns the minute-stamped `sale_event` stream into a plan
+that rewrites itself as the morning sells through. For each (product, site) it learns a **pace
+curve** — the cumulative fraction of a day's demand that has arrived by each hour — from prior
+days, projects the end-of-day outcome from what's sold so far, and recommends **one mid-day
+action before the money is lost**:
+
+- **Bake more** — pacing hot, will sell out early, and the site can par-bake in time.
+- **Move** — pacing hot but can't bake off; shift on-hand stock from a HIGH-confidence surplus sibling.
+- **Mark down** — carrying more than the day will take; clear it before it's waste.
+- **Hold** — on track, or the signal is too thin to act on (never acts on guesswork).
+
+Every € figure is recommender-computed and grounded (shortfall = lost *margin* on unmet demand;
+surplus = leftover cost); the Trust Layer phrases it, never the LLM. A **time scrubber** (07:00→20:00)
+re-queries the plan so you can watch it rewrite itself across the trading day.
+
+**Intraday backtest (walk-forward on the demo chain):** an **11:00 check-in recovers ≈ €1,154**
+across the chain vs. a €0 do-nothing baseline (par-baking hot sellers + clearing surplus early),
+reproducible via `python -m app.recommender.intraday_backtest`.
+
 ## Headline result (backtest on the demo chain)
 
 Walk-forward backtest against **true (uncensored) demand** — the model trains only on

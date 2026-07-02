@@ -50,6 +50,8 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ product_name, sales_history, rainy_tomorrow }),
     }),
+  getIntraday: (asOf: string): Promise<IntradaySignalOut[]> =>
+    req(`/intraday?as_of=${encodeURIComponent(asOf)}`),
 };
 
 export interface ChatTurn {
@@ -115,5 +117,26 @@ export interface SimulateResult {
   forecast_qty: number;
   recommended_qty: number;
   predicted_waste_eur: number;
+  reason: string;
+}
+
+export type IntradayAction = "bake_more" | "move" | "markdown" | "hold";
+
+export interface IntradaySignalOut {
+  product_id: number;
+  product_name: string;
+  site_id: number;
+  site_name: string;
+  as_of: string;
+  sold_so_far: number;
+  on_hand: number;
+  projected_demand: number;
+  projected_sellout_time: string | null;
+  action: IntradayAction;
+  action_qty: number;
+  from_site_id: number | null;
+  from_site_name: string | null;
+  eur_at_risk: number;
+  confidence: string;
   reason: string;
 }

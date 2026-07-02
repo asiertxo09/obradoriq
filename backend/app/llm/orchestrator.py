@@ -94,7 +94,10 @@ def _offline_chat(db: Session, bakery_id: int, message: str) -> dict:
     date = _find_date(message)
     args = {"target_date": date} if date else {}
 
-    if any(k in m for k in ("realloc", "move", "shift", "rebalance", "between site")):
+    if any(k in m for k in ("now", "right now", "selling out", "sell out", "bake more",
+                            "on track", "today so far", "so far today")):
+        tool, args = "get_intraday_status", {}
+    elif any(k in m for k in ("realloc", "move", "shift", "rebalance", "between site")):
         tool = "get_reallocations"
     elif any(k in m for k in ("week", "margin", "profit")):
         tool, args = "get_weekly_summary", {"week_end": date or _last_complete_day()}
@@ -129,6 +132,16 @@ def _summarize(tool: str, r: dict) -> str:
     if tool == "draft_production_sheet":
         return (f"Draft production sheet for {r['target_date']}: estimated ingredient spend "
                 f"€{r['estimated_ingredient_spend_eur']}. Review the lines below and approve.")
+    if tool == "get_intraday_status":
+        sigs = r.get("signals", [])
+        acting = [x for x in sigs if x["action"] != "hold"]
+        if not acting:
+            return (f"Everything looks on track right now — {len(sigs)} product-site signals, "
+                    f"all holding.")
+        top = acting[0]
+        return (f"{len(acting)} item(s) need attention right now. Top: {top['action']} "
+                f"{top['action_qty']}× {top['product_name']} at {top['site_name']} "
+                f"(~€{top['eur_at_risk']:.2f} at risk). See the breakdown below.")
     return "Done."
 
 

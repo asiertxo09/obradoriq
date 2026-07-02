@@ -16,6 +16,7 @@ from app.service import (
     draft_production_sheet,
     generate_reallocations,
     generate_recommendations,
+    intraday_status,
     weekly_summary,
 )
 
@@ -54,6 +55,13 @@ def tool_specs() -> list[dict]:
             "waste: site,product,date,quantity_wasted). Convert any messy input to that CSV.",
             {"kind": {"type": "string", "enum": ["sales", "waste"]},
              "csv_text": {"type": "string"}}, required=["kind", "csv_text"]),
+        _fn("get_intraday_status",
+            "Live, per (product, site) 'today so far' signal: sold-so-far vs on-hand vs "
+            "projected end-of-day demand, with a mid-day bake_more/move/markdown/hold "
+            "action when something is off pace (e.g. selling out early, or overstocked).",
+            {"as_of": {"type": "string", "description":
+                       "ISO datetime (e.g. 2026-06-20T11:00:00) for the moment to check. "
+                       "Defaults to now."}}),
     ]
 
 
@@ -86,6 +94,11 @@ def execute_tool(db: Session, bakery_id: int, name: str, args: dict) -> dict:
         text = args.get("csv_text", "")
         result = (import_sales if kind == "sales" else import_waste)(db, bakery_id, text)
         return {"kind": kind, **result.model_dump()}
+    if name == "get_intraday_status":
+        as_of = _parse_datetime(args.get("as_of"))
+        signals = intraday_status(db, bakery_id, as_of)
+        return {"as_of": (as_of or dt.datetime.now()).isoformat(),
+                "signals": [s.model_dump() for s in signals]}
     return {"error": f"unknown tool {name}"}
 
 
@@ -96,3 +109,12 @@ def _parse_date(value) -> dt.date:
         return dt.date.fromisoformat(str(value))
     except ValueError:
         return dt.date.today() + dt.timedelta(days=1)
+
+
+def _parse_datetime(value) -> dt.datetime | None:
+    if not value:
+        return None
+    try:
+        return dt.datetime.fromisoformat(str(value))
+    except ValueError:
+        return None

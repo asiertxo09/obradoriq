@@ -16,18 +16,22 @@ from app.core.config import get_settings
 from app.llm import agents
 from app.models.entities import (
     Bakery,
+    InventoryRecord,
     Product,
     Reallocation,
     Recommendation,
+    SaleEvent,
     SalesRecord,
     Site,
     WasteRecord,
 )
 from app.recommender.forecast import forecast
+from app.recommender.intraday import intraday_signal, pace_curve
 from app.recommender.production import recommend_production
 from app.recommender.reallocation import reallocate_across_sites
 from app.recommender.types import ProductInfo, SaleObservation, SiteState
 from app.schemas.schemas import (
+    IntradaySignalOut,
     ProductMargin,
     ReallocationOut,
     RecommendationOut,
@@ -191,6 +195,102 @@ def generate_reallocations(db: Session, bakery_id: int, target_date: dt.date) ->
                 product_id=p.id, product_name=p.name, target_date=target_date,
                 from_site_id=r.from_site_id, to_site_id=r.to_site_id, quantity=r.quantity,
                 eur_waste_avoided=r.eur_waste_avoided, justification=text))
+    return out
+
+
+def intraday_status(db: Session, bakery_id: int,
+                    as_of: dt.datetime | None = None) -> list[IntradaySignalOut]:
+    """Per (product, site) intraday 'living plan' signal for a moment in the day.
+
+    For each (product, site): today's SaleEvent rows with ts <= as_of give sold_so_far;
+    on-hand comes from the day's InventoryRecord (falling back to recent avg production via
+    _recent_stats); the pace curve is learned from strictly-prior days' SaleEvent rows;
+    sibling SiteStates (same product, other sites) feed the `move` option. Delegates the
+    decision to app.recommender.intraday.intraday_signal and the phrasing to
+    agents.phrase_intraday. Defaults as_of to now. Tenant-scoped by bakery_id.
+    """
+    as_of = as_of or dt.datetime.now()
+    today = as_of.date()
+    day_start = dt.datetime.combine(today, dt.time.min)
+
+    products = db.query(Product).filter_by(bakery_id=bakery_id).all()
+    sites = db.query(Site).filter_by(bakery_id=bakery_id).all()
+    site_name = {s.id: s.name for s in sites}
+
+    out: list[IntradaySignalOut] = []
+    for p in products:
+        pinfo = _product_info(p)
+
+        # First pass: gather each site's sold-so-far / on-hand / pace / forecast so the
+        # second pass can build sibling SiteStates (same product, other sites).
+        per_site: dict[int, dict] = {}
+        for s in sites:
+            sold_so_far = (
+                db.query(SaleEvent)
+                .filter(SaleEvent.product_id == p.id, SaleEvent.site_id == s.id,
+                        SaleEvent.ts >= day_start, SaleEvent.ts <= as_of)
+                .with_entities(SaleEvent.quantity).all()
+            )
+            sold_so_far = sum(q for (q,) in sold_so_far)
+
+            prior_events = (
+                db.query(SaleEvent)
+                .filter(SaleEvent.product_id == p.id, SaleEvent.site_id == s.id,
+                        SaleEvent.ts < day_start)
+                .with_entities(SaleEvent.ts, SaleEvent.quantity).all()
+            )
+            by_day: dict[dt.date, dict[int, int]] = defaultdict(lambda: defaultdict(int))
+            for ts, qty in prior_events:
+                by_day[ts.date()][ts.hour] += qty
+            pace = pace_curve(list(by_day.values()))
+
+            _, sold_out_rate, avg_prod = _recent_stats(db, p.id, s.id, today)
+
+            inv = (db.query(InventoryRecord)
+                   .filter_by(product_id=p.id, site_id=s.id, date=today).first())
+            on_hand = inv.quantity_available if inv is not None else int(round(avg_prod))
+
+            hist = _history(db, p.id, s.id, today)
+            daily_forecast = forecast(p.id, s.id, today, hist) if hist else None
+
+            per_site[s.id] = {
+                "sold_so_far": sold_so_far, "on_hand": on_hand, "pace": pace,
+                "forecast": daily_forecast, "sold_out_rate": sold_out_rate,
+                "avg_prod": avg_prod,
+            }
+
+        for s in sites:
+            d = per_site[s.id]
+            siblings = [
+                SiteState(
+                    site_id=o.id,
+                    forecast_demand=(per_site[o.id]["forecast"].expected_demand
+                                    if per_site[o.id]["forecast"] else per_site[o.id]["avg_prod"]),
+                    planned_production=per_site[o.id]["avg_prod"],
+                    sold_out_rate=per_site[o.id]["sold_out_rate"],
+                    confidence=(per_site[o.id]["forecast"].confidence
+                               if per_site[o.id]["forecast"] else "LOW"),
+                )
+                for o in sites if o.id != s.id
+            ]
+            confidence = d["forecast"].confidence if d["forecast"] else "LOW"
+
+            sig = intraday_signal(
+                pinfo, s.id, as_of, d["sold_so_far"], d["on_hand"], d["pace"],
+                daily_forecast=d["forecast"], sibling_states=siblings, confidence=confidence,
+            )
+            from_site_name = site_name.get(sig.from_site_id, "") if sig.from_site_id else ""
+            reason = agents.phrase_intraday(sig, p.name, site_name[s.id], from_site_name)
+
+            out.append(IntradaySignalOut(
+                product_id=p.id, product_name=p.name, site_id=s.id, site_name=site_name[s.id],
+                as_of=sig.as_of, sold_so_far=sig.sold_so_far, on_hand=sig.on_hand,
+                projected_demand=sig.projected_demand,
+                projected_sellout_time=sig.projected_sellout_time,
+                action=sig.action, action_qty=sig.action_qty,
+                from_site_id=sig.from_site_id, from_site_name=from_site_name,
+                eur_at_risk=sig.eur_at_risk, confidence=sig.confidence, reason=reason,
+            ))
     return out
 
 

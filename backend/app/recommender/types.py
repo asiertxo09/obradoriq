@@ -85,6 +85,45 @@ class Reallocation:
     justification: str
 
 
+@dataclass(frozen=True)
+class SiteCapability:
+    """What a site can physically do mid-day — drives which intraday action is offered.
+
+    Defaults to fully capable; set per-site flags to constrain the recommendation (e.g. a
+    locked-at-dawn artisan site sets can_bake_off=False, so it only ever gets move/markdown).
+    """
+
+    can_bake_off: bool = True  # can start a second batch mid-morning
+    can_move: bool = True      # can send on-hand stock to a sibling site
+
+
+# Intraday action taken by intraday_signal: "bake_more" | "move" | "markdown" | "hold"
+IntradayAction = str
+
+
+@dataclass(frozen=True)
+class IntradaySignal:
+    """The 'living plan' decision for one (product, site) at a moment in the day.
+
+    Produced by app.recommender.intraday.intraday_signal. Pure/deterministic; the € figure
+    is grounded (recommender-computed), phrased later by the Trust Layer, never by the LLM.
+    """
+
+    product_id: int
+    site_id: int
+    as_of: dt.datetime
+    sold_so_far: int
+    on_hand: int
+    projected_demand: float
+    projected_sellout_time: dt.time | None  # None when on-hand covers the whole day
+    action: IntradayAction
+    action_qty: int
+    from_site_id: int | None  # source site when action == "move", else None
+    eur_at_risk: float
+    confidence: Confidence
+    reason: str
+
+
 @dataclass
 class BacktestResult:
     days_evaluated: int = 0

@@ -12,6 +12,7 @@ import {
   Weekly,
 } from "./api";
 import { eur, siteName } from "./format";
+import Live from "./Live";
 
 const DAILY_DATE = "2026-06-29";
 const WEEK_END = "2026-06-28";
@@ -73,7 +74,7 @@ function HeroBanner() {
 }
 
 function Dashboard({ onLogout }: { onLogout: () => void }) {
-  const [tab, setTab] = useState<"ask" | "plan" | "realloc" | "weekly">("ask");
+  const [tab, setTab] = useState<"ask" | "live" | "plan" | "realloc" | "weekly">("ask");
   const [sites, setSites] = useState<Site[]>([]);
   useEffect(() => { api.sites().then(setSites).catch(() => {}); }, []);
 
@@ -86,11 +87,13 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       <HeroBanner />
       <div className="tabs">
         <div className={`tab ${tab === "ask" ? "active" : ""}`} onClick={() => setTab("ask")}>Ask ObradorIQ</div>
+        <div className={`tab ${tab === "live" ? "active" : ""}`} onClick={() => setTab("live")}>Live</div>
         <div className={`tab ${tab === "plan" ? "active" : ""}`} onClick={() => setTab("plan")}>Daily plan</div>
         <div className={`tab ${tab === "realloc" ? "active" : ""}`} onClick={() => setTab("realloc")}>Reallocation</div>
         <div className={`tab ${tab === "weekly" ? "active" : ""}`} onClick={() => setTab("weekly")}>Weekly review</div>
       </div>
       {tab === "ask" && <AskView />}
+      {tab === "live" && <Live />}
       {tab === "plan" && <DailyPlan sites={sites} />}
       {tab === "realloc" && <ReallocationView sites={sites} />}
       {tab === "weekly" && <WeeklyView />}

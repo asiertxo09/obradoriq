@@ -27,6 +27,7 @@ from app.schemas.schemas import (
     ChatResponse,
     DecisionRequest,
     IngestTextRequest,
+    IntradaySignalOut,
     LoginRequest,
     ProductCreate,
     ProductOut,
@@ -46,6 +47,7 @@ from app.llm import orchestrator
 from app.service import (
     generate_reallocations,
     generate_recommendations,
+    intraday_status,
     weekly_summary,
 )
 
@@ -140,6 +142,13 @@ def get_recommendations(target_date: dt.date, bakery_id: int = Depends(current_b
 def get_reallocations(target_date: dt.date, bakery_id: int = Depends(current_bakery_id),
                       db: Session = Depends(get_db)):
     return generate_reallocations(db, bakery_id, target_date)
+
+
+# ---- intraday ----
+@router.get("/intraday", response_model=list[IntradaySignalOut])
+def get_intraday(as_of: dt.datetime | None = Query(None),
+                 bakery_id: int = Depends(current_bakery_id), db: Session = Depends(get_db)):
+    return intraday_status(db, bakery_id, as_of)
 
 
 @router.post("/recommendations/{rec_id}/decision", status_code=201)

@@ -154,6 +154,26 @@ class SimulateResult(BaseModel):
     reason: str
 
 
+# ---- intraday "living plan" ----
+class IntradaySignalOut(BaseModel):
+    product_id: int
+    product_name: str = ""
+    site_id: int
+    site_name: str = ""
+    as_of: dt.datetime
+    sold_so_far: int
+    on_hand: int
+    projected_demand: float
+    projected_sellout_time: dt.time | None = None
+    action: str  # bake_more | move | markdown | hold
+    action_qty: int
+    from_site_id: int | None = None
+    from_site_name: str = ""
+    eur_at_risk: float
+    confidence: str
+    reason: str
+
+
 # ---- weekly summary ----
 class ProductMargin(BaseModel):
     product_id: int
