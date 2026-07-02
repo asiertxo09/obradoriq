@@ -99,6 +99,32 @@ code { background: var(--accent-soft); padding: 1px 4px; border-radius: 4px; fon
 .pill.action-markdown { background: #f6e7e7; color: var(--bad); }
 .pill.MEDIUM { background: #f3ecd9; color: #8a6d1f; }
 
+/* Guided tour */
+.tour-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 39, 35, 0.35);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+.tour-card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 20px 22px;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(42, 39, 35, 0.25);
+}
+.tour-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.tour-progress { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+.tour-close { background: transparent; border: 0; font-size: 20px; line-height: 1; cursor: pointer; color: var(--muted); padding: 0 4px; }
+.tour-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.tour-body { color: var(--ink); font-size: 14px; line-height: 1.5; margin: 0 0 16px; }
+.tour-actions { display: flex; align-items: center; justify-content: space-between; }
+
 /* Print */
 .print-footer { display: none; }
 @media print {

@@ -13,6 +13,9 @@ import {
 } from "./api";
 import { eur, siteName } from "./format";
 import Live from "./Live";
+import Tour, { TabId } from "./Tour";
+
+const TOUR_SEEN_KEY = "obradoriq_tour_seen";
 
 const DAILY_DATE = "2026-06-29";
 const WEEK_END = "2026-06-28";
@@ -74,15 +77,34 @@ function HeroBanner() {
 }
 
 function Dashboard({ onLogout }: { onLogout: () => void }) {
-  const [tab, setTab] = useState<"ask" | "live" | "plan" | "realloc" | "weekly">("ask");
+  const [tab, setTab] = useState<TabId>("ask");
   const [sites, setSites] = useState<Site[]>([]);
+  const [tourOpen, setTourOpen] = useState(() => {
+    try {
+      return !localStorage.getItem(TOUR_SEEN_KEY);
+    } catch {
+      return false;
+    }
+  });
   useEffect(() => { api.sites().then(setSites).catch(() => {}); }, []);
+
+  function closeTour() {
+    setTourOpen(false);
+    try {
+      localStorage.setItem(TOUR_SEEN_KEY, "1");
+    } catch {
+      // localStorage unavailable (e.g. private browsing) — tour just won't persist as "seen"
+    }
+  }
 
   return (
     <div className="app">
       <header className="top">
         <div className="brand">Obrador<span>IQ</span></div>
-        <button className="ghost" onClick={onLogout}>Sign out</button>
+        <div>
+          <button className="ghost" onClick={() => setTourOpen(true)}>Take the tour</button>
+          <button className="ghost" onClick={onLogout}>Sign out</button>
+        </div>
       </header>
       <HeroBanner />
       <div className="tabs">
@@ -97,6 +119,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       {tab === "plan" && <DailyPlan sites={sites} />}
       {tab === "realloc" && <ReallocationView sites={sites} />}
       {tab === "weekly" && <WeeklyView />}
+      {tourOpen && <Tour onNavigate={setTab} onClose={closeTour} />}
     </div>
   );
 }
