@@ -22,12 +22,12 @@ Plan: approved build plan; concept: `docs/ideas/obradoriq-waste-killer.md`; spec
 
 ## Next work
 
-- [ ] Validate assumptions with 2-3 bakery owners or operators.
-- [ ] Create a sample product catalog and mock sales dataset.
-- [ ] Design the first dashboard wireframe.
-- [ ] Decide MVP data upload format.
-- [ ] Define the first recommendation formula before adding advanced AI.
-- [ ] Prepare a short demo flow for class presentation.
+- [ ] Validate assumptions with 2-3 bakery owners or operators. *(user action)*
+- [x] Create a sample product catalog and mock sales dataset. *(done in Phase 0: `data/` fixture + generator)*
+- [x] Design the first dashboard wireframe. *(superseded by the built dashboard, Track E)*
+- [x] Decide MVP data upload format. *(CSV/POS export via `/ingest`, plus free-text `/ingest/text`)*
+- [x] Define the first recommendation formula before adding advanced AI. *(newsvendor profit-optimizer, `recommender/newsvendor.py`)*
+- [x] Prepare a short demo flow for class presentation. *(`docs/DEMO_FLOW.md` — 5-min script + fallbacks)*
 
 ## MVP build order — contract-first parallel tracks
 
