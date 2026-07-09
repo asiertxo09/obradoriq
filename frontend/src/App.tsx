@@ -12,6 +12,7 @@ import {
   Weekly,
 } from "./api";
 import { eur, siteName } from "./format";
+import Landing from "./Landing";
 import Live from "./Live";
 import Tour, { TabId } from "./Tour";
 
@@ -22,11 +23,13 @@ const WEEK_END = "2026-06-28";
 
 export default function App() {
   const [authed, setAuthed] = useState<boolean>(!!getToken());
-  if (!authed) return <Login onLogin={() => setAuthed(true)} />;
-  return <Dashboard onLogout={() => { clearToken(); setAuthed(false); }} />;
+  const [entering, setEntering] = useState(false);
+  if (authed) return <Dashboard onLogout={() => { clearToken(); setAuthed(false); }} />;
+  if (!entering) return <Landing onEnter={() => setEntering(true)} />;
+  return <Login onLogin={() => setAuthed(true)} onBack={() => setEntering(false)} />;
 }
 
-function Login({ onLogin }: { onLogin: () => void }) {
+function Login({ onLogin, onBack }: { onLogin: () => void; onBack: () => void }) {
   const [email, setEmail] = useState("owner@obradoriq.demo");
   const [password, setPassword] = useState("bakery123");
   const [err, setErr] = useState("");
@@ -51,6 +54,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
         <p className="muted" style={{ fontSize: 12, marginTop: 12 }}>
           Demo: owner@obradoriq.demo / bakery123
         </p>
+        <button className="ghost" onClick={onBack}>← Back</button>
       </div>
     </div>
   );
